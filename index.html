@@ -7,859 +7,237 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: #0f0f14;
-    color: #e4e4e7;
-    min-height: 100vh;
-  }
-
-  /* Header */
-  .header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    padding: 40px 0 30px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-  .header-inner {
-    max-width: 1200px; margin: 0 auto; padding: 0 24px;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-  }
-  .logo-area h1 {
-    font-size: 28px; font-weight: 800; color: #fff;
-    letter-spacing: -0.5px;
-  }
-  .logo-area h1 span { color: #60a5fa; }
-  .logo-area p { font-size: 13px; color: #94a3b8; margin-top: 4px; }
-  .header-badge {
-    background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.25);
-    border-radius: 12px; padding: 12px 20px; text-align: center;
-  }
-  .header-badge .period { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #60a5fa; font-weight: 600; }
-  .header-badge .dates { font-size: 16px; font-weight: 600; color: #fff; margin-top: 2px; }
-
-  /* KPI Cards */
-  .kpi-grid {
-    max-width: 1200px; margin: -20px auto 0; padding: 0 24px;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
-    position: relative; z-index: 2;
-  }
-  .kpi-card {
-    background: #1c1c28; border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px; padding: 24px; text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-  .kpi-card .kpi-icon { font-size: 28px; margin-bottom: 8px; }
-  .kpi-card .kpi-value { font-size: 32px; font-weight: 800; color: #fff; }
-  .kpi-card .kpi-label { font-size: 12px; color: #71717a; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-  .kpi-card.highlight { border-color: rgba(96,165,250,0.3); background: linear-gradient(135deg, #1c1c28 0%, #1a2340 100%); }
-  .kpi-card.highlight .kpi-value { color: #60a5fa; }
-
-  /* Main Content */
-  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-
-  /* Section */
-  .section { margin-bottom: 40px; }
-  .section-title {
-    font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .section-title::after {
-    content: ''; flex: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
-  }
-
-  /* Charts */
-  .chart-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-    margin-bottom: 32px;
-  }
-  @media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
-  .chart-card {
-    background: #1c1c28; border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px; padding: 24px;
-  }
-  .chart-card h3 {
-    font-size: 14px; font-weight: 600; color: #a1a1aa; margin-bottom: 16px;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .chart-wrapper { position: relative; height: 280px; }
-
-  /* Daily Sales Table */
-  .day-cards {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;
-    margin-bottom: 32px;
-  }
-  .day-card {
-    background: #1c1c28; border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 14px; padding: 18px 16px; text-align: center;
-    position: relative; overflow: hidden;
-  }
-  .day-card.best { border-color: #22c55e; background: linear-gradient(135deg, #1c1c28 0%, #1a2e1a 100%); }
-  .day-card.best::before { content: '★ BEST DAY'; position: absolute; top: 4px; right: 0; font-size: 10px; font-weight: 700; color: #22c55e; background: rgba(34,197,94,0.1); padding: 3px 8px; border-radius: 0 0 0 6px; }
-  .day-card .day-name { font-size: 12px; color: #a1a1aa; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-  .day-card .day-date { font-size: 14px; color: #fff; font-weight: 600; margin: 6px 0; }
-  .day-card .day-sales { font-size: 11px; color: #71717a; }
-  .day-card .day-revenue { font-size: 20px; font-weight: 700; color: #60a5fa; margin-top: 8px; }
-  .day-card.no-sales { opacity: 0.5; }
-  .day-card.no-sales .day-revenue { color: #71717a; }
-
-  /* Tables */
-  .styled-table {
-    width: 100%; border-collapse: collapse; margin: 0;
-  }
-  .styled-table thead {
-    background: rgba(96,165,250,0.06); border-bottom: 2px solid rgba(96,165,250,0.1);
-  }
-  .styled-table th {
-    padding: 14px 16px; text-align: left; font-size: 12px; font-weight: 600;
-    color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .styled-table tbody tr {
-    border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s;
-  }
-  .styled-table tbody tr:hover { background: rgba(96,165,250,0.04); }
-  .styled-table td {
-    padding: 14px 16px; font-size: 14px; color: #e4e4e7;
-  }
-  .styled-table .tx-time { color: #94a3b8; font-weight: 500; }
-  .styled-table .tx-invoice { color: #60a5fa; font-weight: 600; font-family: 'Courier New', monospace; }
-  .styled-table .tx-products { color: #cbd5e1; }
-  .styled-table .amount { color: #22c55e; font-weight: 600; }
-  .styled-table .tx-status { padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-  .styled-table .status-closed { background: rgba(34,197,94,0.12); color: #22c55e; }
-  .styled-table .status-saved { background: rgba(96,165,250,0.12); color: #60a5fa; }
-  .styled-table .status-voided { background: rgba(239,68,68,0.12); color: #ef4444; text-decoration: line-through; }
-  .styled-table .day-group-header {
-    background: rgba(96,165,250,0.1); font-weight: 600; color: #60a5fa;
-  }
-  .styled-table .day-group-header td {
-    padding: 12px 16px; font-size: 13px;
-  }
-
-  /* Customer Table */
-  .customer-name { color: #fff; font-weight: 500; }
-  .rank-badge {
-    display: inline-block; width: 28px; height: 28px; border-radius: 50%;
-    background: rgba(96,165,250,0.15); color: #60a5fa; font-size: 12px; font-weight: 700;
-    text-align: center; line-height: 28px;
-  }
-  .rank-badge.rank-1 { background: rgba(250,204,21,0.15); color: #fcc34d; }
-  .rank-badge.rank-2 { background: rgba(192,192,192,0.15); color: #bdbdbd; }
-  .rank-badge.rank-3 { background: rgba(205,127,50,0.15); color: #cd7f32; }
-  .rank-badge.rank-n { background: rgba(96,165,250,0.15); color: #60a5fa; }
-
-  /* Bar Chart */
-  .bar-cell { position: relative; }
-  .bar-bg {
-    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-    height: 6px; background: rgba(96,165,250,0.1); border-radius: 3px;
-    width: 100%; z-index: 0;
-  }
-  .bar-fill { display: block; height: 100%; border-radius: 3px; }
-  .fill-blue { background: #60a5fa; }
-
-  /* Product Table */
-  .product-icon { font-size: 20px; margin-right: 8px; }
-  .product-name { color: #fff; font-weight: 500; }
-  .product-category { font-size: 12px; color: #71717a; }
-  .pct-badge {
-    display: inline-block; background: rgba(96,165,250,0.12); color: #60a5fa;
-    padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
-  }
-
-  /* Note */
-  .note-box {
-    background: rgba(96,165,250,0.06); border-left: 3px solid #60a5fa;
-    border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #cbd5e1;
-    margin-top: 20px;
-  }
-
-  /* Footer */
-  .footer {
-    background: rgba(15,15,20,0.5); border-top: 1px solid rgba(255,255,255,0.04);
-    padding: 24px 0; margin-top: 60px; text-align: center;
-  }
-  .footer-text { font-size: 12px; color: #71717a; }
-
-  @media (max-width: 768px) {
-    .logo-area h1 { font-size: 20px; }
-    .kpi-card .kpi-value { font-size: 24px; }
-  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',-apple-system,sans-serif;background:#0f0f14;color:#e4e4e7;min-height:100vh}
+  .header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:40px 0 30px;border-bottom:1px solid rgba(255,255,255,0.08)}
+  .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  .logo-area h1{font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px}
+  .logo-area h1 span{color:#60a5fa}
+  .logo-area p{font-size:13px;color:#94a3b8;margin-top:4px}
+  .header-badge{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);border-radius:12px;padding:12px 20px;text-align:center}
+  .header-badge .period{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#60a5fa;font-weight:600}
+  .header-badge .dates{font-size:16px;font-weight:600;color:#fff;margin-top:2px}
+  .kpi-grid{max-width:1200px;margin:-20px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;position:relative;z-index:2}
+  .kpi-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;text-align:center;transition:transform 0.2s}
+  .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
+  .kpi-card .kpi-icon{font-size:28px;margin-bottom:8px}
+  .kpi-card .kpi-value{font-size:32px;font-weight:800;color:#fff}
+  .kpi-card .kpi-label{font-size:12px;color:#71717a;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  .kpi-card.highlight{border-color:rgba(96,165,250,0.3);background:linear-gradient(135deg,#1c1c28 0%,#1a2340 100%)}
+  .kpi-card.highlight .kpi-value{color:#60a5fa}
+  .container{max-width:1200px;margin:0 auto;padding:32px 24px}
+  .section{margin-bottom:40px}
+  .section-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.1),transparent)}
+  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
+  @media(max-width:768px){.chart-row{grid-template-columns:1fr}}
+  .chart-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px}
+  .chart-card h3{font-size:14px;font-weight:600;color:#a1a1aa;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
+  .chart-wrapper{position:relative;height:280px}
+  .chart-full{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:32px}
+  .chart-full .chart-wrapper{height:220px}
+  .day-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
+  .day-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 16px;text-align:center;position:relative;overflow:hidden}
+  .day-card .day-name{font-size:13px;font-weight:600;color:#a1a1aa}
+  .day-card .day-date{font-size:11px;color:#52525b;margin-top:2px}
+  .day-card .day-amount{font-size:22px;font-weight:800;color:#fff;margin-top:10px}
+  .day-card .day-count{font-size:11px;color:#60a5fa;margin-top:4px}
+  .day-card.best{border-color:rgba(52,211,153,0.4)}
+  .day-card.best .day-amount{color:#34d399}
+  .day-card.best::before{content:'MEJOR DÍA';position:absolute;top:8px;right:-22px;background:#34d399;color:#0f0f14;font-size:8px;font-weight:700;padding:2px 26px;transform:rotate(45deg);letter-spacing:0.5px}
+  .day-card.zero{opacity:0.4}
+  .styled-table{width:100%;border-collapse:collapse;background:#1c1c28;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
+  .styled-table thead th{background:#252535;padding:14px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .styled-table tbody td{padding:14px 16px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .styled-table tbody tr:hover{background:rgba(96,165,250,0.04)}
+  .styled-table tbody tr:last-child td{border-bottom:none}
+  .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:12px;font-weight:700}
+  .rank-1{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1c1c28}
+  .rank-2{background:linear-gradient(135deg,#94a3b8,#64748b);color:#1c1c28}
+  .rank-3{background:linear-gradient(135deg,#cd7f32,#a0522d);color:#fff}
+  .rank-n{background:#2a2a3a;color:#71717a}
+  .product-name{font-weight:600;color:#fff}
+  .product-type{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;margin-left:8px;text-transform:uppercase;letter-spacing:0.5px}
+  .type-jewelry{background:rgba(244,114,182,0.15);color:#f472b6}
+  .type-canvas{background:rgba(96,165,250,0.15);color:#60a5fa}
+  .type-souvenir{background:rgba(52,211,153,0.15);color:#34d399}
+  .type-mini{background:rgba(251,191,36,0.15);color:#fbbf24}
+  .type-marble{background:rgba(167,139,250,0.15);color:#a78bfa}
+  .amount{font-weight:700;color:#34d399;font-variant-numeric:tabular-nums}
+  .amount-lg{font-size:16px}
+  .bar-cell{min-width:120px}
+  .bar-bg{background:#252535;border-radius:6px;height:8px;overflow:hidden;margin-top:4px}
+  .bar-fill{height:100%;border-radius:6px}
+  .fill-blue{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+  .fill-green{background:linear-gradient(90deg,#10b981,#34d399)}
+  .fill-pink{background:linear-gradient(90deg,#ec4899,#f472b6)}
+  .customer-name{font-weight:600;color:#fff}
+  .customer-walkin{color:#71717a;font-style:italic}
+  .tx-time{font-size:12px;color:#60a5fa;font-weight:500;font-variant-numeric:tabular-nums}
+  .tx-invoice{font-size:12px;color:#52525b;font-family:monospace}
+  .tx-products{font-size:12px;color:#a1a1aa}
+  .tx-status{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
+  .status-closed{background:rgba(52,211,153,0.15);color:#34d399}
+  .status-voided{background:rgba(239,68,68,0.15);color:#ef4444;text-decoration:line-through}
+  .day-group-header td{background:#1a1a2e!important;padding:10px 16px!important;font-size:13px;font-weight:700;color:#60a5fa;letter-spacing:0.3px;border-bottom:2px solid rgba(96,165,250,0.2)!important}
+  .note-box{background:rgba(96,165,250,0.06);border-left:3px solid #60a5fa;border-radius:8px;padding:12px 16px;font-size:12px;color:#cbd5e1;margin-top:20px}
+  .footer{text-align:center;padding:30px;color:#3f3f46;font-size:12px;border-top:1px solid rgba(255,255,255,0.04);margin-top:40px}
+  @media(max-width:640px){.kpi-card .kpi-value{font-size:24px}.day-cards{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
 </style>
 </head>
 <body>
+<div class="header"><div class="header-inner">
+  <div class="logo-area"><h1>Ivan Guaderrama <span>Gallery</span></h1><p>IG Alvaro Obregon — San José del Cabo, BCS &nbsp;|&nbsp; Horario: America/Mazatlán (UTC-7)</p></div>
+  <div class="header-badge"><div class="period">Reporte Semanal de Ventas</div><div class="dates">30 Marzo — 5 Abril, 2026</div></div>
+</div></div>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-inner">
-    <div class="logo-area">
-      <h1>IG <span>Alvaro Obregon</span></h1>
-      <p>Ivan Guaderrama Gallery — San Jose del Cabo</p>
-    </div>
-    <div class="header-badge">
-      <div class="period">Reporte Semanal</div>
-      <div class="dates">30 Mar — 5 Abr 2026</div>
-    </div>
-  </div>
-</div>
-
-<!-- KPI CARDS -->
 <div class="kpi-grid">
-  <div class="kpi-card highlight">
-    <div class="kpi-icon">💰</div>
-    <div class="kpi-value">$3,480.50</div>
-    <div class="kpi-label">Total Revenue</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-icon">📊</div>
-    <div class="kpi-value">27</div>
-    <div class="kpi-label">Transacciones</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-icon">🛍️</div>
-    <div class="kpi-value">47</div>
-    <div class="kpi-label">Unidades Vendidas</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-icon">👥</div>
-    <div class="kpi-value">18</div>
-    <div class="kpi-label">Clientes Únicos</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-icon">🎟️</div>
-    <div class="kpi-value">$129</div>
-    <div class="kpi-label">Ticket Promedio</div>
-  </div>
+  <div class="kpi-card highlight"><div class="kpi-icon">💰</div><div class="kpi-value">$3,481</div><div class="kpi-label">Ingresos Totales</div></div>
+  <div class="kpi-card"><div class="kpi-icon">🧾</div><div class="kpi-value">27</div><div class="kpi-label">Transacciones</div></div>
+  <div class="kpi-card"><div class="kpi-icon">📦</div><div class="kpi-value">47</div><div class="kpi-label">Piezas Vendidas</div></div>
+  <div class="kpi-card"><div class="kpi-icon">👥</div><div class="kpi-value">18</div><div class="kpi-label">Clientes Únicos</div></div>
+  <div class="kpi-card"><div class="kpi-icon">💵</div><div class="kpi-value">$129</div><div class="kpi-label">Ticket Promedio</div></div>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="container">
 
-<!-- VENTAS DIARIAS -->
-<div class="section">
-  <div class="section-title">📅 Ventas por Día</div>
-  <div class="day-cards">
-    <div class="day-card">
-      <div class="day-name">Lunes</div>
-      <div class="day-date">30 Marzo</div>
-      <div class="day-sales">2 ventas</div>
-      <div class="day-revenue">$130.50</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Martes</div>
-      <div class="day-date">31 Marzo</div>
-      <div class="day-sales">4 ventas</div>
-      <div class="day-revenue">$1,547.00</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Miércoles</div>
-      <div class="day-date">1 Abril</div>
-      <div class="day-sales">1 venta</div>
-      <div class="day-revenue">$48.00</div>
-    </div>
-    <div class="day-card best">
-      <div class="day-name">Jueves</div>
-      <div class="day-date">2 Abril</div>
-      <div class="day-sales">16 ventas</div>
-      <div class="day-revenue">$1,449.00</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Viernes</div>
-      <div class="day-date">3 Abril</div>
-      <div class="day-sales">4 ventas</div>
-      <div class="day-revenue">$306.00</div>
-    </div>
-    <div class="day-card no-sales">
-      <div class="day-name">Sábado</div>
-      <div class="day-date">4 Abril</div>
-      <div class="day-sales">0 ventas</div>
-      <div class="day-revenue">$0.00</div>
-    </div>
-    <div class="day-card no-sales">
-      <div class="day-name">Domingo</div>
-      <div class="day-date">5 Abril</div>
-      <div class="day-sales">0 ventas</div>
-      <div class="day-revenue">$0.00</div>
-    </div>
-  </div>
-</div>
+<!-- VENTAS POR DÍA -->
+<div class="section"><div class="section-title">Ventas por Día</div>
+<div class="day-cards">
+  <div class="day-card"><div class="day-name">Lunes</div><div class="day-date">30 Mar</div><div class="day-amount">$131</div><div class="day-count">2 ventas</div></div>
+  <div class="day-card"><div class="day-name">Martes</div><div class="day-date">31 Mar</div><div class="day-amount">$1,547</div><div class="day-count">4 ventas</div></div>
+  <div class="day-card"><div class="day-name">Miércoles</div><div class="day-date">1 Abr</div><div class="day-amount">$48</div><div class="day-count">1 venta</div></div>
+  <div class="day-card best"><div class="day-name">Jueves</div><div class="day-date">2 Abr</div><div class="day-amount">$1,449</div><div class="day-count">16 ventas</div></div>
+  <div class="day-card"><div class="day-name">Viernes</div><div class="day-date">3 Abr</div><div class="day-amount">$306</div><div class="day-count">4 ventas</div></div>
+  <div class="day-card zero"><div class="day-name">Sábado</div><div class="day-date">4 Abr</div><div class="day-amount">$0</div><div class="day-count">0 ventas</div></div>
+  <div class="day-card zero"><div class="day-name">Domingo</div><div class="day-date">5 Abr</div><div class="day-amount">$0</div><div class="day-count">0 ventas</div></div>
+</div></div>
 
-<!-- CHARTS -->
-<div class="section">
-  <div class="section-title">📈 Análisis de Ventas</div>
-  <div class="chart-row">
-    <div class="chart-card">
-      <h3>Ventas Diarias</h3>
-      <div class="chart-wrapper">
-        <canvas id="dailySalesChart"></canvas>
-      </div>
-    </div>
-    <div class="chart-card">
-      <h3>Ingresos por Categoría</h3>
-      <div class="chart-wrapper">
-        <canvas id="categoryChart"></canvas>
-      </div>
-    </div>
-  </div>
+<!-- CHARTS ROW 1 -->
+<div class="chart-row">
+  <div class="chart-card"><h3>Ingresos por Día (USD)</h3><div class="chart-wrapper"><canvas id="dailyRevenueChart"></canvas></div></div>
+  <div class="chart-card"><h3>Ingresos por Categoría</h3><div class="chart-wrapper"><canvas id="categoryChart"></canvas></div></div>
 </div>
+<!-- CHARTS ROW 2 -->
+<div class="chart-row">
+  <div class="chart-card"><h3>Productos — Piezas Vendidas</h3><div class="chart-wrapper"><canvas id="productQtyChart"></canvas></div></div>
+  <div class="chart-card"><h3>Transacciones por Día</h3><div class="chart-wrapper"><canvas id="txCountChart"></canvas></div></div>
+</div>
+<!-- CHART: HORARIOS -->
+<div class="chart-full"><h3 style="font-size:14px;font-weight:600;color:#a1a1aa;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">⏰ Horario de Ventas — Ventas e Ingresos por Hora del Día (9 AM – 10 PM)</h3><div class="chart-wrapper"><canvas id="hourlyChart"></canvas></div></div>
 
-<!-- PRODUCTOS -->
-<div class="section">
-  <div class="section-title">🏆 Productos por Ingresos</div>
-  <table class="styled-table">
-    <thead>
-      <tr><th>Rango</th><th>Producto</th><th>Categoría</th><th>Qty</th><th>Ingresos</th><th>% Total</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="rank-badge rank-1">1</span></td>
-        <td class="product-name">MIA JEWELRY IG</td>
-        <td class="product-category">Jewelry</td>
-        <td>6</td>
-        <td class="amount">$1,610.00</td>
-        <td><span class="pct-badge">46.3%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-2">2</span></td>
-        <td class="product-name">Big Canvas</td>
-        <td class="product-category">Canvas</td>
-        <td>15</td>
-        <td class="amount">$716.00</td>
-        <td><span class="pct-badge">20.6%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-3">3</span></td>
-        <td class="product-name">GICLEE COLLECTION</td>
-        <td class="product-category">Canvas</td>
-        <td>2</td>
-        <td class="amount">$357.00</td>
-        <td><span class="pct-badge">10.3%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">4</span></td>
-        <td class="product-name">MINI canvas desk</td>
-        <td class="product-category">Mini canvas desk</td>
-        <td>8</td>
-        <td class="amount">$312.00</td>
-        <td><span class="pct-badge">9.0%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">5</span></td>
-        <td class="product-name">Perfume</td>
-        <td class="product-category">Souvenir</td>
-        <td>4</td>
-        <td class="amount">$160.00</td>
-        <td><span class="pct-badge">4.6%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">6</span></td>
-        <td class="product-name">Mirrors</td>
-        <td class="product-category">Souvenir</td>
-        <td>6</td>
-        <td class="amount">$156.00</td>
-        <td><span class="pct-badge">4.5%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">7</span></td>
-        <td class="product-name">Magnets</td>
-        <td class="product-category">Souvenir</td>
-        <td>5</td>
-        <td class="amount">$150.00</td>
-        <td><span class="pct-badge">4.3%</span></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">8</span></td>
-        <td class="product-name">10 By 10 Marble Tile</td>
-        <td class="product-category">Marble</td>
-        <td>1</td>
-        <td class="amount">$19.50</td>
-        <td><span class="pct-badge">0.6%</span></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<!-- TOP PRODUCTOS POR INGRESO -->
+<div class="section"><div class="section-title">Top Productos por Ingreso</div>
+<table class="styled-table"><thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Piezas</th><th>Ingreso</th><th>% del Total</th></tr></thead><tbody>
+  <tr><td><span class="rank-badge rank-1">1</span></td><td class="product-name">MIA JEWELRY IG</td><td><span class="product-type type-jewelry">Jewelry</span></td><td>6</td><td class="amount amount-lg">$1,610.00</td><td class="bar-cell">46.3%<div class="bar-bg"><div class="bar-fill fill-pink" style="width:46.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-2">2</span></td><td class="product-name">Big Canvas</td><td><span class="product-type type-canvas">Canvas</span></td><td>15</td><td class="amount amount-lg">$716.00</td><td class="bar-cell">20.6%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:20.6%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">GICLEE COLLECTION</td><td><span class="product-type type-canvas">Canvas</span></td><td>2</td><td class="amount amount-lg">$357.00</td><td class="bar-cell">10.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:10.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">4</span></td><td class="product-name">MINI canvas desk</td><td><span class="product-type type-mini">Mini Canvas</span></td><td>8</td><td class="amount">$312.00</td><td class="bar-cell">9.0%<div class="bar-bg"><div class="bar-fill fill-green" style="width:9%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">5</span></td><td class="product-name">Perfume</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>4</td><td class="amount">$160.00</td><td class="bar-cell">4.6%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.6%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">6</span></td><td class="product-name">Mirrors</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>6</td><td class="amount">$156.00</td><td class="bar-cell">4.5%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.5%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">7</span></td><td class="product-name">Magnets</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>5</td><td class="amount">$150.00</td><td class="bar-cell">4.3%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">8</span></td><td class="product-name">10 By 10 Marble Tile</td><td><span class="product-type type-marble">Marble</span></td><td>1</td><td class="amount">$19.50</td><td class="bar-cell">0.6%<div class="bar-bg"><div class="bar-fill fill-green" style="width:0.6%"></div></div></td></tr>
+</tbody></table></div>
 
-<!-- TOP CUSTOMERS -->
-<div class="section">
-  <div class="section-title">⭐ Clientes Destacados</div>
-  <table class="styled-table">
-    <thead>
-      <tr><th>Rango</th><th>Cliente</th><th>Compras</th><th>Total Gastado</th><th>% Ventas</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="rank-badge rank-1">1</span></td>
-        <td class="customer-name">Mary Smolik</td>
-        <td>1</td>
-        <td class="amount">$614.00</td>
-        <td class="bar-cell">17.6%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:17.6%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-2">2</span></td>
-        <td class="customer-name">Margaret C Vaughan</td>
-        <td>1</td>
-        <td class="amount">$590.00</td>
-        <td class="bar-cell">16.9%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:16.9%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-3">3</span></td>
-        <td class="customer-name">Kathleen Stover</td>
-        <td>1</td>
-        <td class="amount">$295.00</td>
-        <td class="bar-cell">8.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:8.5%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">4</span></td>
-        <td class="customer-name">Lori Jean Zavadil</td>
-        <td>1</td>
-        <td class="amount">$148.00</td>
-        <td class="bar-cell">4.2%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.2%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">5</span></td>
-        <td class="customer-name">Moira McGinley</td>
-        <td>1</td>
-        <td class="amount">$144.00</td>
-        <td class="bar-cell">4.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.1%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">6</span></td>
-        <td class="customer-name">Kendra</td>
-        <td>1</td>
-        <td class="amount">$135.00</td>
-        <td class="bar-cell">3.9%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.9%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">7</span></td>
-        <td class="customer-name">Maria Teresa Blanquel Becerra</td>
-        <td>1</td>
-        <td class="amount">$130.00</td>
-        <td class="bar-cell">3.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.7%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">8</span></td>
-        <td class="customer-name">Itzi</td>
-        <td>1</td>
-        <td class="amount">$118.00</td>
-        <td class="bar-cell">3.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.4%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">9</span></td>
-        <td class="customer-name">Megan Wick</td>
-        <td>1</td>
-        <td class="amount">$87.00</td>
-        <td class="bar-cell">2.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.5%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">10</span></td>
-        <td class="customer-name">Lyndsey Wilson</td>
-        <td>1</td>
-        <td class="amount">$80.00</td>
-        <td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">10</span></td>
-        <td class="customer-name">Tim A Majewski</td>
-        <td>1</td>
-        <td class="amount">$80.00</td>
-        <td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">12</span></td>
-        <td class="customer-name">Traci Eichstadt</td>
-        <td>1</td>
-        <td class="amount">$60.00</td>
-        <td class="bar-cell">1.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.7%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">13</span></td>
-        <td class="customer-name">Carissa A Peters</td>
-        <td>1</td>
-        <td class="amount">$52.00</td>
-        <td class="bar-cell">1.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.5%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">14</span></td>
-        <td class="customer-name">Sandra Ross</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td class="bar-cell">1.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.4%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">15</span></td>
-        <td class="customer-name">Ashley D</td>
-        <td>1</td>
-        <td class="amount">$39.00</td>
-        <td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">15</span></td>
-        <td class="customer-name">Julia Olkin</td>
-        <td>1</td>
-        <td class="amount">$39.00</td>
-        <td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">15</span></td>
-        <td class="customer-name">Shawn Finnegan</td>
-        <td>1</td>
-        <td class="amount">$39.00</td>
-        <td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td>
-      </tr>
-      <tr>
-        <td><span class="rank-badge rank-n">—</span></td>
-        <td class="customer-name">Walk-in (sin registro)</td>
-        <td>10</td>
-        <td class="amount">$782.50</td>
-        <td class="bar-cell">22.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:22.5%"></div></div></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<!-- TOP PRODUCTOS POR CANTIDAD -->
+<div class="section"><div class="section-title">Top Productos Más Vendidos (por Piezas)</div>
+<table class="styled-table"><thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Piezas</th><th>Ingreso</th></tr></thead><tbody>
+  <tr><td><span class="rank-badge rank-1">1</span></td><td class="product-name">Big Canvas</td><td><span class="product-type type-canvas">Canvas</span></td><td><strong>15</strong></td><td class="amount">$716.00</td></tr>
+  <tr><td><span class="rank-badge rank-2">2</span></td><td class="product-name">MINI canvas desk</td><td><span class="product-type type-mini">Mini Canvas</span></td><td><strong>8</strong></td><td class="amount">$312.00</td></tr>
+  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">MIA JEWELRY IG</td><td><span class="product-type type-jewelry">Jewelry</span></td><td><strong>6</strong></td><td class="amount">$1,610.00</td></tr>
+  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">Mirrors</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>6</strong></td><td class="amount">$156.00</td></tr>
+  <tr><td><span class="rank-badge rank-n">5</span></td><td class="product-name">Magnets</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>5</strong></td><td class="amount">$150.00</td></tr>
+  <tr><td><span class="rank-badge rank-n">6</span></td><td class="product-name">Perfume</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>4</strong></td><td class="amount">$160.00</td></tr>
+  <tr><td><span class="rank-badge rank-n">7</span></td><td class="product-name">GICLEE COLLECTION</td><td><span class="product-type type-canvas">Canvas</span></td><td><strong>2</strong></td><td class="amount">$357.00</td></tr>
+  <tr><td><span class="rank-badge rank-n">8</span></td><td class="product-name">10 By 10 Marble Tile</td><td><span class="product-type type-marble">Marble</span></td><td><strong>1</strong></td><td class="amount">$19.50</td></tr>
+</tbody></table></div>
+
+<!-- CLIENTES -->
+<div class="section"><div class="section-title">Clientes de la Semana</div>
+<table class="styled-table"><thead><tr><th>#</th><th>Cliente</th><th>Compras</th><th>Total Gastado</th><th>% del Total</th></tr></thead><tbody>
+  <tr><td><span class="rank-badge rank-1">1</span></td><td class="customer-name">Mary Smolik</td><td>1</td><td class="amount amount-lg">$614.00</td><td class="bar-cell">17.6%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:17.6%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-2">2</span></td><td class="customer-name">Margaret C Vaughan</td><td>1</td><td class="amount amount-lg">$590.00</td><td class="bar-cell">17.0%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:17%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-3">3</span></td><td class="customer-name">Kathleen Stover</td><td>1</td><td class="amount">$295.00</td><td class="bar-cell">8.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:8.5%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">4</span></td><td class="customer-name">Lori Jean Zavadil</td><td>1</td><td class="amount">$148.00</td><td class="bar-cell">4.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">5</span></td><td class="customer-name">Moira McGinley</td><td>1</td><td class="amount">$144.00</td><td class="bar-cell">4.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.1%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">6</span></td><td class="customer-name">Kendra</td><td>1</td><td class="amount">$135.00</td><td class="bar-cell">3.9%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.9%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">7</span></td><td class="customer-name">Maria Teresa Blanquel Becerra</td><td>1</td><td class="amount">$130.00</td><td class="bar-cell">3.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.7%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">8</span></td><td class="customer-name">Itzi</td><td>1</td><td class="amount">$118.00</td><td class="bar-cell">3.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.4%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">9</span></td><td class="customer-name">Megan Wick</td><td>1</td><td class="amount">$87.00</td><td class="bar-cell">2.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.5%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">10</span></td><td class="customer-name">Lyndsey Wilson</td><td>1</td><td class="amount">$80.00</td><td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">10</span></td><td class="customer-name">Tim A Majewski</td><td>1</td><td class="amount">$80.00</td><td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">12</span></td><td class="customer-name">Traci Eichstadt</td><td>1</td><td class="amount">$60.00</td><td class="bar-cell">1.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.7%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">13</span></td><td class="customer-name">Carissa A Peters</td><td>1</td><td class="amount">$52.00</td><td class="bar-cell">1.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.5%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">14</span></td><td class="customer-name">Sandra Ross</td><td>1</td><td class="amount">$48.00</td><td class="bar-cell">1.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.4%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Ashley D</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Julia Olkin</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Shawn Finnegan</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
+  <tr><td><span class="rank-badge rank-n">—</span></td><td class="customer-name customer-walkin">Walk-in (sin registro)</td><td>10</td><td class="amount amount-lg">$782.50</td><td class="bar-cell">22.5%<div class="bar-bg"><div class="bar-fill fill-green" style="width:22.5%"></div></div></td></tr>
+</tbody></table></div>
 
 <!-- DETALLE DE TRANSACCIONES -->
-<div class="section">
-  <div class="section-title">📝 Detalle de Transacciones</div>
-  <div class="note-box">
-    ⏰ <strong>Horario: America/Mazatlán (UTC-7)</strong> | Nota: OBR13928 (Margaret C Vaughan $590 voided) excluido de totales
-  </div>
-  <table class="styled-table">
-    <thead>
-      <tr><th>Hora Mazatlán</th><th>Factura</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Status</th></tr>
-    </thead>
-    <tbody>
-      <!-- LUNES 30 MAR -->
-      <tr class="day-group-header"><td colspan="6">Lunes 30 Marzo — 2 ventas — $130.50</td></tr>
-      <tr>
-        <td class="tx-time">11:30</td>
-        <td class="tx-invoice">OBR13926</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Big Canvas ($24), 10x10 Marble Tile ($19.50)</td>
-        <td class="amount">$43.50</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">15:12</td>
-        <td class="tx-invoice">OBR13927</td>
-        <td>Megan Wick</td>
-        <td class="tx-products">Big Canvas ($48), MINI canvas desk ($39)</td>
-        <td class="amount">$87.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
+<div class="section"><div class="section-title">Detalle de Transacciones</div>
+<table class="styled-table"><thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Status</th></tr></thead><tbody>
+  <tr class="day-group-header"><td colspan="6">Lunes 30 Marzo — 2 ventas — $130.50</td></tr>
+  <tr><td class="tx-time">11:30</td><td class="tx-invoice">OBR13926</td><td>Walk-in</td><td class="tx-products">Big Canvas ($24), Marble Tile ($19.50)</td><td class="amount">$43.50</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">15:12</td><td class="tx-invoice">OBR13927</td><td>Megan Wick</td><td class="tx-products">Big Canvas ($48), MINI canvas desk ($39)</td><td class="amount">$87.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
 
-      <!-- MARTES 31 MAR -->
-      <tr class="day-group-header"><td colspan="6">Martes 31 Marzo — 4 ventas — $1,547.00</td></tr>
-      <tr>
-        <td class="tx-time">12:05</td>
-        <td class="tx-invoice">OBR13929</td>
-        <td>Kathleen Stover</td>
-        <td class="tx-products">MIA JEWELRY IG ($295)</td>
-        <td class="amount">$295.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">12:07</td>
-        <td class="tx-invoice">OBR13930</td>
-        <td>Mary Smolik</td>
-        <td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295), Big Canvas ($24)</td>
-        <td class="amount">$614.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">12:19</td>
-        <td class="tx-invoice">OBR13931</td>
-        <td>Margaret C Vaughan</td>
-        <td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295)</td>
-        <td class="amount">$590.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">13:54</td>
-        <td class="tx-invoice">OBR13932</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Big Canvas ($48)</td>
-        <td class="amount">$48.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
+  <tr class="day-group-header"><td colspan="6">Martes 31 Marzo — 4 ventas — $1,547.00 (+ 1 anulada)</td></tr>
+  <tr style="opacity:0.5"><td class="tx-time">12:04</td><td class="tx-invoice">OBR13928</td><td>Margaret C Vaughan</td><td class="tx-products">MIA JEWELRY IG x2 ($590)</td><td style="text-decoration:line-through;color:#ef4444">$590.00</td><td><span class="tx-status status-voided">VOIDED</span></td></tr>
+  <tr><td class="tx-time">12:05</td><td class="tx-invoice">OBR13929</td><td>Kathleen Stover</td><td class="tx-products">MIA JEWELRY IG ($295)</td><td class="amount">$295.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">12:07</td><td class="tx-invoice">OBR13930</td><td>Mary Smolik</td><td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295), Big Canvas ($24)</td><td class="amount">$614.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">12:19</td><td class="tx-invoice">OBR13931</td><td>Margaret C Vaughan</td><td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295)</td><td class="amount">$590.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">13:54</td><td class="tx-invoice">OBR13932</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
 
-      <!-- MIERCOLES 1 ABR -->
-      <tr class="day-group-header"><td colspan="6">Miércoles 1 Abril — 1 venta — $48.00</td></tr>
-      <tr>
-        <td class="tx-time">13:16</td>
-        <td class="tx-invoice">OBR13933</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Big Canvas ($48)</td>
-        <td class="amount">$48.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
+  <tr class="day-group-header"><td colspan="6">Miércoles 1 Abril — 1 venta — $48.00</td></tr>
+  <tr><td class="tx-time">13:16</td><td class="tx-invoice">OBR13933</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
 
-      <!-- JUEVES 2 ABR -->
-      <tr class="day-group-header"><td colspan="6">Jueves 2 Abril ★ BEST DAY — 16 ventas — $1,449.00</td></tr>
-      <tr>
-        <td class="tx-time">16:40</td>
-        <td class="tx-invoice">OBR13934</td>
-        <td>Traci Eichstadt</td>
-        <td class="tx-products">Magnets ($30), Magnets ($30)</td>
-        <td class="amount">$60.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">16:41</td>
-        <td class="tx-invoice">OBR13935</td>
-        <td>Carissa A Peters</td>
-        <td class="tx-products">Mirrors ($26), Mirrors ($26)</td>
-        <td class="amount">$52.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">18:22</td>
-        <td class="tx-invoice">OBR13936</td>
-        <td>Walk-in</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">18:37</td>
-        <td class="tx-invoice">OBR13937</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Mirrors ($26), MINI canvas desk ($39), Mirrors ($26)</td>
-        <td class="amount">$91.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">18:39</td>
-        <td class="tx-invoice">OBR13938</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Big Canvas ($48)</td>
-        <td class="amount">$48.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">19:20</td>
-        <td class="tx-invoice">OBR13939</td>
-        <td>Sandra Ross</td>
-        <td class="tx-products">Big Canvas ($48)</td>
-        <td class="amount">$48.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">19:26</td>
-        <td class="tx-invoice">OBR13940</td>
-        <td>Maria Teresa Blanquel</td>
-        <td class="tx-products">Big Canvas ($70), Magnets ($30), Magnets ($30)</td>
-        <td class="amount">$130.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">19:35</td>
-        <td class="tx-invoice">OBR13941</td>
-        <td>Moira McGinley</td>
-        <td class="tx-products">Big Canvas x3 ($144)</td>
-        <td class="amount">$144.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">19:49</td>
-        <td class="tx-invoice">OBR13942</td>
-        <td>Walk-in</td>
-        <td class="tx-products">GICLEE COLLECTION ($179), GICLEE COLLECTION ($178)</td>
-        <td class="amount">$357.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:27</td>
-        <td class="tx-invoice">OBR13943</td>
-        <td>Walk-in</td>
-        <td class="tx-products">Magnets ($30)</td>
-        <td class="amount">$30.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:30</td>
-        <td class="tx-invoice">OBR13944</td>
-        <td>Ashley D</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:31</td>
-        <td class="tx-invoice">OBR13945</td>
-        <td>Julia Olkin</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:37</td>
-        <td class="tx-invoice">OBR13946</td>
-        <td>Lyndsey Wilson</td>
-        <td class="tx-products">Perfume ($40), Perfume ($40)</td>
-        <td class="amount">$80.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:52</td>
-        <td class="tx-invoice">OBR13947</td>
-        <td>Itzi</td>
-        <td class="tx-products">Big Canvas ($70), Big Canvas ($48)</td>
-        <td class="amount">$118.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:53</td>
-        <td class="tx-invoice">OBR13948</td>
-        <td>Kendra</td>
-        <td class="tx-products">MIA JEWELRY IG ($135)</td>
-        <td class="amount">$135.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">20:55</td>
-        <td class="tx-invoice">OBR13949</td>
-        <td>Walk-in</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
+  <tr class="day-group-header"><td colspan="6">⭐ Jueves 2 Abril — 16 ventas — $1,449.00 — MEJOR DÍA</td></tr>
+  <tr><td class="tx-time">16:40</td><td class="tx-invoice">OBR13934</td><td>Traci Eichstadt</td><td class="tx-products">Magnets ($30), Magnets ($30)</td><td class="amount">$60.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">16:41</td><td class="tx-invoice">OBR13935</td><td>Carissa A Peters</td><td class="tx-products">Mirrors ($26), Mirrors ($26)</td><td class="amount">$52.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">18:22</td><td class="tx-invoice">OBR13936</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">18:37</td><td class="tx-invoice">OBR13937</td><td>Walk-in</td><td class="tx-products">Mirrors ($26), MINI canvas desk ($39), Mirrors ($26)</td><td class="amount">$91.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">18:39</td><td class="tx-invoice">OBR13938</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">19:20</td><td class="tx-invoice">OBR13939</td><td>Sandra Ross</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">19:26</td><td class="tx-invoice">OBR13940</td><td>Maria Teresa Blanquel</td><td class="tx-products">Big Canvas ($70), Magnets ($30), Magnets ($30)</td><td class="amount">$130.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">19:35</td><td class="tx-invoice">OBR13941</td><td>Moira McGinley</td><td class="tx-products">Big Canvas ($48) x3</td><td class="amount">$144.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">19:49</td><td class="tx-invoice">OBR13942</td><td>Walk-in</td><td class="tx-products">GICLEE COLLECTION ($179), GICLEE COLLECTION ($178)</td><td class="amount">$357.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:27</td><td class="tx-invoice">OBR13943</td><td>Walk-in</td><td class="tx-products">Magnets ($30)</td><td class="amount">$30.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:30</td><td class="tx-invoice">OBR13944</td><td>Ashley D</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:31</td><td class="tx-invoice">OBR13945</td><td>Julia Olkin</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:37</td><td class="tx-invoice">OBR13946</td><td>Lyndsey Wilson</td><td class="tx-products">Perfume ($40), Perfume ($40)</td><td class="amount">$80.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:52</td><td class="tx-invoice">OBR13947</td><td>Itzi</td><td class="tx-products">Big Canvas ($70), Big Canvas ($48)</td><td class="amount">$118.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:53</td><td class="tx-invoice">OBR13948</td><td>Kendra</td><td class="tx-products">MIA JEWELRY IG ($135)</td><td class="amount">$135.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">20:55</td><td class="tx-invoice">OBR13949</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
 
-      <!-- VIERNES 3 ABR -->
-      <tr class="day-group-header"><td colspan="6">Viernes 3 Abril — 4 ventas — $306.00</td></tr>
-      <tr>
-        <td class="tx-time">10:15</td>
-        <td class="tx-invoice">OBR13950</td>
-        <td>Walk-in</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">12:06</td>
-        <td class="tx-invoice">OBR13951</td>
-        <td>Lori Jean Zavadil</td>
-        <td class="tx-products">Big Canvas ($48), Big Canvas ($48), Mirrors ($26), Mirrors ($26)</td>
-        <td class="amount">$148.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">13:46</td>
-        <td class="tx-invoice">OBR13952</td>
-        <td>Tim A Majewski</td>
-        <td class="tx-products">Perfume ($40), Perfume ($40)</td>
-        <td class="amount">$80.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
-      <tr>
-        <td class="tx-time">14:05</td>
-        <td class="tx-invoice">OBR13953</td>
-        <td>Shawn Finnegan</td>
-        <td class="tx-products">MINI canvas desk ($39)</td>
-        <td class="amount">$39.00</td>
-        <td><span class="tx-status status-closed">CLOSED</span></td>
-      </tr>
+  <tr class="day-group-header"><td colspan="6">Viernes 3 Abril — 4 ventas — $306.00</td></tr>
+  <tr><td class="tx-time">10:15</td><td class="tx-invoice">OBR13950</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">12:06</td><td class="tx-invoice">OBR13951</td><td>Lori Jean Zavadil</td><td class="tx-products">Big Canvas ($48) x2, Mirrors ($26) x2</td><td class="amount">$148.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">13:46</td><td class="tx-invoice">OBR13952</td><td>Tim A Majewski</td><td class="tx-products">Perfume ($40), Perfume ($40)</td><td class="amount">$80.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
+  <tr><td class="tx-time">14:05</td><td class="tx-invoice">OBR13953</td><td>Shawn Finnegan</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
 
-      <!-- SABADO 4 ABR -->
-      <tr class="day-group-header"><td colspan="6">Sábado 4 Abril — Sin ventas</td></tr>
-
-      <!-- DOMINGO 5 ABR -->
-      <tr class="day-group-header"><td colspan="6">Domingo 5 Abril — Sin ventas</td></tr>
-    </tbody>
-  </table>
+  <tr class="day-group-header"><td colspan="6">Sábado 4 Abril — Sin ventas</td></tr>
+  <tr class="day-group-header"><td colspan="6">Domingo 5 Abril — Sin ventas</td></tr>
+</tbody></table>
+<div class="note-box">⚠️ OBR13928 (Margaret C Vaughan, $590) fue <strong>anulada (VOIDED)</strong> y no se incluye en los totales. Se muestra en la tabla para referencia.</div>
 </div>
 
 </div>
 
-<!-- FOOTER -->
-<div class="footer">
-  <div class="footer-text">
-    Reporte Generado — Semana 30 Marzo — 5 Abril 2026 | Horario: America/Mazatlán (UTC-7)
-  </div>
-</div>
+<div class="footer">Generado automáticamente desde Vend/Lightspeed API — Ivan Guaderrama Gallery — Horario: America/Mazatlán (UTC-7) — 7 Abril 2026</div>
 
 <script>
-// Chart.js Configuration
-Chart.defaults.color = '#94a3b8';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
+Chart.defaults.color='#a1a1aa';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family="'Inter',sans-serif";
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      labels: { color: '#cbd5e1', font: { size: 12, family: "'Inter', sans-serif" }, padding: 16 }
-    }
-  }
-};
+new Chart(document.getElementById('dailyRevenueChart'),{type:'bar',data:{labels:['Lun 30','Mar 31','Mié 1','Jue 2 ⭐','Vie 3','Sáb 4','Dom 5'],datasets:[{label:'Ingresos USD',data:[130.50,1547,48,1449,306,0,0],backgroundColor:['rgba(96,165,250,0.7)','rgba(96,165,250,0.7)','rgba(96,165,250,0.7)','rgba(52,211,153,0.8)','rgba(96,165,250,0.7)','rgba(63,63,70,0.4)','rgba(63,63,70,0.4)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}},x:{grid:{display:false}}}}});
 
-// Daily Sales Chart
-const dailySalesCtx = document.getElementById('dailySalesChart').getContext('2d');
-new Chart(dailySalesCtx, {
-  type: 'bar',
-  data: {
-    labels: ['Lun 30', 'Mar 31', 'Mié 1', 'Jue 2★', 'Vie 3', 'Sáb 4', 'Dom 5'],
-    datasets: [{
-      label: 'Revenue',
-      data: [130.50, 1547.00, 48.00, 1449.00, 306.00, 0, 0],
-      backgroundColor: ['#60a5fa', '#60a5fa', '#60a5fa', '#22c55e', '#60a5fa', 'rgba(96,165,250,0.2)', 'rgba(96,165,250,0.2)'],
-      borderColor: '#60a5fa',
-      borderWidth: 0,
-      borderRadius: 8,
-      barThickness: 24
-    }]
-  },
-  options: {
-    ...chartOptions,
-    indexAxis: undefined,
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { color: '#94a3b8' },
-        grid: { color: 'rgba(255,255,255,0.05)' }
-      },
-      x: {
-        ticks: { color: '#94a3b8' },
-        grid: { display: false }
-      }
-    }
-  }
-});
+new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:['Jewelry','Canvas','Mini Canvas Desk','Souvenir','Marble'],datasets:[{data:[1610,1073,312,466,19.50],backgroundColor:['#f472b6','#60a5fa','#fbbf24','#34d399','#a78bfa'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},tooltip:{callbacks:{label:c=>' $'+c.parsed.toLocaleString()+' ('+(c.parsed/3480.50*100).toFixed(1)+'%)'}}}}});
 
-// Category Chart
-const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-new Chart(categoryCtx, {
-  type: 'doughnut',
-  data: {
-    labels: ['Jewelry', 'Canvas', 'Mini Canvas', 'Souvenir', 'Marble'],
-    datasets: [{
-      data: [1610.00, 1073.00, 312.00, 466.00, 19.50],
-      backgroundColor: ['#60a5fa', '#8b5cf6', '#ec4899', '#f59e0b', '#14b8a6'],
-      borderColor: '#1c1c28',
-      borderWidth: 3
-    }]
-  },
-  options: {
-    ...chartOptions,
-    plugins: {
-      ...chartOptions.plugins,
-      tooltip: {
-        callbacks: {
-          label: function(context) {
-            const value = context.parsed;
-            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-            const pct = ((value / total) * 100).toFixed(1);
-            return `$${value.toFixed(2)} (${pct}%)`;
-          }
-        }
-      }
-    }
-  }
-});
+new Chart(document.getElementById('productQtyChart'),{type:'bar',data:{labels:['Big Canvas','MINI canvas','MIA JEWELRY','Mirrors','Magnets','Perfume','GICLEE','Marble Tile'],datasets:[{label:'Piezas',data:[15,8,6,6,5,4,2,1],backgroundColor:['#60a5fa','#fbbf24','#f472b6','#34d399','#34d399','#34d399','#60a5fa','#a78bfa'],borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('txCountChart'),{type:'line',data:{labels:['Lun 30','Mar 31','Mié 1','Jue 2 ⭐','Vie 3','Sáb 4','Dom 5'],datasets:[{label:'Transacciones',data:[2,4,1,16,4,0,0],borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,0.1)',fill:true,tension:0.4,pointRadius:6,pointBackgroundColor:'#60a5fa',pointBorderColor:'#1c1c28',pointBorderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.04)'}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('hourlyChart'),{type:'bar',data:{labels:['9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'],datasets:[{label:'Ingresos USD',data:[0,39,43.5,1647,176,39,87,112,0,178,679,480,0,0],backgroundColor:['rgba(63,63,70,0.3)','rgba(96,165,250,0.5)','rgba(96,165,250,0.5)','rgba(52,211,153,0.85)','rgba(96,165,250,0.6)','rgba(96,165,250,0.5)','rgba(96,165,250,0.5)','rgba(96,165,250,0.6)','rgba(63,63,70,0.3)','rgba(96,165,250,0.6)','rgba(244,114,182,0.7)','rgba(244,114,182,0.7)','rgba(63,63,70,0.3)','rgba(63,63,70,0.3)'],borderRadius:6,borderSkipped:false,yAxisID:'y'},{label:'# Ventas',data:[0,1,1,4,3,1,1,2,0,3,4,7,0,0],type:'line',borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.1)',fill:false,tension:0.4,pointRadius:5,pointBackgroundColor:'#fbbf24',pointBorderColor:'#1c1c28',pointBorderWidth:2,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,padding:16}},tooltip:{callbacks:{label:c=>c.dataset.label==='Ingresos USD'?'$'+c.parsed.y.toLocaleString():c.parsed.y+' ventas'}}},scales:{y:{position:'left',ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}},y1:{position:'right',ticks:{stepSize:1},grid:{display:false}},x:{grid:{display:false}}}}});
 </script>
-
 </body>
 </html>
