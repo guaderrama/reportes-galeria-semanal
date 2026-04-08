@@ -283,6 +283,60 @@ tr:hover{background:rgba(59,130,246,.04)}
 </div></div>
 </div>
 </div></div>
+
+
+<!-- Data Quality Alerts -->
+<div class="card" style="border-color:rgba(239,68,68,.3)">
+  <div class="card-title">⚠️ Alertas de Calidad de Datos</div>
+  <div class="kpis" style="margin-bottom:16px">
+    <div class="kpi" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Ventas con Email</div>
+      <div class="kpi-val" style="color:#ef4444">11.1%</div>
+      <div class="kpi-sub">3 de 27 ventas · 24 sin email</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Nombre Genérico</div>
+      <div class="kpi-val" style="color:#ef4444">37.0%</div>
+      <div class="kpi-sub">10 ventas como "walking" o "walk inn"</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Con Descuento</div>
+      <div class="kpi-val" style="color:#ef4444">40.7%</div>
+      <div class="kpi-sub">11 ventas · $544.50 descontado</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #3b82f6">
+      <div class="kpi-label">Items / Transacción</div>
+      <div class="kpi-val kpi-blue">2.0</div>
+      <div class="kpi-sub">Voided: 1 · Returns: 0</div>
+    </div>
+  </div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Factura</th><th>Cliente</th><th class="r">Total</th><th>Estado</th></tr></thead><tbody>
+    <tr><td>OBR13953</td><td>SHAWN FINNEGAN</td><td class="r">$39.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13952</td><td>TIM A MAJEWSKI</td><td class="r">$80.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13950</td><td>walking</td><td class="r">$39.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13949</td><td>walking</td><td class="r">$39.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13948</td><td>KENDRA</td><td class="r">$135.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13947</td><td>ITZI</td><td class="r">$118.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13946</td><td>Lyndsey Wilson</td><td class="r">$80.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13945</td><td>JULIA OLKIN</td><td class="r">$39.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13944</td><td>ASHLEY D</td><td class="r">$39.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13943</td><td>walking</td><td class="r">$30.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13942</td><td>walking</td><td class="r">$357.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13939</td><td>sandra ross</td><td class="r">$48.00</td><td><span style="color:#f59e0b;font-size:11px">📧 Sin email</span></td></tr>
+    <tr><td>OBR13938</td><td>walking</td><td class="r">$48.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13937</td><td>walking</td><td class="r">$91.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+    <tr><td>OBR13936</td><td>walking</td><td class="r">$39.00</td><td><span style="color:#ef4444;font-size:11px">⛔ Sin nombre</span></td></tr>
+  </tbody></table></div>
+</div>
+<div class="card"><div class="card-title">💳 Métodos de Pago</div>
+<div class="tbl-wrap"><table><thead><tr><th>Método</th><th class="r">Txns</th><th class="r">Monto</th><th class="r">%</th></tr></thead><tbody>
+    <tr><td><span class="dot" style="background:#3b82f6"></span>Credit Card MNX</td><td class="r">21</td><td class="r b">$2,377.50</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>68.3%</span><div style="width:60px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:68.30915098405401%;height:100%;background:#3b82f6;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#8b5cf6"></span>American Express MNX</td><td class="r">1</td><td class="r b">$590.00</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>17.0%</span><div style="width:60px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:16.951587415601207%;height:100%;background:#8b5cf6;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#10b981"></span>Cash USD</td><td class="r">2</td><td class="r b">$405.00</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>11.6%</span><div style="width:60px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:11.63625915816693%;height:100%;background:#10b981;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#f59e0b"></span>Cash MXN</td><td class="r">3</td><td class="r b">$108.00</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>3.1%</span><div style="width:60px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:3.103002442177848%;height:100%;background:#f59e0b;border-radius:4px"></div></div></div></td></tr>
+</tbody></table></div></div>
+
 </div>
 <div id="ytd" class="tab-panel">
 <div class="kpis">
@@ -374,6 +428,44 @@ tr:hover{background:rgba(59,130,246,.04)}
 <tr><td>14</td><td>MARY SMOLIK</td><td class="r">1</td><td class="r b">$614.00</td><td class="r">1</td><td class="r">$614.00</td></tr>
 <tr><td>15</td><td>MARGARET C VAUGHAN</td><td class="r">1</td><td class="r b">$590.00</td><td class="r">1</td><td class="r">$590.00</td></tr>
 </tbody></table></div></div>
+
+<!-- Data Quality YTD -->
+<div class="card" style="border-color:rgba(239,68,68,.3)">
+  <div class="card-title">⚠️ Calidad de Datos — Acumulado 2026</div>
+  <div class="kpis" style="margin-bottom:0">
+    <div class="kpi" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Ventas con Email</div>
+      <div class="kpi-val" style="color:#ef4444">19.6%</div>
+      <div class="kpi-sub">101 de 514 · 413 sin email</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #ef4444">
+      <div class="kpi-label">Nombre Genérico</div>
+      <div class="kpi-val" style="color:#ef4444">34.8%</div>
+      <div class="kpi-sub">179 ventas anónimas</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #f59e0b">
+      <div class="kpi-label">Con Descuento</div>
+      <div class="kpi-val" style="color:#f59e0b">34.2%</div>
+      <div class="kpi-sub">176 ventas · $13,554.85 descontado</div>
+    </div>
+    <div class="kpi" style="border-left:4px solid #3b82f6">
+      <div class="kpi-label">Items / Txn</div>
+      <div class="kpi-val kpi-blue">1.74</div>
+      <div class="kpi-sub">Voided: 5 ($2,720.00) · Returns: 4</div>
+    </div>
+  </div>
+</div>
+<div class="charts-grid"><div class="chart-box"><div class="card-title">💳 Métodos de Pago (YTD)</div>
+<div class="tbl-wrap"><table><thead><tr><th>Método</th><th class="r">Txns</th><th class="r">Monto</th><th class="r">%</th></tr></thead><tbody>
+    <tr><td><span class="dot" style="background:#3b82f6"></span>Credit Card MNX</td><td class="r">327</td><td class="r b">$34,858.90</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>46.0%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:45.9973094815375%;height:100%;background:#3b82f6;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#8b5cf6"></span>American Express MNX</td><td class="r">75</td><td class="r b">$20,289.50</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>26.8%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:26.77257201821213%;height:100%;background:#8b5cf6;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#ec4899"></span>PAY LINK (TRANSFER)</td><td class="r">3</td><td class="r b">$8,584.75</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>11.3%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:11.327821663094044%;height:100%;background:#ec4899;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#06b6d4"></span>Credit Card USD</td><td class="r">6</td><td class="r b">$5,739.00</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>7.6%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:7.5727736421557665%;height:100%;background:#06b6d4;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#10b981"></span>Cash USD</td><td class="r">68</td><td class="r b">$4,367.50</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>5.8%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:5.763040404620198%;height:100%;background:#10b981;border-radius:4px"></div></div></div></td></tr>
+    <tr><td><span class="dot" style="background:#f59e0b"></span>Cash MXN</td><td class="r">38</td><td class="r b">$1,945.00</td><td class="r"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><span>2.6%</span><div style="width:80px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="width:2.566482790380374%;height:100%;background:#f59e0b;border-radius:4px"></div></div></div></td></tr>
+</tbody></table></div></div>
+<div class="chart-box"><div class="card-title">📊 Distribución de Pagos</div><div class="chart-wrap"><canvas id="ch_pay_ytd"></canvas></div></div></div>
+
 <div class="card"><div class="card-title">🔄 Clientes Recurrentes</div><div class="tbl-wrap"><table>
 <thead><tr><th>#</th><th>Cliente</th><th class="r">Compras</th><th class="r">Total</th><th class="r">Meses Activos</th><th class="r">Ticket Prom</th></tr></thead><tbody>
 <tr><td>1</td><td>walk inn</td><td class="r">69</td><td class="r b">$4,763.00</td><td class="r">3</td><td class="r">$69.03</td></tr>
@@ -481,7 +573,14 @@ function initYTD() {
     options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom',labels:{color:'#e2e8f0',padding:10,font:{size:11}}}, tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}
   });
 
-  // Hourly YTD dual axis
+  
+  // Payment methods YTD doughnut
+  mk('ch_pay_ytd','doughnut',{
+    data: {labels:["Credit Card MNX", "American Express MNX", "PAY LINK (TRANSFER)", "Credit Card USD", "Cash USD", "Cash MXN"], datasets:[{data:[34858.9, 20289.5, 8584.75, 5739.0, 4367.5, 1945.0], backgroundColor:["#3b82f6", "#8b5cf6", "#ec4899", "#06b6d4", "#10b981", "#f59e0b"], borderWidth:0}]},
+    options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom',labels:{color:'#e2e8f0',padding:10,font:{size:isMobile?9:11}}}, tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}
+  });
+
+// Hourly YTD dual axis
   mk('ch_hourly_ytd','bar',{
     data: {
       labels:["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"],
