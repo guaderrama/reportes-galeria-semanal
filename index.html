@@ -390,13 +390,14 @@ tr:hover{background:rgba(59,130,246,.04)}
 
 <script>
 const C = {};
+const isMobile = window.innerWidth < 768;
 const CHART_OPTS = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {legend: {display: false}},
   scales: {
-    y: {beginAtZero:true, ticks:{color:'#94a3b8'}, grid:{color:'rgba(30,41,59,.4)'}},
-    x: {ticks:{color:'#94a3b8'}, grid:{display:false}}
+    y: {beginAtZero:true, ticks:{color:'#94a3b8',font:{size:isMobile?10:12}}, grid:{color:'rgba(30,41,59,.4)'}},
+    x: {ticks:{color:'#94a3b8',font:{size:isMobile?10:12},maxRotation:isMobile?45:0}, grid:{display:false}}
   }
 };
 
@@ -426,7 +427,7 @@ function toggleTxn(btn) {
 function initWeek() {
   // Daily revenue bar
   mk('ch_daily','bar',{
-    data: {labels:["Lun 30", "Mar 31", "Mi\u00e9 1", "Jue 2", "Vie 3"], datasets:[{data:[130.5, 1547.0, 48.0, 1449.0, 306.0], backgroundColor:'#3b82f6', borderRadius:6, barThickness:40}]},
+    data: {labels:["Lun 30", "Mar 31", "Mi\u00e9 1", "Jue 2", "Vie 3"], datasets:[{data:[130.5, 1547.0, 48.0, 1449.0, 306.0], backgroundColor:'#3b82f6', borderRadius:6, maxBarThickness:50}]},
     options: {...CHART_OPTS, plugins:{...CHART_OPTS.plugins, tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}
   });
 
@@ -447,7 +448,7 @@ function initWeek() {
     data: {
       labels:["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "18:00", "19:00", "20:00"],
       datasets:[
-        {label:'Ingresos ($)', data:[39.0, 43.5, 1647.0, 176.0, 39.0, 87.0, 112.0, 178.0, 679.0, 480.0], backgroundColor:'rgba(59,130,246,.7)', borderRadius:4, yAxisID:'y', order:2},
+        {label:'Ingresos ($)', data:[39.0, 43.5, 1647.0, 176.0, 39.0, 87.0, 112.0, 178.0, 679.0, 480.0], backgroundColor:'rgba(59,130,246,.7)', borderRadius:4, yAxisID:'y', order:2, maxBarThickness:40},
         {label:'Transacciones', data:[1, 1, 4, 3, 1, 1, 2, 3, 4, 7], borderColor:'#10b981', backgroundColor:'rgba(16,185,129,.1)', type:'line', fill:true, tension:.4, pointRadius:4, pointBackgroundColor:'#10b981', yAxisID:'y1', order:1}
       ]
     },
@@ -458,7 +459,7 @@ function initWeek() {
       scales:{
         y:{beginAtZero:true,position:'left',ticks:{color:'#94a3b8'},grid:{color:'rgba(30,41,59,.4)'},title:{display:true,text:'USD',color:'#64748b'}},
         y1:{beginAtZero:true,position:'right',ticks:{color:'#94a3b8'},grid:{display:false},title:{display:true,text:'Txns',color:'#64748b'}},
-        x:{ticks:{color:'#94a3b8'},grid:{display:false}}
+        x:{ticks:{color:'#94a3b8',font:{size:isMobile?9:12},maxRotation:isMobile?45:0},grid:{display:false}}
       }
     }
   });
@@ -469,7 +470,7 @@ function initYTD() {
   mk('ch_monthly','bar',{
     data: {
       labels:["Enero", "Febrero", "Marzo", "Abril"],
-      datasets:[{data:[24015.899999999998, 17227.5, 32491.25, 1900.0], backgroundColor:['#3b82f6','#3b82f6','#3b82f6','rgba(59,130,246,.35)'], borderRadius:6, barThickness:60}]
+      datasets:[{data:[24015.899999999998, 17227.5, 32491.25, 1900.0], backgroundColor:['#3b82f6','#3b82f6','#3b82f6','rgba(59,130,246,.35)'], borderRadius:6, maxBarThickness:60}]
     },
     options: {...CHART_OPTS, plugins:{...CHART_OPTS.plugins, tooltip:{callbacks:{label:c=>'$'+c.raw.toLocaleString()}}}}
   });
@@ -485,7 +486,7 @@ function initYTD() {
     data: {
       labels:["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"],
       datasets:[
-        {label:'Ingresos ($)', data:[204.5, 806.0, 4070.5, 13471.35, 2234.0, 2090.0, 2387.8, 5608.5, 4250.5, 9899.5, 7876.5, 20577.5, 2110.0, 48.0], backgroundColor:'rgba(16,185,129,.6)', borderRadius:4, yAxisID:'y', order:2},
+        {label:'Ingresos ($)', data:[204.5, 806.0, 4070.5, 13471.35, 2234.0, 2090.0, 2387.8, 5608.5, 4250.5, 9899.5, 7876.5, 20577.5, 2110.0, 48.0], backgroundColor:'rgba(16,185,129,.6)', borderRadius:4, yAxisID:'y', order:2, maxBarThickness:40},
         {label:'Transacciones', data:[3, 11, 27, 43, 21, 21, 20, 45, 46, 92, 74, 84, 24, 1], borderColor:'#f59e0b', backgroundColor:'rgba(245,158,11,.1)', type:'line', fill:true, tension:.4, pointRadius:4, pointBackgroundColor:'#f59e0b', yAxisID:'y1', order:1}
       ]
     },
@@ -496,7 +497,7 @@ function initYTD() {
       scales:{
         y:{beginAtZero:true,position:'left',ticks:{color:'#94a3b8'},grid:{color:'rgba(30,41,59,.4)'},title:{display:true,text:'USD',color:'#64748b'}},
         y1:{beginAtZero:true,position:'right',ticks:{color:'#94a3b8'},grid:{display:false},title:{display:true,text:'Txns',color:'#64748b'}},
-        x:{ticks:{color:'#94a3b8'},grid:{display:false}}
+        x:{ticks:{color:'#94a3b8',font:{size:isMobile?9:12},maxRotation:isMobile?45:0},grid:{display:false}}
       }
     }
   });
