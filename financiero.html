@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Financiero — Ivan Guaderrama Art Gallery — 8 Abril 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0f1e;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:20px;min-height:100vh}
+.container{max-width:1200px;margin:0 auto}
+.header{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 50%,#1e1b4b 100%);border-radius:16px;padding:28px 32px;margin-bottom:24px;border:1px solid #4338ca33;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:0;right:0;width:200px;height:100%;background:linear-gradient(90deg,transparent,#6366f115);pointer-events:none}
+.header h1{font-size:22px;font-weight:700;color:#c7d2fe;letter-spacing:-.3px}
+.header .subtitle{font-size:14px;color:#818cf8;margin-top:4px}
+.header .date-badge{display:inline-block;background:#4338ca44;border:1px solid #6366f155;border-radius:8px;padding:4px 12px;font-size:12px;color:#a5b4fc;margin-top:8px}
+.report-type{display:inline-block;background:#10b98133;border:1px solid #10b98155;border-radius:6px;padding:3px 10px;font-size:11px;color:#6ee7b7;margin-left:8px;font-weight:600}
+.semaforo{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:14px;padding:24px;margin-bottom:24px;border-left:4px solid #f59e0b}
+.semaforo h2{font-size:16px;color:#fbbf24;margin-bottom:8px}
+.semaforo p{font-size:14px;color:#94a3b8;line-height:1.6}
+.semaforo .status-icon{font-size:28px;float:left;margin-right:12px;margin-top:-2px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:linear-gradient(135deg,#111827,#1f2937);border-radius:14px;padding:20px;border:1px solid #374151;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.green::before{background:linear-gradient(90deg,#10b981,#34d399)}
+.kpi.red::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.kpi.blue::before{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+.kpi.purple::before{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.kpi.amber::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.kpi .label{font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.kpi .value{font-size:26px;font-weight:700;color:#f1f5f9}
+.kpi .subtext{font-size:12px;margin-top:6px}
+.kpi .subtext.up{color:#10b981}
+.kpi .subtext.down{color:#ef4444}
+.kpi .subtext.neutral{color:#9ca3af}
+.section{background:linear-gradient(135deg,#111827,#1a1f2e);border-radius:14px;padding:24px;margin-bottom:20px;border:1px solid #1e293b}
+.section h2{font-size:16px;font-weight:600;color:#c7d2fe;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section h2 .icon{font-size:18px}
+.month-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:16px}
+.month-card{background:#0f172a;border-radius:12px;padding:18px;border:1px solid #1e293b}
+.month-card .month-name{font-size:13px;color:#94a3b8;font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.month-card .row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:13px}
+.month-card .row .lbl{color:#64748b}
+.month-card .row .val{font-weight:600;color:#e2e8f0}
+.month-card .row .val.positive{color:#10b981}
+.month-card .row .val.negative{color:#ef4444}
+.month-card .divider{border-top:1px solid #1e293b;margin:8px 0}
+.month-card .highlight{background:#1e293b;border-radius:8px;padding:8px 12px;margin-top:10px;text-align:center}
+.month-card .highlight .big{font-size:20px;font-weight:700}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.8px;padding:10px 12px;border-bottom:1px solid #1e293b}
+td{padding:10px 12px;border-bottom:1px solid #1e293b11;font-size:13px}
+tr:hover{background:#1e293b44}
+.cat-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.cat-nomina{background:#3b82f622;color:#60a5fa;border:1px solid #3b82f644}
+.cat-renta{background:#8b5cf622;color:#a78bfa;border:1px solid #8b5cf644}
+.cat-operativo{background:#10b98122;color:#6ee7b7;border:1px solid #10b98144}
+.cat-personal{background:#f59e0b22;color:#fbbf24;border:1px solid #f59e0b44}
+.cat-produccion{background:#ec489922;color:#f472b6;border:1px solid #ec489944}
+.cat-comision{background:#06b6d422;color:#67e8f9;border:1px solid #06b6d444}
+.cat-tech{background:#6366f122;color:#818cf8;border:1px solid #6366f144}
+.cat-servicios{background:#f9731622;color:#fb923c;border:1px solid #f9731644}
+.cat-salud{background:#14b8a622;color:#5eead4;border:1px solid #14b8a644}
+.cat-ventas{background:#e11d4822;color:#fb7185;border:1px solid #e11d4844}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.dot.green{background:#10b981;box-shadow:0 0 6px #10b98188}
+.dot.yellow{background:#f59e0b;box-shadow:0 0 6px #f59e0b88}
+.dot.red{background:#ef4444;box-shadow:0 0 6px #ef444488}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.chart-box{background:#0f172a;border-radius:12px;padding:16px;border:1px solid #1e293b}
+.chart-box h3{font-size:13px;color:#94a3b8;margin-bottom:12px;font-weight:500}
+canvas{max-height:280px}
+.alerts{display:flex;flex-direction:column;gap:10px}
+.alert{padding:14px 18px;border-radius:10px;font-size:13px;line-height:1.5;display:flex;align-items:flex-start;gap:10px}
+.alert.warning{background:#78350f22;border:1px solid #f59e0b33;color:#fde68a}
+.alert.danger{background:#7f1d1d22;border:1px solid #ef444433;color:#fca5a5}
+.alert.info{background:#1e3a5f22;border:1px solid #3b82f633;color:#93c5fd}
+.alert .alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.cash-bar-visual{height:24px;background:#1e293b;border-radius:12px;overflow:hidden;position:relative;margin:12px 0}
+.cash-bar-fill{height:100%;border-radius:12px}
+.footer{text-align:center;padding:20px;color:#475569;font-size:12px;border-top:1px solid #1e293b;margin-top:24px}
+.income-breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:12px}
+.income-item{background:#0f172a;border-radius:10px;padding:12px;border:1px solid #1e293b}
+.income-item .il{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.5px}
+.income-item .iv{font-size:16px;font-weight:700;color:#e2e8f0;margin-top:2px}
+@media(max-width:768px){.chart-row{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.month-grid{grid-template-columns:1fr}body{padding:12px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>Ivan Guaderrama Art Gallery</h1>
+  <div class="subtitle">Reporte Financiero Ejecutivo</div>
+  <div class="date-badge">Martes 8 de Abril, 2026 — Semana 14</div>
+  <span class="report-type">MARTES — REVISION SEMANAL</span>
+</div>
+
+<!-- Semaforo General -->
+<div class="semaforo">
+  <div class="status-icon">⚠️</div>
+  <h2>Estado General: ATENCION REQUERIDA</h2>
+  <p>El cash flow ha disminuido <strong>$236K desde enero</strong>. Marzo registro gastos extraordinarios de <strong>$630K en compras no empresariales</strong> que llevaron los gastos operativos a $1.16M — superando el ingreso de $828K. El margen bruto oscila entre 59-74%, pero los gastos operativos consumen la utilidad. Abril lleva $5,200 en gastos sin ingresos registrados aun en QuickBooks.</p>
+</div>
+
+<!-- KPIs Principales -->
+<div class="kpi-grid">
+  <div class="kpi green">
+    <div class="label">Cash Disponible</div>
+    <div class="value">$2.83M</div>
+    <div class="subtext down">↓ $236K vs inicio de año</div>
+  </div>
+  <div class="kpi blue">
+    <div class="label">Ingresos Q1</div>
+    <div class="value">$2.24M</div>
+    <div class="subtext neutral">Ene $687K · Feb $721K · Mar $828K</div>
+  </div>
+  <div class="kpi red">
+    <div class="label">Gastos Operativos Q1</div>
+    <div class="value">$2.16M</div>
+    <div class="subtext down">$569K + $433K + $1,161K</div>
+  </div>
+  <div class="kpi purple">
+    <div class="label">Margen Bruto Prom.</div>
+    <div class="value">67.8%</div>
+    <div class="subtext up">Ene 70% · Feb 59% · Mar 74%</div>
+  </div>
+  <div class="kpi amber">
+    <div class="label">Gastos Abril (parcial)</div>
+    <div class="value">$5,200</div>
+    <div class="subtext neutral">Carpinteria $2,800 + Limpieza $2,400</div>
+  </div>
+</div>
+
+<!-- Cash Flow Visual -->
+<div class="section">
+  <h2><span class="icon">💰</span> Estado de Cash Flow — YTD 2026</h2>
+  <div style="background:#0f172a;border-radius:12px;padding:20px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline">
+      <div><span style="color:#64748b;font-size:12px">Inicio año:</span> <span style="color:#94a3b8;font-weight:600">$3,068,375</span></div>
+      <div><span style="color:#64748b;font-size:12px">Actual:</span> <span style="color:#10b981;font-weight:700;font-size:20px">$2,832,036</span></div>
+    </div>
+    <div class="cash-bar-visual">
+      <div class="cash-bar-fill" style="width:92.3%;background:linear-gradient(90deg,#10b981,#3b82f6)"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:#64748b">
+      <span>$0</span>
+      <span>92.3% del inicio de año</span>
+      <span>$3.07M</span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px">
+    <div style="background:#0f172a;border-radius:10px;padding:14px;text-align:center;border:1px solid #1e293b">
+      <div style="font-size:11px;color:#ef4444;margin-bottom:4px">Actividades Operativas</div>
+      <div style="font-size:18px;font-weight:700;color:#fca5a5">-$235,506</div>
+    </div>
+    <div style="background:#0f172a;border-radius:10px;padding:14px;text-align:center;border:1px solid #1e293b">
+      <div style="font-size:11px;color:#64748b;margin-bottom:4px">Actividades de Inversion</div>
+      <div style="font-size:18px;font-weight:700;color:#94a3b8">$0</div>
+    </div>
+    <div style="background:#0f172a;border-radius:10px;padding:14px;text-align:center;border:1px solid #1e293b">
+      <div style="font-size:11px;color:#f59e0b;margin-bottom:4px">Actividades Financieras</div>
+      <div style="font-size:18px;font-weight:700;color:#fde68a">-$834</div>
+    </div>
+  </div>
+  <div style="margin-top:14px;padding:12px;background:#1e293b33;border-radius:8px;font-size:12px;color:#94a3b8">
+    <strong style="color:#c7d2fe">Prestamos a colaboradores en cash flow:</strong> Ivan G $205,000 · Juan Carlos $17,000 · Angel Avila $12,500 · Otros $5,000
+  </div>
+</div>
+
+<!-- P&L Mensual -->
+<div class="section">
+  <h2><span class="icon">📊</span> P&L Mensual — Enero a Abril 2026</h2>
+  <div class="month-grid">
+    <div class="month-card">
+      <div class="month-name">Enero 2026</div>
+      <div class="row"><span class="lbl">Ingresos</span><span class="val positive">$687,497</span></div>
+      <div class="row"><span class="lbl">Costo Ventas</span><span class="val">$204,684</span></div>
+      <div class="row"><span class="lbl">Margen Bruto</span><span class="val positive">70.2%</span></div>
+      <div class="divider"></div>
+      <div class="row"><span class="lbl">Gastos Oper.</span><span class="val negative">$569,458</span></div>
+      <div class="highlight">
+        <div style="font-size:11px;color:#64748b">Resultado Neto</div>
+        <div class="big" style="color:#ef4444">-$86,645</div>
+      </div>
+    </div>
+    <div class="month-card">
+      <div class="month-name">Febrero 2026</div>
+      <div class="row"><span class="lbl">Ingresos</span><span class="val positive">$721,449</span></div>
+      <div class="row"><span class="lbl">Costo Ventas</span><span class="val">$296,841</span></div>
+      <div class="row"><span class="lbl">Margen Bruto</span><span class="val" style="color:#f59e0b">58.9%</span></div>
+      <div class="divider"></div>
+      <div class="row"><span class="lbl">Gastos Oper.</span><span class="val negative">$432,802</span></div>
+      <div class="highlight">
+        <div style="font-size:11px;color:#64748b">Resultado Neto</div>
+        <div class="big" style="color:#ef4444">-$8,194</div>
+      </div>
+    </div>
+    <div class="month-card">
+      <div class="month-name">Marzo 2026</div>
+      <div class="row"><span class="lbl">Ingresos</span><span class="val positive">$827,925</span></div>
+      <div class="row"><span class="lbl">Costo Ventas</span><span class="val">$218,228</span></div>
+      <div class="row"><span class="lbl">Margen Bruto</span><span class="val positive">73.6%</span></div>
+      <div class="divider"></div>
+      <div class="row"><span class="lbl">Gastos Oper.</span><span class="val negative">$1,161,099</span></div>
+      <div class="highlight">
+        <div style="font-size:11px;color:#64748b">Resultado Neto</div>
+        <div class="big" style="color:#ef4444">-$551,402</div>
+      </div>
+    </div>
+    <div class="month-card" style="border:1px solid #f59e0b44">
+      <div class="month-name" style="color:#fbbf24">Abril 2026 (8 dias)</div>
+      <div class="row"><span class="lbl">Ingresos</span><span class="val neutral">$0</span></div>
+      <div class="row"><span class="lbl">Costo Ventas</span><span class="val">$37,383</span></div>
+      <div class="divider"></div>
+      <div class="row"><span class="lbl">Gastos Oper.</span><span class="val negative">$5,200</span></div>
+      <div class="highlight">
+        <div style="font-size:11px;color:#64748b">Resultado Neto</div>
+        <div class="big" style="color:#ef4444">-$42,583</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Fuentes de Ingreso Marzo -->
+<div class="section">
+  <h2><span class="icon">💵</span> Fuentes de Ingreso — Marzo 2026</h2>
+  <div class="income-breakdown">
+    <div class="income-item">
+      <div class="il">Terapias Cabo Health</div>
+      <div class="iv" style="color:#10b981">$487,349</div>
+      <div style="font-size:10px;color:#64748b">58.9% del total</div>
+    </div>
+    <div class="income-item">
+      <div class="il">Galeria Obregon</div>
+      <div class="iv" style="color:#3b82f6">$297,305</div>
+      <div style="font-size:10px;color:#64748b">35.9% del total</div>
+    </div>
+    <div class="income-item">
+      <div class="il">Shopify</div>
+      <div class="iv" style="color:#8b5cf6">$26,423</div>
+      <div style="font-size:10px;color:#64748b">3.2% del total</div>
+    </div>
+    <div class="income-item">
+      <div class="il">Dara Art</div>
+      <div class="iv" style="color:#f59e0b">$7,960</div>
+      <div style="font-size:10px;color:#64748b">1.0% del total</div>
+    </div>
+    <div class="income-item">
+      <div class="il">Retail Hoteles</div>
+      <div class="iv" style="color:#ec4899">$5,106</div>
+      <div style="font-size:10px;color:#64748b">0.6% del total</div>
+    </div>
+    <div class="income-item">
+      <div class="il">Almacen + Otros</div>
+      <div class="iv" style="color:#64748b">$3,782</div>
+      <div style="font-size:10px;color:#64748b">0.5% del total</div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="chart-row">
+  <div class="chart-box">
+    <h3>Ingresos vs Gastos por Mes</h3>
+    <canvas id="chartIncomeVsExpenses"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Margen Bruto Mensual</h3>
+    <canvas id="chartMargin"></canvas>
+  </div>
+</div>
+<div class="chart-row">
+  <div class="chart-box">
+    <h3>Distribucion de Gastos Operativos — Marzo 2026</h3>
+    <canvas id="chartExpensePie"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Top 10 Gastos Operativos — Marzo 2026</h3>
+    <canvas id="chartTopExpenses"></canvas>
+  </div>
+</div>
+<div class="chart-row">
+  <div class="chart-box">
+    <h3>Fuentes de Ingreso — Marzo 2026</h3>
+    <canvas id="chartIncomeSources"></canvas>
+  </div>
+  <div class="chart-box">
+    <h3>Costo de Ventas (COGS) Mensual</h3>
+    <canvas id="chartCOGS"></canvas>
+  </div>
+</div>
+
+<!-- Gastos detallados -->
+<div class="section">
+  <h2><span class="icon">📋</span> Gastos Operativos — Comparativo Mensual (Top 15)</h2>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Categoria</th>
+        <th>Tipo</th>
+        <th style="text-align:right">Enero</th>
+        <th style="text-align:right">Febrero</th>
+        <th style="text-align:right">Marzo</th>
+        <th style="text-align:right">Prom. Mensual</th>
+        <th>Semaforo Mar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Compras No Empresariales</strong></td>
+        <td><span class="cat-badge cat-personal">PERSONAL</span></td>
+        <td style="text-align:right">$72,956</td>
+        <td style="text-align:right">$22,173</td>
+        <td style="text-align:right">$630,166</td>
+        <td style="text-align:right">$241,765</td>
+        <td><span class="dot red"></span>+161%</td>
+      </tr>
+      <tr>
+        <td><strong>Nomina Ivan e Imelda</strong></td>
+        <td><span class="cat-badge cat-nomina">NOMINA</span></td>
+        <td style="text-align:right">$150,000</td>
+        <td style="text-align:right">$75,000</td>
+        <td style="text-align:right">$225,000</td>
+        <td style="text-align:right">$150,000</td>
+        <td><span class="dot red"></span>+50%</td>
+      </tr>
+      <tr>
+        <td><strong>Nomina Colaboradores</strong></td>
+        <td><span class="cat-badge cat-nomina">NOMINA</span></td>
+        <td style="text-align:right">$214,270</td>
+        <td style="text-align:right">$199,932</td>
+        <td style="text-align:right">$206,061</td>
+        <td style="text-align:right">$206,754</td>
+        <td><span class="dot green"></span>Normal</td>
+      </tr>
+      <tr>
+        <td><strong>Arrendamientos USD</strong></td>
+        <td><span class="cat-badge cat-renta">RENTA</span></td>
+        <td style="text-align:right">$24,924</td>
+        <td style="text-align:right">$23,990</td>
+        <td style="text-align:right">$24,094</td>
+        <td style="text-align:right">$24,336</td>
+        <td><span class="dot green"></span>Normal</td>
+      </tr>
+      <tr>
+        <td><strong>Carpinteria</strong></td>
+        <td><span class="cat-badge cat-servicios">SERVICIOS</span></td>
+        <td style="text-align:right">$26,455</td>
+        <td style="text-align:right">$18,541</td>
+        <td style="text-align:right">$19,576</td>
+        <td style="text-align:right">$21,524</td>
+        <td><span class="dot green"></span>-9%</td>
+      </tr>
+      <tr>
+        <td><strong>Marketing</strong></td>
+        <td><span class="cat-badge cat-ventas">MARKETING</span></td>
+        <td style="text-align:right">$1,243</td>
+        <td style="text-align:right">$16,717</td>
+        <td style="text-align:right">$6,889</td>
+        <td style="text-align:right">$8,283</td>
+        <td><span class="dot green"></span>-17%</td>
+      </tr>
+      <tr>
+        <td><strong>Arrendamiento Inmuebles MXN</strong></td>
+        <td><span class="cat-badge cat-renta">RENTA</span></td>
+        <td style="text-align:right">$13,920</td>
+        <td style="text-align:right">$13,920</td>
+        <td style="text-align:right">$13,920</td>
+        <td style="text-align:right">$13,920</td>
+        <td><span class="dot green"></span>Fijo</td>
+      </tr>
+      <tr>
+        <td><strong>Insumos Joyeria</strong></td>
+        <td><span class="cat-badge cat-produccion">PRODUCCION</span></td>
+        <td style="text-align:right">$1,584</td>
+        <td style="text-align:right">$12,832</td>
+        <td style="text-align:right">$3,871</td>
+        <td style="text-align:right">$6,096</td>
+        <td><span class="dot green"></span>-37%</td>
+      </tr>
+      <tr>
+        <td><strong>Limpieza</strong></td>
+        <td><span class="cat-badge cat-operativo">OPERATIVO</span></td>
+        <td style="text-align:right">$8,265</td>
+        <td style="text-align:right">$7,033</td>
+        <td style="text-align:right">$9,515</td>
+        <td style="text-align:right">$8,271</td>
+        <td><span class="dot yellow"></span>+15%</td>
+      </tr>
+      <tr>
+        <td><strong>Inteligencia Artificial</strong></td>
+        <td><span class="cat-badge cat-tech">TECH</span></td>
+        <td style="text-align:right">$3,448</td>
+        <td style="text-align:right">$12,786</td>
+        <td style="text-align:right">$1,900</td>
+        <td style="text-align:right">$6,045</td>
+        <td><span class="dot green"></span>-69%</td>
+      </tr>
+      <tr>
+        <td><strong>Energia Electrica</strong></td>
+        <td><span class="cat-badge cat-operativo">OPERATIVO</span></td>
+        <td style="text-align:right">$6,121</td>
+        <td style="text-align:right">$3,123</td>
+        <td style="text-align:right">$5,002</td>
+        <td style="text-align:right">$4,749</td>
+        <td><span class="dot green"></span>Normal</td>
+      </tr>
+      <tr>
+        <td><strong>Servicios Ivan e Imelda</strong></td>
+        <td><span class="cat-badge cat-personal">PERSONAL</span></td>
+        <td style="text-align:right">$4,555</td>
+        <td style="text-align:right">$4,773</td>
+        <td style="text-align:right">$3,273</td>
+        <td style="text-align:right">$4,200</td>
+        <td><span class="dot green"></span>-22%</td>
+      </tr>
+      <tr>
+        <td><strong>Produccion Souvenirs</strong></td>
+        <td><span class="cat-badge cat-produccion">PRODUCCION</span></td>
+        <td style="text-align:right">$10,400</td>
+        <td style="text-align:right">$6,954</td>
+        <td style="text-align:right">$3,111</td>
+        <td style="text-align:right">$6,822</td>
+        <td><span class="dot green"></span>-54%</td>
+      </tr>
+      <tr>
+        <td><strong>Comisiones (Stripe + PayPal)</strong></td>
+        <td><span class="cat-badge cat-comision">COMISION</span></td>
+        <td style="text-align:right">$1,650</td>
+        <td style="text-align:right">$2,523</td>
+        <td style="text-align:right">$1,807</td>
+        <td style="text-align:right">$1,993</td>
+        <td><span class="dot green"></span>Normal</td>
+      </tr>
+      <tr>
+        <td><strong>Realidad Aumentada / Apps</strong></td>
+        <td><span class="cat-badge cat-tech">TECH</span></td>
+        <td style="text-align:right">$1,500</td>
+        <td style="text-align:right">$1,500</td>
+        <td style="text-align:right">$1,500</td>
+        <td style="text-align:right">$1,500</td>
+        <td><span class="dot green"></span>Fijo</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- COGS Detalle -->
+<div class="section">
+  <h2><span class="icon">🏭</span> Costo de Ventas (COGS) — Detalle Trimestral</h2>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th>Concepto</th>
+        <th style="text-align:right">Enero</th>
+        <th style="text-align:right">Febrero</th>
+        <th style="text-align:right">Marzo</th>
+        <th style="text-align:right">Total Q1</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Gastos Terapias Cabo Health</td>
+        <td style="text-align:right">$57,717</td>
+        <td style="text-align:right">$169,633</td>
+        <td style="text-align:right">$94,706</td>
+        <td style="text-align:right;font-weight:700">$322,056</td>
+      </tr>
+      <tr>
+        <td>Comisiones de Venta Obregon</td>
+        <td style="text-align:right">$51,852</td>
+        <td style="text-align:right">$35,680</td>
+        <td style="text-align:right">$53,142</td>
+        <td style="text-align:right;font-weight:700">$140,674</td>
+      </tr>
+      <tr>
+        <td>Comisiones de Venta (otras)</td>
+        <td style="text-align:right">$44,046</td>
+        <td style="text-align:right">$45,381</td>
+        <td style="text-align:right">$33,392</td>
+        <td style="text-align:right;font-weight:700">$122,819</td>
+      </tr>
+      <tr>
+        <td>Suscripciones Mensuales</td>
+        <td style="text-align:right">$22,967</td>
+        <td style="text-align:right">$20,473</td>
+        <td style="text-align:right">$17,528</td>
+        <td style="text-align:right;font-weight:700">$60,968</td>
+      </tr>
+      <tr>
+        <td>Comisiones Bancarias</td>
+        <td style="text-align:right">$17,172</td>
+        <td style="text-align:right">$14,652</td>
+        <td style="text-align:right">$15,289</td>
+        <td style="text-align:right;font-weight:700">$47,113</td>
+      </tr>
+      <tr>
+        <td>Produccion Shopify / Eatsy</td>
+        <td style="text-align:right">$9,165</td>
+        <td style="text-align:right">$6,969</td>
+        <td style="text-align:right">$3,094</td>
+        <td style="text-align:right;font-weight:700">$19,228</td>
+      </tr>
+      <tr style="background:#1e293b33;font-weight:700">
+        <td>TOTAL COGS</td>
+        <td style="text-align:right">$204,684</td>
+        <td style="text-align:right">$296,841</td>
+        <td style="text-align:right">$218,228</td>
+        <td style="text-align:right;color:#f59e0b">$719,753</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- Alertas -->
+<div class="section">
+  <h2><span class="icon">🚨</span> Alertas y Observaciones</h2>
+  <div class="alerts">
+    <div class="alert danger">
+      <span class="alert-icon">🔴</span>
+      <div><strong>Compras no empresariales marzo: $630,166.</strong> Este monto es 13x mas que febrero ($22,173). Represento el 54% de todos los gastos operativos de marzo. Es el principal factor del resultado negativo de -$551K.</div>
+    </div>
+    <div class="alert danger">
+      <span class="alert-icon">🔴</span>
+      <div><strong>Nomina Ivan e Imelda marzo: $225,000.</strong> Triple del monto de febrero ($75K). El promedio trimestral es $150K. Verificar si fue un pago acumulado o ajuste retroactivo.</div>
+    </div>
+    <div class="alert warning">
+      <span class="alert-icon">🟡</span>
+      <div><strong>Ingresos no registrados en abril.</strong> QuickBooks muestra $0 en ingresos para abril, pero ya hay COGS de $37,383 registrado. Las ventas de la galeria posiblemente no se estan sincronizando desde Vend.</div>
+    </div>
+    <div class="alert warning">
+      <span class="alert-icon">🟡</span>
+      <div><strong>Cash flow operativo negativo: -$235,506 YTD.</strong> Los 3 meses muestran resultado neto negativo. El cash ha bajado 7.7% del inicio de año. A este ritmo se mantiene solvente, pero la tendencia requiere atencion.</div>
+    </div>
+    <div class="alert info">
+      <span class="alert-icon">🔵</span>
+      <div><strong>Febrero: casi punto de equilibrio.</strong> Con solo -$8,194 de perdida neta, febrero demuestra que sin gastos extraordinarios el negocio puede operar cerca del breakeven. Margen bruto de 59% fue el mas bajo del Q1 por COGS elevado ($297K).</div>
+    </div>
+    <div class="alert info">
+      <span class="alert-icon">🔵</span>
+      <div><strong>Cabo Health es la mayor fuente de ingreso.</strong> En marzo represento el 59% del ingreso total ($487K). Los gastos asociados fueron $95K, dejando un margen positivo significativo en esa linea de negocio.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Generado el martes 8 de abril de 2026 — Hora Mazatlan (UTC-7)</p>
+  <p style="margin-top:4px">Fuente: QuickBooks Online — Ivan Guaderrama Art Gallery</p>
+  <p style="margin-top:4px;color:#4338ca">Proximo reporte: Viernes 11 de Abril, 2026</p>
+  <p style="margin-top:8px;font-size:10px;color:#334155">Datos verificados con consultas individuales por mes a la API de QuickBooks</p>
+</div>
+
+</div>
+
+<script>
+Chart.defaults.color='#94a3b8';Chart.defaults.borderColor='#1e293b';Chart.defaults.font.family="'Segoe UI',system-ui,sans-serif";
+
+// 1. Income vs Expenses
+new Chart(document.getElementById('chartIncomeVsExpenses'),{
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo','Abril*'],
+    datasets:[
+      {label:'Ingresos',data:[687497,721449,827925,0],backgroundColor:'#10b98188',borderColor:'#10b981',borderWidth:1,borderRadius:6},
+      {label:'COGS',data:[204684,296841,218228,37383],backgroundColor:'#f59e0b66',borderColor:'#f59e0b',borderWidth:1,borderRadius:6},
+      {label:'Gastos Operativos',data:[569458,432802,1161099,5200],backgroundColor:'#ef444466',borderColor:'#ef4444',borderWidth:1,borderRadius:6}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:15,font:{size:11}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString()}}},
+    scales:{y:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#1e293b'}},x:{grid:{display:false}}}
+  }
+});
+
+// 2. Gross Margin
+new Chart(document.getElementById('chartMargin'),{
+  type:'line',
+  data:{
+    labels:['Enero','Febrero','Marzo'],
+    datasets:[{
+      label:'Margen Bruto %',data:[70.2,58.9,73.6],
+      borderColor:'#8b5cf6',backgroundColor:'#8b5cf622',fill:true,tension:.3,
+      pointRadius:6,pointBackgroundColor:'#8b5cf6',pointBorderWidth:2,pointBorderColor:'#0f172a'
+    }]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y.toFixed(1)+'%'}}},
+    scales:{y:{min:45,max:85,ticks:{callback:v=>v+'%'},grid:{color:'#1e293b'}},x:{grid:{display:false}}}
+  }
+});
+
+// 3. Expense Pie (March)
+new Chart(document.getElementById('chartExpensePie'),{
+  type:'doughnut',
+  data:{
+    labels:['Compras No Empresariales','Nomina Ivan/Imelda','Nomina Colaboradores','Renta (USD+MXN)','Carpinteria','Limpieza','Otros'],
+    datasets:[{
+      data:[630166,225000,206061,38014,19576,9515,32767],
+      backgroundColor:['#f59e0b','#3b82f6','#6366f1','#a855f7','#f97316','#10b981','#64748b'],
+      borderWidth:0,hoverOffset:8
+    }]
+  },
+  options:{
+    responsive:true,cutout:'55%',
+    plugins:{
+      legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': $'+ctx.parsed.toLocaleString()+' ('+((ctx.parsed/1161099)*100).toFixed(1)+'%)'}}
+    }
+  }
+});
+
+// 4. Top 10 Expenses (March)
+new Chart(document.getElementById('chartTopExpenses'),{
+  type:'bar',
+  data:{
+    labels:['Compras No Empr.','Nomina Ivan/Imelda','Nomina Colab.','Renta USD','Carpinteria','Renta MXN','Limpieza','Energia','Insumos Joyeria','Capacitacion'],
+    datasets:[{
+      data:[630166,225000,206061,24094,19576,13920,9515,5002,3871,2388],
+      backgroundColor:['#ef4444','#3b82f6','#6366f1','#a855f7','#f97316','#a855f7','#10b981','#f59e0b','#ec4899','#06b6d4'],
+      borderRadius:4,borderSkipped:false
+    }]
+  },
+  options:{
+    indexAxis:'y',responsive:true,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.x.toLocaleString()}}},
+    scales:{x:{ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#1e293b'}},y:{grid:{display:false},ticks:{font:{size:11}}}}
+  }
+});
+
+// 5. Income Sources (March)
+new Chart(document.getElementById('chartIncomeSources'),{
+  type:'doughnut',
+  data:{
+    labels:['Terapias Cabo Health','Galeria Obregon','Shopify','Dara Art','Retail Hoteles','Almacen + Otros'],
+    datasets:[{
+      data:[487349,297305,26423,7960,5106,3782],
+      backgroundColor:['#10b981','#3b82f6','#8b5cf6','#f59e0b','#ec4899','#64748b'],
+      borderWidth:0,hoverOffset:8
+    }]
+  },
+  options:{
+    responsive:true,cutout:'55%',
+    plugins:{
+      legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}},
+      tooltip:{callbacks:{label:ctx=>ctx.label+': $'+ctx.parsed.toLocaleString()}}
+    }
+  }
+});
+
+// 6. COGS Monthly
+new Chart(document.getElementById('chartCOGS'),{
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo'],
+    datasets:[
+      {label:'Terapias Cabo Health',data:[57717,169633,94706],backgroundColor:'#10b98188',borderRadius:4},
+      {label:'Comisiones Venta',data:[95898,81060,86534],backgroundColor:'#3b82f688',borderRadius:4},
+      {label:'Suscripciones',data:[22967,20473,18606],backgroundColor:'#8b5cf688',borderRadius:4},
+      {label:'Comisiones Bancarias',data:[17172,14652,15289],backgroundColor:'#f59e0b88',borderRadius:4},
+      {label:'Otros COGS',data:[10930,10023,3093],backgroundColor:'#64748b88',borderRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.parsed.y.toLocaleString()}}},
+    scales:{y:{stacked:true,ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'K'},grid:{color:'#1e293b'}},x:{stacked:true,grid:{display:false}}}
+  }
+});
+</script>
+</body>
+</html>
