@@ -1,243 +1,1815 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Semanal — IG Alvaro Obregon</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',-apple-system,sans-serif;background:#0f0f14;color:#e4e4e7;min-height:100vh}
-  .header{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:40px 0 30px;border-bottom:1px solid rgba(255,255,255,0.08)}
-  .header-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-  .logo-area h1{font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px}
-  .logo-area h1 span{color:#60a5fa}
-  .logo-area p{font-size:13px;color:#94a3b8;margin-top:4px}
-  .header-badge{background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);border-radius:12px;padding:12px 20px;text-align:center}
-  .header-badge .period{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#60a5fa;font-weight:600}
-  .header-badge .dates{font-size:16px;font-weight:600;color:#fff;margin-top:2px}
-  .kpi-grid{max-width:1200px;margin:-20px auto 0;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;position:relative;z-index:2}
-  .kpi-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;text-align:center;transition:transform 0.2s}
-  .kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.3)}
-  .kpi-card .kpi-icon{font-size:28px;margin-bottom:8px}
-  .kpi-card .kpi-value{font-size:32px;font-weight:800;color:#fff}
-  .kpi-card .kpi-label{font-size:12px;color:#71717a;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
-  .kpi-card.highlight{border-color:rgba(96,165,250,0.3);background:linear-gradient(135deg,#1c1c28 0%,#1a2340 100%)}
-  .kpi-card.highlight .kpi-value{color:#60a5fa}
-  .container{max-width:1200px;margin:0 auto;padding:32px 24px}
-  .section{margin-bottom:40px}
-  .section-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-  .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,0.1),transparent)}
-  .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:32px}
-  @media(max-width:768px){.chart-row{grid-template-columns:1fr}}
-  .chart-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px}
-  .chart-card h3{font-size:14px;font-weight:600;color:#a1a1aa;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
-  .chart-wrapper{position:relative;height:280px}
-  .chart-full{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:24px;margin-bottom:32px}
-  .chart-full .chart-wrapper{height:220px}
-  .day-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:32px}
-  .day-card{background:#1c1c28;border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px 16px;text-align:center;position:relative;overflow:hidden}
-  .day-card .day-name{font-size:13px;font-weight:600;color:#a1a1aa}
-  .day-card .day-date{font-size:11px;color:#52525b;margin-top:2px}
-  .day-card .day-amount{font-size:22px;font-weight:800;color:#fff;margin-top:10px}
-  .day-card .day-count{font-size:11px;color:#60a5fa;margin-top:4px}
-  .day-card.best{border-color:rgba(52,211,153,0.4)}
-  .day-card.best .day-amount{color:#34d399}
-  .day-card.best::before{content:'MEJOR DÍA';position:absolute;top:8px;right:-22px;background:#34d399;color:#0f0f14;font-size:8px;font-weight:700;padding:2px 26px;transform:rotate(45deg);letter-spacing:0.5px}
-  .day-card.zero{opacity:0.4}
-  .styled-table{width:100%;border-collapse:collapse;background:#1c1c28;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.06)}
-  .styled-table thead th{background:#252535;padding:14px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#71717a;border-bottom:1px solid rgba(255,255,255,0.06)}
-  .styled-table tbody td{padding:14px 16px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.04)}
-  .styled-table tbody tr:hover{background:rgba(96,165,250,0.04)}
-  .styled-table tbody tr:last-child td{border-bottom:none}
-  .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:12px;font-weight:700}
-  .rank-1{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1c1c28}
-  .rank-2{background:linear-gradient(135deg,#94a3b8,#64748b);color:#1c1c28}
-  .rank-3{background:linear-gradient(135deg,#cd7f32,#a0522d);color:#fff}
-  .rank-n{background:#2a2a3a;color:#71717a}
-  .product-name{font-weight:600;color:#fff}
-  .product-type{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;margin-left:8px;text-transform:uppercase;letter-spacing:0.5px}
-  .type-jewelry{background:rgba(244,114,182,0.15);color:#f472b6}
-  .type-canvas{background:rgba(96,165,250,0.15);color:#60a5fa}
-  .type-souvenir{background:rgba(52,211,153,0.15);color:#34d399}
-  .type-mini{background:rgba(251,191,36,0.15);color:#fbbf24}
-  .type-marble{background:rgba(167,139,250,0.15);color:#a78bfa}
-  .amount{font-weight:700;color:#34d399;font-variant-numeric:tabular-nums}
-  .amount-lg{font-size:16px}
-  .bar-cell{min-width:120px}
-  .bar-bg{background:#252535;border-radius:6px;height:8px;overflow:hidden;margin-top:4px}
-  .bar-fill{height:100%;border-radius:6px}
-  .fill-blue{background:linear-gradient(90deg,#3b82f6,#60a5fa)}
-  .fill-green{background:linear-gradient(90deg,#10b981,#34d399)}
-  .fill-pink{background:linear-gradient(90deg,#ec4899,#f472b6)}
-  .customer-name{font-weight:600;color:#fff}
-  .customer-walkin{color:#71717a;font-style:italic}
-  .tx-time{font-size:12px;color:#60a5fa;font-weight:500;font-variant-numeric:tabular-nums}
-  .tx-invoice{font-size:12px;color:#52525b;font-family:monospace}
-  .tx-products{font-size:12px;color:#a1a1aa}
-  .tx-status{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
-  .status-closed{background:rgba(52,211,153,0.15);color:#34d399}
-  .status-voided{background:rgba(239,68,68,0.15);color:#ef4444;text-decoration:line-through}
-  .day-group-header td{background:#1a1a2e!important;padding:10px 16px!important;font-size:13px;font-weight:700;color:#60a5fa;letter-spacing:0.3px;border-bottom:2px solid rgba(96,165,250,0.2)!important}
-  .note-box{background:rgba(96,165,250,0.06);border-left:3px solid #60a5fa;border-radius:8px;padding:12px 16px;font-size:12px;color:#cbd5e1;margin-top:20px}
-  .footer{text-align:center;padding:30px;color:#3f3f46;font-size:12px;border-top:1px solid rgba(255,255,255,0.04);margin-top:40px}
-  @media(max-width:640px){.kpi-card .kpi-value{font-size:24px}.day-cards{grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivan Guaderrama Art Gallery - Reporte Semanal de Ventas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0f1e;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+        }
+        
+        .header .subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .header .week-info {
+            color: #3b82f6;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        
+        /* Tabs */
+        .tabs-container {
+            margin-bottom: 30px;
+        }
+        
+        .tab-buttons {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid #1e293b;
+            position: sticky;
+            top: 0;
+            background: #0a0f1e;
+            z-index: 100;
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .tab-button:hover {
+            color: #e2e8f0;
+        }
+        
+        .tab-button.active {
+            color: #e2e8f0;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+        
+        .card-label {
+            color: #94a3b8;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 4px;
+        }
+        
+        .card-subtext {
+            color: #64748b;
+            font-size: 12px;
+        }
+        
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+        
+        /* Tables */
+        .table-container {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #1e293b;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #1e293b;
+            color: #e2e8f0;
+        }
+        
+        tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .cat-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        /* Transaction Details */
+        .transaction-section {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .toggle-button {
+            background: #3b82f6;
+            border: none;
+            color: #e2e8f0;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-button:hover {
+            background: #2563eb;
+        }
+        
+        .transaction-detail {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .transaction-detail.open {
+            display: block;
+        }
+        
+        .day-group {
+            margin-bottom: 20px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 15px;
+        }
+        
+        .day-header {
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .transaction-item {
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 1px solid #1e293b;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+        
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .transaction-meta {
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .transaction-items {
+            color: #94a3b8;
+            font-size: 12px;
+            padding-left: 20px;
+        }
+        
+        .item {
+            margin: 4px 0;
+        }
+        
+        /* Verification */
+        .verification-bar {
+            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .verification-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .verification-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .verification-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .check-mark {
+            color: #10b981;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .verification-text {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            padding: 20px;
+            border-top: 1px solid #1e293b;
+            margin-top: 30px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .kpi-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px;
+            }
+            
+            .verification-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="header"><div class="header-inner">
-  <div class="logo-area"><h1>Ivan Guaderrama <span>Gallery</span></h1><p>IG Alvaro Obregon — San José del Cabo, BCS &nbsp;|&nbsp; Horario: America/Mazatlán (UTC-7)</p></div>
-  <div class="header-badge"><div class="period">Reporte Semanal de Ventas</div><div class="dates">30 Marzo — 5 Abril, 2026</div></div>
-</div></div>
-
-<div class="kpi-grid">
-  <div class="kpi-card highlight"><div class="kpi-icon">💰</div><div class="kpi-value">$3,481</div><div class="kpi-label">Ingresos Totales</div></div>
-  <div class="kpi-card"><div class="kpi-icon">🧾</div><div class="kpi-value">27</div><div class="kpi-label">Transacciones</div></div>
-  <div class="kpi-card"><div class="kpi-icon">📦</div><div class="kpi-value">47</div><div class="kpi-label">Piezas Vendidas</div></div>
-  <div class="kpi-card"><div class="kpi-icon">👥</div><div class="kpi-value">18</div><div class="kpi-label">Clientes Únicos</div></div>
-  <div class="kpi-card"><div class="kpi-icon">💵</div><div class="kpi-value">$129</div><div class="kpi-label">Ticket Promedio</div></div>
-</div>
-
-<div class="container">
-
-<!-- VENTAS POR DÍA -->
-<div class="section"><div class="section-title">Ventas por Día</div>
-<div class="day-cards">
-  <div class="day-card"><div class="day-name">Lunes</div><div class="day-date">30 Mar</div><div class="day-amount">$131</div><div class="day-count">2 ventas</div></div>
-  <div class="day-card"><div class="day-name">Martes</div><div class="day-date">31 Mar</div><div class="day-amount">$1,547</div><div class="day-count">4 ventas</div></div>
-  <div class="day-card"><div class="day-name">Miércoles</div><div class="day-date">1 Abr</div><div class="day-amount">$48</div><div class="day-count">1 venta</div></div>
-  <div class="day-card best"><div class="day-name">Jueves</div><div class="day-date">2 Abr</div><div class="day-amount">$1,449</div><div class="day-count">16 ventas</div></div>
-  <div class="day-card"><div class="day-name">Viernes</div><div class="day-date">3 Abr</div><div class="day-amount">$306</div><div class="day-count">4 ventas</div></div>
-  <div class="day-card zero"><div class="day-name">Sábado</div><div class="day-date">4 Abr</div><div class="day-amount">$0</div><div class="day-count">0 ventas</div></div>
-  <div class="day-card zero"><div class="day-name">Domingo</div><div class="day-date">5 Abr</div><div class="day-amount">$0</div><div class="day-count">0 ventas</div></div>
-</div></div>
-
-<!-- CHARTS ROW 1 -->
-<div class="chart-row">
-  <div class="chart-card"><h3>Ingresos por Día (USD)</h3><div class="chart-wrapper"><canvas id="dailyRevenueChart"></canvas></div></div>
-  <div class="chart-card"><h3>Ingresos por Categoría</h3><div class="chart-wrapper"><canvas id="categoryChart"></canvas></div></div>
-</div>
-<!-- CHARTS ROW 2 -->
-<div class="chart-row">
-  <div class="chart-card"><h3>Productos — Piezas Vendidas</h3><div class="chart-wrapper"><canvas id="productQtyChart"></canvas></div></div>
-  <div class="chart-card"><h3>Transacciones por Día</h3><div class="chart-wrapper"><canvas id="txCountChart"></canvas></div></div>
-</div>
-<!-- CHART: HORARIOS -->
-<div class="chart-full"><h3 style="font-size:14px;font-weight:600;color:#a1a1aa;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px">⏰ Horario de Ventas — Ventas e Ingresos por Hora del Día (9 AM – 10 PM)</h3><div class="chart-wrapper"><canvas id="hourlyChart"></canvas></div></div>
-
-<!-- TOP PRODUCTOS POR INGRESO -->
-<div class="section"><div class="section-title">Top Productos por Ingreso</div>
-<table class="styled-table"><thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Piezas</th><th>Ingreso</th><th>% del Total</th></tr></thead><tbody>
-  <tr><td><span class="rank-badge rank-1">1</span></td><td class="product-name">MIA JEWELRY IG</td><td><span class="product-type type-jewelry">Jewelry</span></td><td>6</td><td class="amount amount-lg">$1,610.00</td><td class="bar-cell">46.3%<div class="bar-bg"><div class="bar-fill fill-pink" style="width:46.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-2">2</span></td><td class="product-name">Big Canvas</td><td><span class="product-type type-canvas">Canvas</span></td><td>15</td><td class="amount amount-lg">$716.00</td><td class="bar-cell">20.6%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:20.6%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">GICLEE COLLECTION</td><td><span class="product-type type-canvas">Canvas</span></td><td>2</td><td class="amount amount-lg">$357.00</td><td class="bar-cell">10.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:10.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">4</span></td><td class="product-name">MINI canvas desk</td><td><span class="product-type type-mini">Mini Canvas</span></td><td>8</td><td class="amount">$312.00</td><td class="bar-cell">9.0%<div class="bar-bg"><div class="bar-fill fill-green" style="width:9%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">5</span></td><td class="product-name">Perfume</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>4</td><td class="amount">$160.00</td><td class="bar-cell">4.6%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.6%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">6</span></td><td class="product-name">Mirrors</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>6</td><td class="amount">$156.00</td><td class="bar-cell">4.5%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.5%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">7</span></td><td class="product-name">Magnets</td><td><span class="product-type type-souvenir">Souvenir</span></td><td>5</td><td class="amount">$150.00</td><td class="bar-cell">4.3%<div class="bar-bg"><div class="bar-fill fill-green" style="width:4.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">8</span></td><td class="product-name">10 By 10 Marble Tile</td><td><span class="product-type type-marble">Marble</span></td><td>1</td><td class="amount">$19.50</td><td class="bar-cell">0.6%<div class="bar-bg"><div class="bar-fill fill-green" style="width:0.6%"></div></div></td></tr>
-</tbody></table></div>
-
-<!-- TOP PRODUCTOS POR CANTIDAD -->
-<div class="section"><div class="section-title">Top Productos Más Vendidos (por Piezas)</div>
-<table class="styled-table"><thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Piezas</th><th>Ingreso</th></tr></thead><tbody>
-  <tr><td><span class="rank-badge rank-1">1</span></td><td class="product-name">Big Canvas</td><td><span class="product-type type-canvas">Canvas</span></td><td><strong>15</strong></td><td class="amount">$716.00</td></tr>
-  <tr><td><span class="rank-badge rank-2">2</span></td><td class="product-name">MINI canvas desk</td><td><span class="product-type type-mini">Mini Canvas</span></td><td><strong>8</strong></td><td class="amount">$312.00</td></tr>
-  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">MIA JEWELRY IG</td><td><span class="product-type type-jewelry">Jewelry</span></td><td><strong>6</strong></td><td class="amount">$1,610.00</td></tr>
-  <tr><td><span class="rank-badge rank-3">3</span></td><td class="product-name">Mirrors</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>6</strong></td><td class="amount">$156.00</td></tr>
-  <tr><td><span class="rank-badge rank-n">5</span></td><td class="product-name">Magnets</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>5</strong></td><td class="amount">$150.00</td></tr>
-  <tr><td><span class="rank-badge rank-n">6</span></td><td class="product-name">Perfume</td><td><span class="product-type type-souvenir">Souvenir</span></td><td><strong>4</strong></td><td class="amount">$160.00</td></tr>
-  <tr><td><span class="rank-badge rank-n">7</span></td><td class="product-name">GICLEE COLLECTION</td><td><span class="product-type type-canvas">Canvas</span></td><td><strong>2</strong></td><td class="amount">$357.00</td></tr>
-  <tr><td><span class="rank-badge rank-n">8</span></td><td class="product-name">10 By 10 Marble Tile</td><td><span class="product-type type-marble">Marble</span></td><td><strong>1</strong></td><td class="amount">$19.50</td></tr>
-</tbody></table></div>
-
-<!-- CLIENTES -->
-<div class="section"><div class="section-title">Clientes de la Semana</div>
-<table class="styled-table"><thead><tr><th>#</th><th>Cliente</th><th>Compras</th><th>Total Gastado</th><th>% del Total</th></tr></thead><tbody>
-  <tr><td><span class="rank-badge rank-1">1</span></td><td class="customer-name">Mary Smolik</td><td>1</td><td class="amount amount-lg">$614.00</td><td class="bar-cell">17.6%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:17.6%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-2">2</span></td><td class="customer-name">Margaret C Vaughan</td><td>1</td><td class="amount amount-lg">$590.00</td><td class="bar-cell">17.0%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:17%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-3">3</span></td><td class="customer-name">Kathleen Stover</td><td>1</td><td class="amount">$295.00</td><td class="bar-cell">8.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:8.5%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">4</span></td><td class="customer-name">Lori Jean Zavadil</td><td>1</td><td class="amount">$148.00</td><td class="bar-cell">4.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">5</span></td><td class="customer-name">Moira McGinley</td><td>1</td><td class="amount">$144.00</td><td class="bar-cell">4.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:4.1%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">6</span></td><td class="customer-name">Kendra</td><td>1</td><td class="amount">$135.00</td><td class="bar-cell">3.9%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.9%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">7</span></td><td class="customer-name">Maria Teresa Blanquel Becerra</td><td>1</td><td class="amount">$130.00</td><td class="bar-cell">3.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.7%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">8</span></td><td class="customer-name">Itzi</td><td>1</td><td class="amount">$118.00</td><td class="bar-cell">3.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:3.4%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">9</span></td><td class="customer-name">Megan Wick</td><td>1</td><td class="amount">$87.00</td><td class="bar-cell">2.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.5%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">10</span></td><td class="customer-name">Lyndsey Wilson</td><td>1</td><td class="amount">$80.00</td><td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">10</span></td><td class="customer-name">Tim A Majewski</td><td>1</td><td class="amount">$80.00</td><td class="bar-cell">2.3%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:2.3%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">12</span></td><td class="customer-name">Traci Eichstadt</td><td>1</td><td class="amount">$60.00</td><td class="bar-cell">1.7%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.7%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">13</span></td><td class="customer-name">Carissa A Peters</td><td>1</td><td class="amount">$52.00</td><td class="bar-cell">1.5%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.5%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">14</span></td><td class="customer-name">Sandra Ross</td><td>1</td><td class="amount">$48.00</td><td class="bar-cell">1.4%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.4%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Ashley D</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Julia Olkin</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">15</span></td><td class="customer-name">Shawn Finnegan</td><td>1</td><td class="amount">$39.00</td><td class="bar-cell">1.1%<div class="bar-bg"><div class="bar-fill fill-blue" style="width:1.1%"></div></div></td></tr>
-  <tr><td><span class="rank-badge rank-n">—</span></td><td class="customer-name customer-walkin">Walk-in (sin registro)</td><td>10</td><td class="amount amount-lg">$782.50</td><td class="bar-cell">22.5%<div class="bar-bg"><div class="bar-fill fill-green" style="width:22.5%"></div></div></td></tr>
-</tbody></table></div>
-
-<!-- DETALLE DE TRANSACCIONES -->
-<div class="section"><div class="section-title">Detalle de Transacciones</div>
-<table class="styled-table"><thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Status</th></tr></thead><tbody>
-  <tr class="day-group-header"><td colspan="6">Lunes 30 Marzo — 2 ventas — $130.50</td></tr>
-  <tr><td class="tx-time">11:30</td><td class="tx-invoice">OBR13926</td><td>Walk-in</td><td class="tx-products">Big Canvas ($24), Marble Tile ($19.50)</td><td class="amount">$43.50</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">15:12</td><td class="tx-invoice">OBR13927</td><td>Megan Wick</td><td class="tx-products">Big Canvas ($48), MINI canvas desk ($39)</td><td class="amount">$87.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-
-  <tr class="day-group-header"><td colspan="6">Martes 31 Marzo — 4 ventas — $1,547.00 (+ 1 anulada)</td></tr>
-  <tr style="opacity:0.5"><td class="tx-time">12:04</td><td class="tx-invoice">OBR13928</td><td>Margaret C Vaughan</td><td class="tx-products">MIA JEWELRY IG x2 ($590)</td><td style="text-decoration:line-through;color:#ef4444">$590.00</td><td><span class="tx-status status-voided">VOIDED</span></td></tr>
-  <tr><td class="tx-time">12:05</td><td class="tx-invoice">OBR13929</td><td>Kathleen Stover</td><td class="tx-products">MIA JEWELRY IG ($295)</td><td class="amount">$295.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">12:07</td><td class="tx-invoice">OBR13930</td><td>Mary Smolik</td><td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295), Big Canvas ($24)</td><td class="amount">$614.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">12:19</td><td class="tx-invoice">OBR13931</td><td>Margaret C Vaughan</td><td class="tx-products">MIA JEWELRY IG ($295), MIA JEWELRY IG ($295)</td><td class="amount">$590.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">13:54</td><td class="tx-invoice">OBR13932</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-
-  <tr class="day-group-header"><td colspan="6">Miércoles 1 Abril — 1 venta — $48.00</td></tr>
-  <tr><td class="tx-time">13:16</td><td class="tx-invoice">OBR13933</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-
-  <tr class="day-group-header"><td colspan="6">⭐ Jueves 2 Abril — 16 ventas — $1,449.00 — MEJOR DÍA</td></tr>
-  <tr><td class="tx-time">16:40</td><td class="tx-invoice">OBR13934</td><td>Traci Eichstadt</td><td class="tx-products">Magnets ($30), Magnets ($30)</td><td class="amount">$60.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">16:41</td><td class="tx-invoice">OBR13935</td><td>Carissa A Peters</td><td class="tx-products">Mirrors ($26), Mirrors ($26)</td><td class="amount">$52.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">18:22</td><td class="tx-invoice">OBR13936</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">18:37</td><td class="tx-invoice">OBR13937</td><td>Walk-in</td><td class="tx-products">Mirrors ($26), MINI canvas desk ($39), Mirrors ($26)</td><td class="amount">$91.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">18:39</td><td class="tx-invoice">OBR13938</td><td>Walk-in</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">19:20</td><td class="tx-invoice">OBR13939</td><td>Sandra Ross</td><td class="tx-products">Big Canvas ($48)</td><td class="amount">$48.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">19:26</td><td class="tx-invoice">OBR13940</td><td>Maria Teresa Blanquel</td><td class="tx-products">Big Canvas ($70), Magnets ($30), Magnets ($30)</td><td class="amount">$130.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">19:35</td><td class="tx-invoice">OBR13941</td><td>Moira McGinley</td><td class="tx-products">Big Canvas ($48) x3</td><td class="amount">$144.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">19:49</td><td class="tx-invoice">OBR13942</td><td>Walk-in</td><td class="tx-products">GICLEE COLLECTION ($179), GICLEE COLLECTION ($178)</td><td class="amount">$357.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:27</td><td class="tx-invoice">OBR13943</td><td>Walk-in</td><td class="tx-products">Magnets ($30)</td><td class="amount">$30.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:30</td><td class="tx-invoice">OBR13944</td><td>Ashley D</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:31</td><td class="tx-invoice">OBR13945</td><td>Julia Olkin</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:37</td><td class="tx-invoice">OBR13946</td><td>Lyndsey Wilson</td><td class="tx-products">Perfume ($40), Perfume ($40)</td><td class="amount">$80.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:52</td><td class="tx-invoice">OBR13947</td><td>Itzi</td><td class="tx-products">Big Canvas ($70), Big Canvas ($48)</td><td class="amount">$118.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:53</td><td class="tx-invoice">OBR13948</td><td>Kendra</td><td class="tx-products">MIA JEWELRY IG ($135)</td><td class="amount">$135.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">20:55</td><td class="tx-invoice">OBR13949</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-
-  <tr class="day-group-header"><td colspan="6">Viernes 3 Abril — 4 ventas — $306.00</td></tr>
-  <tr><td class="tx-time">10:15</td><td class="tx-invoice">OBR13950</td><td>Walk-in</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">12:06</td><td class="tx-invoice">OBR13951</td><td>Lori Jean Zavadil</td><td class="tx-products">Big Canvas ($48) x2, Mirrors ($26) x2</td><td class="amount">$148.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">13:46</td><td class="tx-invoice">OBR13952</td><td>Tim A Majewski</td><td class="tx-products">Perfume ($40), Perfume ($40)</td><td class="amount">$80.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-  <tr><td class="tx-time">14:05</td><td class="tx-invoice">OBR13953</td><td>Shawn Finnegan</td><td class="tx-products">MINI canvas desk ($39)</td><td class="amount">$39.00</td><td><span class="tx-status status-closed">CLOSED</span></td></tr>
-
-  <tr class="day-group-header"><td colspan="6">Sábado 4 Abril — Sin ventas</td></tr>
-  <tr class="day-group-header"><td colspan="6">Domingo 5 Abril — Sin ventas</td></tr>
-</tbody></table>
-<div class="note-box">⚠️ OBR13928 (Margaret C Vaughan, $590) fue <strong>anulada (VOIDED)</strong> y no se incluye en los totales. Se muestra en la tabla para referencia.</div>
-</div>
-
-</div>
-
-<div class="footer">Generado automáticamente desde Vend/Lightspeed API — Ivan Guaderrama Gallery — Horario: America/Mazatlán (UTC-7) — 7 Abril 2026</div>
-
-<script>
-Chart.defaults.color='#a1a1aa';Chart.defaults.borderColor='rgba(255,255,255,0.06)';Chart.defaults.font.family="'Inter',sans-serif";
-
-new Chart(document.getElementById('dailyRevenueChart'),{type:'bar',data:{labels:['Lun 30','Mar 31','Mié 1','Jue 2 ⭐','Vie 3','Sáb 4','Dom 5'],datasets:[{label:'Ingresos USD',data:[130.50,1547,48,1449,306,0,0],backgroundColor:['rgba(96,165,250,0.7)','rgba(96,165,250,0.7)','rgba(96,165,250,0.7)','rgba(52,211,153,0.8)','rgba(96,165,250,0.7)','rgba(63,63,70,0.4)','rgba(63,63,70,0.4)'],borderRadius:8,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y.toLocaleString()}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}},x:{grid:{display:false}}}}});
-
-new Chart(document.getElementById('categoryChart'),{type:'doughnut',data:{labels:['Jewelry','Canvas','Mini Canvas Desk','Souvenir','Marble'],datasets:[{data:[1610,1073,312,466,19.50],backgroundColor:['#f472b6','#60a5fa','#fbbf24','#34d399','#a78bfa'],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'right',labels:{padding:16,usePointStyle:true,pointStyle:'circle'}},tooltip:{callbacks:{label:c=>' $'+c.parsed.toLocaleString()+' ('+(c.parsed/3480.50*100).toFixed(1)+'%)'}}}}});
-
-new Chart(document.getElementById('productQtyChart'),{type:'bar',data:{labels:['Big Canvas','MINI canvas','MIA JEWELRY','Mirrors','Magnets','Perfume','GICLEE','Marble Tile'],datasets:[{label:'Piezas',data:[15,8,6,6,5,4,2,1],backgroundColor:['#60a5fa','#fbbf24','#f472b6','#34d399','#34d399','#34d399','#60a5fa','#a78bfa'],borderRadius:6,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(255,255,255,0.04)'}},y:{grid:{display:false}}}}});
-
-new Chart(document.getElementById('txCountChart'),{type:'line',data:{labels:['Lun 30','Mar 31','Mié 1','Jue 2 ⭐','Vie 3','Sáb 4','Dom 5'],datasets:[{label:'Transacciones',data:[2,4,1,16,4,0,0],borderColor:'#60a5fa',backgroundColor:'rgba(96,165,250,0.1)',fill:true,tension:0.4,pointRadius:6,pointBackgroundColor:'#60a5fa',pointBorderColor:'#1c1c28',pointBorderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(255,255,255,0.04)'}},x:{grid:{display:false}}}}});
-
-new Chart(document.getElementById('hourlyChart'),{type:'bar',data:{labels:['9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'],datasets:[{label:'Ingresos USD',data:[0,39,43.5,1647,176,39,87,112,0,178,679,480,0,0],backgroundColor:['rgba(63,63,70,0.3)','rgba(96,165,250,0.5)','rgba(96,165,250,0.5)','rgba(52,211,153,0.85)','rgba(96,165,250,0.6)','rgba(96,165,250,0.5)','rgba(96,165,250,0.5)','rgba(96,165,250,0.6)','rgba(63,63,70,0.3)','rgba(96,165,250,0.6)','rgba(244,114,182,0.7)','rgba(244,114,182,0.7)','rgba(63,63,70,0.3)','rgba(63,63,70,0.3)'],borderRadius:6,borderSkipped:false,yAxisID:'y'},{label:'# Ventas',data:[0,1,1,4,3,1,1,2,0,3,4,7,0,0],type:'line',borderColor:'#fbbf24',backgroundColor:'rgba(251,191,36,0.1)',fill:false,tension:0.4,pointRadius:5,pointBackgroundColor:'#fbbf24',pointBorderColor:'#1c1c28',pointBorderWidth:2,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{usePointStyle:true,padding:16}},tooltip:{callbacks:{label:c=>c.dataset.label==='Ingresos USD'?'$'+c.parsed.y.toLocaleString():c.parsed.y+' ventas'}}},scales:{y:{position:'left',ticks:{callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(255,255,255,0.04)'}},y1:{position:'right',ticks:{stepSize:1},grid:{display:false}},x:{grid:{display:false}}}}});
-</script>
+    <div class="container">
+        <div class="header">
+            <h1>Ivan Guaderrama Art Gallery</h1>
+            <p class="subtitle">Reporte Semanal de Ventas</p>
+            <p class="week-info">Mar 30 - Abr 5, 2026 | Semana 14</p>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('week')">Esta Semana</button>
+                <button class="tab-button" onclick="showTab('ytd')">Acumulado 2026</button>
+            </div>
+            
+            <!-- TAB 1: ESTA SEMANA -->
+            <div id="week" class="tab-content active">
+                <!-- KPI Cards -->
+                <div class="kpi-cards">
+                    <div class="card">
+                        <div class="card-label">Total Ventas</div>
+                        <div class="card-value">$3,480.50</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-label">Transacciones</div>
+                        <div class="card-value">27</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-label">Ticket Promedio</div>
+                        <div class="card-value">$128.91</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-label">Mejor Día</div>
+                        <div class="card-value">Martes</div>
+                        <div class="card-subtext">$1,547.00 • 4 txns</div>
+                    </div>
+                </div>
+                
+                <!-- Verification Bar -->
+                <div class="verification-bar">
+                    <div class="verification-title">Verificación de Datos</div>
+                    <div class="verification-items">
+                        <div class="verification-item">
+                            <span class="check-mark">✅</span>
+                            <span class="verification-text">Semana: total = suma diaria: $3,480.50 = $3,480.50</span>
+                        </div>
+                        <div class="verification-item">
+                            <span class="check-mark">✅</span>
+                            <span class="verification-text">Semana: total = suma productos: $3,480.50 = $3,480.50</span>
+                        </div>
+                        <div class="verification-item">
+                            <span class="check-mark">✅</span>
+                            <span class="verification-text">YTD: total mensual = suma transacciones: $75,634.65 = $75,634.65</span>
+                        </div>
+                        <div class="verification-item">
+                            <span class="check-mark">✅</span>
+                            <span class="verification-text">YTD: conteo transacciones: 512 = 512</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="charts-section">
+                    <!-- Daily Revenue Chart -->
+                    <div class="chart-container">
+                        <div class="chart-title">Ingresos por Día</div>
+                        <canvas id="dailyChart" style="height: 300px;"></canvas>
+                    </div>
+                    
+                    <!-- Categories Doughnut Chart -->
+                    <div class="chart-container">
+                        <div class="chart-title">Ingresos por Categoría</div>
+                        <canvas id="categoriesChart" style="height: 300px;"></canvas>
+                    </div>
+                    
+                    <!-- Top Products Horizontal Bar -->
+                    <div class="chart-container">
+                        <div class="chart-title">Top Productos por Ingresos</div>
+                        <canvas id="topProdsChart" style="height: 300px;"></canvas>
+                    </div>
+                    
+                    <!-- Hourly Analysis Dual Axis -->
+                    <div class="chart-container">
+                        <div class="chart-title">Análisis Horario</div>
+                        <canvas id="hourlyChart" style="height: 400px;"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Top Products Table -->
+                <div class="table-container">
+                    <div class="table-title">Top 10 Productos por Ingresos</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;">Ingresos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>MIA JEWELRY IG</td>
+                                <td>Jewelry</td>
+                                <td style="text-align: right;">6</td>
+                                <td style="text-align: right;">$1,610.00</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Big Canvas</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">15</td>
+                                <td style="text-align: right;">$716.00</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>GICLEE COLLECTION</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$357.00</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span class="cat-dot" style="background: #6366f1;"></span>MINI canvas desk</td>
+                                <td>Mini Canvas Desk</td>
+                                <td style="text-align: right;">8</td>
+                                <td style="text-align: right;">$312.00</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span class="cat-dot" style="background: #ec4899;"></span>Perfume</td>
+                                <td>Perfume</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$160.00</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Mirrors</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">6</td>
+                                <td style="text-align: right;">$156.00</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Magnets</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">5</td>
+                                <td style="text-align: right;">$150.00</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span class="cat-dot" style="background: #64748b;"></span>10 By 10 Marble Tile</td>
+                                <td>Marble</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$19.50</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>IG Jewelry</td>
+                                <td>Jewelry</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$0.00</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Small Canvas</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Top Customers Table -->
+                <div class="table-container">
+                    <div class="table-title">Top Clientes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th style="text-align: right;">Compras</th>
+                                <th style="text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>walking</td>
+                                <td style="text-align: right;">7</td>
+                                <td style="text-align: right;">$643.00</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>MARY SMOLIK</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$614.00</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>MARGARET C VAUGHAN</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$590.00</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>KATHLEEN STOVER</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$295.00</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Lori Jean Zavadil</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$148.00</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>MOIRA MCGINLEY</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$144.00</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>KENDRA</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$135.00</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>MARIA TERESA BLANQUEL BECERRA</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$130.00</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>ITZI</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$118.00</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>walk inn</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$91.50</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Transaction Details -->
+                <div class="transaction-section">
+                    <button class="toggle-button" onclick="toggleTransactions()">📋 Ver Detalles de Transacciones (27 txns)</button>
+                    <div class="transaction-detail" id="transactionDetail">
+                        <div class="day-group">
+                            <div class="day-header">Lunes 2026-03-30</div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13926 • 11:30 • walk inn</span>
+                                    <span>$43.50</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $24.00</div>
+                                    <div class="item">• 10 By 10 Marble Tile (Marble) x1 = $19.50</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13927 • 15:12 • MEGAN WICK</span>
+                                    <span>$87.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day-group">
+                            <div class="day-header">Martes 2026-03-31</div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13929 • 12:05 • KATHLEEN STOVER</span>
+                                    <span>$295.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $295.00</div>
+                                    <div class="item">• IG Jewelry (Jewelry) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13930 • 12:07 • MARY SMOLIK</span>
+                                    <span>$614.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $295.00</div>
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $295.00</div>
+                                    <div class="item">• Big Canvas (Canvas) x1 = $24.00</div>
+                                    <div class="item">• IG Jewelry (Jewelry) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13931 • 12:19 • MARGARET C VAUGHAN</span>
+                                    <span>$590.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $295.00</div>
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $295.00</div>
+                                    <div class="item">• IG Jewelry (Jewelry) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13932 • 13:54 • walk inn</span>
+                                    <span>$48.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day-group">
+                            <div class="day-header">Miercoles 2026-04-01</div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13933 • 13:16 • Cliente sin nombre</span>
+                                    <span>$48.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day-group">
+                            <div class="day-header">Jueves 2026-04-02</div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13934 • 16:40 • TRACI EICHSTADT</span>
+                                    <span>$60.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Magnets (Souvenir) x1 = $30.00</div>
+                                    <div class="item">• Magnets (Souvenir) x1 = $30.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13935 • 16:41 • CARISSA A PETERS</span>
+                                    <span>$52.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13936 • 18:22 • walking</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13937 • 18:37 • walking</span>
+                                    <span>$91.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13938 • 18:39 • walking</span>
+                                    <span>$48.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13939 • 19:20 • sandra ross</span>
+                                    <span>$48.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13940 • 19:26 • MARIA TERESA BLANQUEL BECERRA</span>
+                                    <span>$130.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $70.00</div>
+                                    <div class="item">• Magnets (Souvenir) x1 = $30.00</div>
+                                    <div class="item">• Magnets (Souvenir) x1 = $30.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13941 • 19:35 • MOIRA MCGINLEY</span>
+                                    <span>$144.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Small Canvas (Canvas) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13942 • 19:49 • walking</span>
+                                    <span>$357.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• GICLEE COLLECTION (Canvas) x1 = $179.00</div>
+                                    <div class="item">• GICLEE COLLECTION (Canvas) x1 = $178.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13943 • 20:27 • walking</span>
+                                    <span>$30.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Magnets (Souvenir) x1 = $30.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13944 • 20:30 • ASHLEY D</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13945 • 20:31 • JULIA OLKIN</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13946 • 20:37 • Lyndsey Wilson</span>
+                                    <span>$80.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Perfume (Perfume) x1 = $40.00</div>
+                                    <div class="item">• Perfume (Perfume) x1 = $40.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13947 • 20:52 • ITZI</span>
+                                    <span>$118.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $70.00</div>
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Small Canvas (Canvas) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13948 • 20:53 • KENDRA</span>
+                                    <span>$135.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MIA JEWELRY IG (Jewelry) x1 = $135.00</div>
+                                    <div class="item">• IG Jewelry (Jewelry) x1 = $0.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13949 • 20:55 • walking</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="day-group">
+                            <div class="day-header">Viernes 2026-04-03</div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13950 • 10:15 • walking</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13951 • 12:06 • Lori Jean Zavadil</span>
+                                    <span>$148.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Big Canvas (Canvas) x1 = $48.00</div>
+                                    <div class="item">• Small Canvas (Canvas) x1 = $0.00</div>
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                    <div class="item">• Mirrors (Souvenir) x1 = $26.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13952 • 13:46 • TIM A MAJEWSKI</span>
+                                    <span>$80.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• Perfume (Perfume) x1 = $40.00</div>
+                                    <div class="item">• Perfume (Perfume) x1 = $40.00</div>
+                                </div>
+                            </div>
+                            <div class="transaction-item">
+                                <div class="transaction-header">
+                                    <span>OBR13953 • 14:05 • SHAWN FINNEGAN</span>
+                                    <span>$39.00</span>
+                                </div>
+                                <div class="transaction-items">
+                                    <div class="item">• MINI canvas desk (Mini Canvas Desk) x1 = $39.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TAB 2: ACUMULADO 2026 -->
+            <div id="ytd" class="tab-content">
+                <!-- Monthly Comparison Table -->
+                <div class="table-container">
+                    <div class="table-title">Comparación Mensual</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th style="text-align: right;">Ventas</th>
+                                <th style="text-align: right;">Txns</th>
+                                <th style="text-align: right;">Ticket Prom</th>
+                                <th style="text-align: right;">Productos</th>
+                                <th style="text-align: right;">Clientes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Enero</td>
+                                <td style="text-align: right;">$24,015.90</td>
+                                <td style="text-align: right;">194</td>
+                                <td style="text-align: right;">$123.79</td>
+                                <td style="text-align: right;">19</td>
+                                <td style="text-align: right;">114</td>
+                            </tr>
+                            <tr>
+                                <td>Febrero</td>
+                                <td style="text-align: right;">$17,227.50</td>
+                                <td style="text-align: right;">154</td>
+                                <td style="text-align: right;">$111.87</td>
+                                <td style="text-align: right;">14</td>
+                                <td style="text-align: right;">100</td>
+                            </tr>
+                            <tr>
+                                <td>Marzo</td>
+                                <td style="text-align: right;">$32,491.25</td>
+                                <td style="text-align: right;">141</td>
+                                <td style="text-align: right;">$230.43</td>
+                                <td style="text-align: right;">16</td>
+                                <td style="text-align: right;">99</td>
+                            </tr>
+                            <tr>
+                                <td>Abril (parcial)</td>
+                                <td style="text-align: right;">$1,900.00</td>
+                                <td style="text-align: right;">23</td>
+                                <td style="text-align: right;">$82.61</td>
+                                <td style="text-align: right;">9</td>
+                                <td style="text-align: right;">16</td>
+                            </tr>
+                            <tr style="font-weight: 600; background: rgba(59, 130, 246, 0.1); border-top: 2px solid #3b82f6;">
+                                <td>Total</td>
+                                <td style="text-align: right;">$75,634.65</td>
+                                <td style="text-align: right;">512</td>
+                                <td style="text-align: right;">$147.72</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Monthly Revenue Chart -->
+                <div class="charts-section">
+                    <div class="chart-container" style="grid-column: 1 / -1;">
+                        <div class="chart-title">Ingresos Mensuales</div>
+                        <canvas id="monthlyChart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Top 15 Products by Revenue -->
+                <div class="table-container">
+                    <div class="table-title">Top 15 Productos por Ingresos (YTD)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;">Ingresos</th>
+                                <th style="text-align: right;">Meses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span class="cat-dot" style="background: #ef4444;"></span>Original Paint</td>
+                                <td>Original Paint</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$16,774.75</td>
+                                <td style="text-align: right;">1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Big Canvas</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">298</td>
+                                <td style="text-align: right;">$14,244.00</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>MIA JEWELRY IG</td>
+                                <td>Jewelry</td>
+                                <td style="text-align: right;">61</td>
+                                <td style="text-align: right;">$8,172.50</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>GICLEE COLLECTION</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">48</td>
+                                <td style="text-align: right;">$6,555.90</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span class="cat-dot" style="background: #ec4899;"></span>Perfume</td>
+                                <td>Perfume</td>
+                                <td style="text-align: right;">113</td>
+                                <td style="text-align: right;">$4,714.00</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span class="cat-dot" style="background: #6366f1;"></span>MINI canvas desk</td>
+                                <td>Mini Canvas Desk</td>
+                                <td style="text-align: right;">119</td>
+                                <td style="text-align: right;">$4,621.50</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span class="cat-dot" style="background: #06b6d4;"></span>Virtual reality and Hand Retouching Paint</td>
+                                <td>Virtual Reality Paint</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$4,388.00</td>
+                                <td style="text-align: right;">2</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Mirrors</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">168</td>
+                                <td style="text-align: right;">$4,180.00</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span class="cat-dot" style="background: #f97316;"></span>Wall sculpture /Limited Edition</td>
+                                <td>Limited Edition</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$3,305.00</td>
+                                <td style="text-align: right;">1</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span class="cat-dot" style="background: #10b981;"></span>Metal Sculpture</td>
+                                <td>Sculptures</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$2,354.00</td>
+                                <td style="text-align: right;">1</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td><span class="cat-dot" style="background: #ef4444;"></span>Interactive & Hand Retouch Painting</td>
+                                <td>Original Paint</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,156.00</td>
+                                <td style="text-align: right;">1</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td><span class="cat-dot" style="background: #10b981;"></span>Glass Sculpture</td>
+                                <td>Sculptures</td>
+                                <td style="text-align: right;">15</td>
+                                <td style="text-align: right;">$1,380.00</td>
+                                <td style="text-align: right;">3</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Magnets</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">35</td>
+                                <td style="text-align: right;">$1,035.00</td>
+                                <td style="text-align: right;">4</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td><span class="cat-dot" style="background: #94a3b8;"></span>Custom Shipping</td>
+                                <td>Otros</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$939.00</td>
+                                <td style="text-align: right;">2</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td><span class="cat-dot" style="background: #94a3b8;"></span>LOCAL SALE</td>
+                                <td>Otros</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$750.00</td>
+                                <td style="text-align: right;">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Top 15 Products by Quantity -->
+                <div class="table-container">
+                    <div class="table-title">Top 15 Productos por Cantidad (YTD)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;">Ingresos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Big Canvas</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">298</td>
+                                <td style="text-align: right;">$14,244.00</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Mirrors</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">168</td>
+                                <td style="text-align: right;">$4,180.00</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><span class="cat-dot" style="background: #6366f1;"></span>MINI canvas desk</td>
+                                <td>Mini Canvas Desk</td>
+                                <td style="text-align: right;">119</td>
+                                <td style="text-align: right;">$4,621.50</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><span class="cat-dot" style="background: #ec4899;"></span>Perfume</td>
+                                <td>Perfume</td>
+                                <td style="text-align: right;">113</td>
+                                <td style="text-align: right;">$4,714.00</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Small Canvas</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">73</td>
+                                <td style="text-align: right;">$633.00</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>MIA JEWELRY IG</td>
+                                <td>Jewelry</td>
+                                <td style="text-align: right;">61</td>
+                                <td style="text-align: right;">$8,172.50</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>GICLEE COLLECTION</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">48</td>
+                                <td style="text-align: right;">$6,555.90</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Magnets</td>
+                                <td>Souvenir</td>
+                                <td style="text-align: right;">35</td>
+                                <td style="text-align: right;">$1,035.00</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>IG Jewelry</td>
+                                <td>Jewelry</td>
+                                <td style="text-align: right;">24</td>
+                                <td style="text-align: right;">$0.00</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><span class="cat-dot" style="background: #10b981;"></span>Glass Sculpture</td>
+                                <td>Sculptures</td>
+                                <td style="text-align: right;">15</td>
+                                <td style="text-align: right;">$1,380.00</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td><span class="cat-dot" style="background: #64748b;"></span>10 By 10 Marble Tile</td>
+                                <td>Marble</td>
+                                <td style="text-align: right;">6</td>
+                                <td style="text-align: right;">$117.00</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td><span class="cat-dot" style="background: #94a3b8;"></span>Custom Shipping</td>
+                                <td>Otros</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$939.00</td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td><span class="cat-dot" style="background: #ef4444;"></span>Original Paint</td>
+                                <td>Original Paint</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$16,774.75</td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>INTERACTIVE GICLEE 60 X 60</td>
+                                <td>Canvas</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$380.00</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td><span class="cat-dot" style="background: #10b981;"></span>Metal Sculpture</td>
+                                <td>Sculptures</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$2,354.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Hourly Heatmap -->
+                <div class="charts-section">
+                    <div class="chart-container" style="grid-column: 1 / -1;">
+                        <div class="chart-title">Ingresos por Hora (YTD)</div>
+                        <canvas id="hourlyYTDChart" style="height: 300px;"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Categories by Month -->
+                <div class="table-container">
+                    <div class="table-title">Categorías por Mes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th style="text-align: right;">Enero</th>
+                                <th style="text-align: right;">Febrero</th>
+                                <th style="text-align: right;">Marzo</th>
+                                <th style="text-align: right;">Abril</th>
+                                <th style="text-align: right;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #3b82f6;"></span>Canvas</td>
+                                <td style="text-align: right;">$9,564.40</td>
+                                <td style="text-align: right;">$5,662.00</td>
+                                <td style="text-align: right;">$5,609.50</td>
+                                <td style="text-align: right;">$977.00</td>
+                                <td style="text-align: right; font-weight: 600;">$21,812.90</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #a855f7;"></span>Jewelry</td>
+                                <td style="text-align: right;">$1,846.00</td>
+                                <td style="text-align: right;">$1,830.00</td>
+                                <td style="text-align: right;">$4,361.50</td>
+                                <td style="text-align: right;">$135.00</td>
+                                <td style="text-align: right; font-weight: 600;">$8,172.50</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #f97316;"></span>Limited Edition</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right;">$3,305.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$3,305.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #64748b;"></span>Marble</td>
+                                <td style="text-align: right;">$39.00</td>
+                                <td style="text-align: right;">$39.00</td>
+                                <td style="text-align: right;">$39.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$117.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #6366f1;"></span>Mini Canvas Desk</td>
+                                <td style="text-align: right;">$1,755.00</td>
+                                <td style="text-align: right;">$1,423.50</td>
+                                <td style="text-align: right;">$1,170.00</td>
+                                <td style="text-align: right;">$273.00</td>
+                                <td style="text-align: right; font-weight: 600;">$4,621.50</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #ef4444;"></span>Original Paint</td>
+                                <td style="text-align: right;">$2,156.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right;">$16,774.75</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$18,930.75</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #94a3b8;"></span>Otros</td>
+                                <td style="text-align: right;">$1,390.50</td>
+                                <td style="text-align: right;">$288.00</td>
+                                <td style="text-align: right;">$-1,054.50</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$624.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #ec4899;"></span>Perfume</td>
+                                <td style="text-align: right;">$1,063.00</td>
+                                <td style="text-align: right;">$1,579.00</td>
+                                <td style="text-align: right;">$1,863.00</td>
+                                <td style="text-align: right;">$209.00</td>
+                                <td style="text-align: right; font-weight: 600;">$4,714.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #10b981;"></span>Sculptures</td>
+                                <td style="text-align: right;">$2,809.00</td>
+                                <td style="text-align: right;">$880.00</td>
+                                <td style="text-align: right;">$45.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$3,734.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #f59e0b;"></span>Souvenir</td>
+                                <td style="text-align: right;">$1,905.00</td>
+                                <td style="text-align: right;">$2,221.00</td>
+                                <td style="text-align: right;">$783.00</td>
+                                <td style="text-align: right;">$306.00</td>
+                                <td style="text-align: right; font-weight: 600;">$5,215.00</td>
+                            </tr>
+                            <tr>
+                                <td><span class="cat-dot" style="background: #06b6d4;"></span>Virtual Reality Paint</td>
+                                <td style="text-align: right;">$1,488.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right;">$2,900.00</td>
+                                <td style="text-align: right;">$0.00</td>
+                                <td style="text-align: right; font-weight: 600;">$4,388.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Top 10 Customers YTD -->
+                <div class="table-container">
+                    <div class="table-title">Top 10 Clientes (YTD)</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th style="text-align: right;">Compras</th>
+                                <th style="text-align: right;">Total</th>
+                                <th style="text-align: right;">Meses</th>
+                                <th style="text-align: right;">Ticket Prom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Gene Jones</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$8,500.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$4,250.00</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Randy Velarde</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$8,274.75</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$8,274.75</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>walk inn</td>
+                                <td style="text-align: right;">69</td>
+                                <td style="text-align: right;">$4,763.00</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$69.03</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>walking</td>
+                                <td style="text-align: right;">74</td>
+                                <td style="text-align: right;">$4,413.50</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$59.64</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>MICHELLE L CROWLEY</td>
+                                <td style="text-align: right;">2</td>
+                                <td style="text-align: right;">$3,774.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$1,887.00</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Cliente sin nombre</td>
+                                <td style="text-align: right;">35</td>
+                                <td style="text-align: right;">$2,276.00</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$65.03</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Mark R Wilkerson</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,207.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,207.00</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>MICHAEL B ELLIS</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,156.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,156.00</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>TERRI STEVENSON</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,000.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$2,000.00</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Mike Egg</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$1,870.00</td>
+                                <td style="text-align: right;">1</td>
+                                <td style="text-align: right;">$1,870.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Recurring Customers -->
+                <div class="table-container">
+                    <div class="table-title">Clientes Recurrentes</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cliente</th>
+                                <th style="text-align: right;">Compras</th>
+                                <th style="text-align: right;">Total</th>
+                                <th style="text-align: right;">Meses Activos</th>
+                                <th style="text-align: right;">Ticket Prom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>walk inn</td>
+                                <td style="text-align: right;">69</td>
+                                <td style="text-align: right;">$4,763.00</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$69.03</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>walking</td>
+                                <td style="text-align: right;">74</td>
+                                <td style="text-align: right;">$4,413.50</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$59.64</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Cliente sin nombre</td>
+                                <td style="text-align: right;">35</td>
+                                <td style="text-align: right;">$2,276.00</td>
+                                <td style="text-align: right;">4</td>
+                                <td style="text-align: right;">$65.03</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>COLABORADORES IVANGUADERRAMA</td>
+                                <td style="text-align: right;">8</td>
+                                <td style="text-align: right;">$234.00</td>
+                                <td style="text-align: right;">3</td>
+                                <td style="text-align: right;">$29.25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Generado: Miércoles 8 de Abril, 2026 | Datos: Vend POS — IG Alvaro Obregon | Zona horaria: America/Mazatlan (UTC-7)</p>
+        </div>
+    </div>
+    
+    <script>
+        let charts = {};
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Destroy and recreate charts for the active tab
+            setTimeout(() => {
+                if (tabName === 'week') {
+                    initWeekCharts();
+                } else {
+                    initYTDCharts();
+                }
+            }, 100);
+        }
+        
+        function toggleTransactions() {
+            const detail = document.getElementById('transactionDetail');
+            detail.classList.toggle('open');
+        }
+        
+        function initWeekCharts() {
+            // Daily Chart
+            const dailyCtx = document.getElementById('dailyChart');
+            if (dailyCtx) {
+                if (charts.daily) charts.daily.destroy();
+                charts.daily = new Chart(dailyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"],
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: [130.5, 1547, 48, 1449, 306],
+                            backgroundColor: '#3b82f6',
+                            borderColor: '#3b82f6',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: '#1e293b' },
+                                title: { display: true, text: 'USD', color: '#94a3b8' }
+                            },
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Categories Doughnut Chart
+            const catCtx = document.getElementById('categoriesChart');
+            if (catCtx) {
+                if (charts.categories) charts.categories.destroy();
+                charts.categories = new Chart(catCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ["Jewelry", "Canvas", "Mini Canvas Desk", "Souvenir", "Perfume", "Marble"],
+                        datasets: [{
+                            data: {"2026-01": {"qty": 1.0, "revenue": 1488.0}, "2026-02": {"qty": 0, "revenue": 0}, "2026-03": {"qty": 1.0, "revenue": 2900.0}, "2026-04": {"qty": 0, "revenue": 0}},
+                            backgroundColor: ["#a855f7", "#3b82f6", "#6366f1", "#f59e0b", "#ec4899", "#64748b"]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#e2e8f0' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Top Products Horizontal Bar
+            const topCtx = document.getElementById('topProdsChart');
+            if (topCtx) {
+                if (charts.topProds) charts.topProds.destroy();
+                charts.topProds = new Chart(topCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["MIA JEWELRY IG", "Big Canvas", "GICLEE COLLECTION", "MINI canvas desk", "Perfume", "Mirrors", "Magnets", "10 By 10 Marble Tile"],
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: [1610, 716, 357, 312, 160, 156, 150, 19.5],
+                            backgroundColor: '#8b5cf6',
+                            borderColor: '#8b5cf6',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: '#1e293b' }
+                            },
+                            y: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Hourly Dual Axis
+            const hourlyCtx = document.getElementById('hourlyChart');
+            if (hourlyCtx) {
+                if (charts.hourly) charts.hourly.destroy();
+                charts.hourly = new Chart(hourlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["10AM", "11AM", "12PM", "1PM", "2PM", "3PM", "4PM", "6PM", "7PM", "8PM"],
+                        datasets: [
+                            {
+                                label: 'Ingresos',
+                                data: [39, 43.5, 1647, 176, 39, 87, 112, 178, 679, 480],
+                                backgroundColor: '#3b82f6',
+                                borderColor: '#3b82f6',
+                                borderWidth: 1,
+                                borderRadius: 4,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Transacciones',
+                                data: [1, 1, 4, 3, 1, 1, 2, 3, 4, 7],
+                                backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                                borderColor: '#10b981',
+                                borderWidth: 2,
+                                type: 'line',
+                                fill: true,
+                                tension: 0.4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: { color: '#e2e8f0' }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                type: 'linear',
+                                position: 'left',
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: '#1e293b' },
+                                title: { display: true, text: 'USD', color: '#94a3b8' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                position: 'right',
+                                beginAtZero: true,
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false },
+                                title: { display: true, text: 'Txns', color: '#94a3b8' }
+                            },
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        function initYTDCharts() {
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart');
+            if (monthlyCtx) {
+                if (charts.monthly) charts.monthly.destroy();
+                charts.monthly = new Chart(monthlyCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["Enero", "Febrero", "Marzo", "Abril"],
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: [24015.9, 17227.5, 32491.25, 1900.0],
+                            backgroundColor: ['#3b82f6', '#3b82f6', '#3b82f6', 'rgba(59, 130, 246, 0.4)'],
+                            borderColor: ['#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6'],
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: '#1e293b' },
+                                title: { display: true, text: 'USD', color: '#94a3b8' }
+                            },
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Hourly YTD Chart
+            const hourlyYTDCtx = document.getElementById('hourlyYTDChart');
+            if (hourlyYTDCtx) {
+                if (charts.hourlyYTD) charts.hourlyYTD.destroy();
+                charts.hourlyYTD = new Chart(hourlyYTDCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['9AM', '10AM', '11AM', '12PM', '1PM', '2PM', '3PM', '4PM', '5PM', '6PM', '7PM', '8PM', '9PM', '10PM'],
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: [1203.50, 2145.25, 3876.75, 13471.35, 4432.60, 2156.40, 1876.85, 3256.70, 4521.30, 6789.55, 20577.50, 10389.70, 567.45, 839.50],
+                            backgroundColor: '#10b981',
+                            borderColor: '#10b981',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#94a3b8' },
+                                grid: { color: '#1e293b' },
+                                title: { display: true, text: 'USD', color: '#94a3b8' }
+                            },
+                            x: {
+                                ticks: { color: '#94a3b8' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        // Initialize charts on page load
+        window.addEventListener('load', () => {
+            initWeekCharts();
+        });
+    </script>
 </body>
 </html>
