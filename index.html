@@ -158,8 +158,14 @@
             margin-bottom: 20px;
         }
         
-        canvas {
-            max-width: 100%;
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        .chart-wrapper.tall {
+            height: 400px;
         }
         
         /* Tables */
@@ -438,25 +444,25 @@
                     <!-- Daily Revenue Chart -->
                     <div class="chart-container">
                         <div class="chart-title">Ingresos por Día</div>
-                        <canvas id="dailyChart" style="height: 300px;"></canvas>
+                        <div class="chart-wrapper"><canvas id="dailyChart"></canvas></div>
                     </div>
-                    
+
                     <!-- Categories Doughnut Chart -->
                     <div class="chart-container">
                         <div class="chart-title">Ingresos por Categoría</div>
-                        <canvas id="categoriesChart" style="height: 300px;"></canvas>
+                        <div class="chart-wrapper"><canvas id="categoriesChart"></canvas></div>
                     </div>
-                    
+
                     <!-- Top Products Horizontal Bar -->
                     <div class="chart-container">
                         <div class="chart-title">Top Productos por Ingresos</div>
-                        <canvas id="topProdsChart" style="height: 300px;"></canvas>
+                        <div class="chart-wrapper"><canvas id="topProdsChart"></canvas></div>
                     </div>
-                    
+
                     <!-- Hourly Analysis Dual Axis -->
                     <div class="chart-container">
                         <div class="chart-title">Análisis Horario</div>
-                        <canvas id="hourlyChart" style="height: 400px;"></canvas>
+                        <div class="chart-wrapper tall"><canvas id="hourlyChart"></canvas></div>
                     </div>
                 </div>
                 
@@ -983,7 +989,7 @@
                 <div class="charts-section">
                     <div class="chart-container" style="grid-column: 1 / -1;">
                         <div class="chart-title">Ingresos Mensuales</div>
-                        <canvas id="monthlyChart" style="height: 300px;"></canvas>
+                        <div class="chart-wrapper"><canvas id="monthlyChart"></canvas></div>
                     </div>
                 </div>
                 
@@ -1253,7 +1259,7 @@
                 <div class="charts-section">
                     <div class="chart-container" style="grid-column: 1 / -1;">
                         <div class="chart-title">Ingresos por Hora (YTD)</div>
-                        <canvas id="hourlyYTDChart" style="height: 300px;"></canvas>
+                        <div class="chart-wrapper"><canvas id="hourlyYTDChart"></canvas></div>
                     </div>
                 </div>
                 
