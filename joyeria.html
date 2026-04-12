@@ -1,1291 +1,507 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Joyería — Ivan Guaderrama Art Gallery</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #0a0f1e;
-            color: #e5e7eb;
-            line-height: 1.6;
-            padding: 1rem;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem 1rem;
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            border-radius: 12px;
-            border: 1px solid #374151;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .subtitle {
-            color: #9ca3af;
-            font-size: 1.1rem;
-        }
-        
-        .badge {
-            display: inline-block;
-            background: #374151;
-            color: #f3f4f6;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .verification-bar {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-        
-        .verification-bar.pass {
-            color: #10b981;
-        }
-        
-        .check-icon {
-            font-size: 1.2rem;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #374151;
-        }
-        
-        .tab-button {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: none;
-            color: #9ca3af;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
-        }
-        
-        .tab-button.active {
-            color: #a855f7;
-            border-bottom-color: #a855f7;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .kpi-card {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.3s, border-color 0.3s;
-        }
-        
-        .kpi-card:hover {
-            border-color: #a855f7;
-            transform: translateY(-2px);
-        }
-        
-        .kpi-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .kpi-label {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .kpi-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #f3f4f6;
-        }
-        
-        .comparison-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .comparison-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .comparison-card {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-        
-        .comparison-card.mia {
-            border-left: 4px solid #a855f7;
-        }
-        
-        .comparison-card.ig {
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .comparison-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .brand-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .mia-badge {
-            background: #a855f7;
-            color: #fff;
-        }
-        
-        .ig-badge {
-            background: #3b82f6;
-            color: #fff;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.95rem;
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            color: #9ca3af;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: #f3f4f6;
-        }
-        
-        .chart-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .chart-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: #f3f4f6;
-        }
-        
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-            overflow: hidden;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 1024px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-wrapper {
-                height: 350px;
-            }
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        thead {
-            background: #1f2937;
-            border-bottom: 2px solid #374151;
-        }
-        
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #f3f4f6;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.95rem;
-        }
-        
-        tbody tr:hover {
-            background: #1f2937;
-        }
-        
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .rank-badge {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #fff;
-            margin-right: 0.5rem;
-        }
-        
-        .rank-1 {
-            background: #fbbf24;
-        }
-        
-        .rank-2 {
-            background: #c0c0c0;
-        }
-        
-        .rank-3 {
-            background: #b87333;
-        }
-        
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-            color: #f3f4f6;
-        }
-        
-        .cortesias-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .cortesias-note {
-            background: #1f2937;
-            border-left: 4px solid #ec4899;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            color: #d1d5db;
-        }
-        
-        .payment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .payment-card {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        
-        .payment-method {
-            font-weight: 600;
-            color: #f3f4f6;
-            margin-bottom: 0.5rem;
-        }
-        
-        .payment-detail {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #6b7280;
-            font-size: 0.9rem;
-            border-top: 1px solid #374151;
-            margin-top: 3rem;
-        }
-        
-        .transactions-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .day-group {
-            margin-bottom: 2rem;
-        }
-        
-        .day-header {
-            font-weight: 600;
-            color: #a855f7;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .transaction {
-            background: #1f2937;
-            border-left: 3px solid #374151;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .transaction-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .transaction-row:last-child {
-            margin-bottom: 0;
-        }
-        
-        .transaction-time {
-            color: #9ca3af;
-            font-size: 0.85rem;
-        }
-        
-        .transaction-amount {
-            font-weight: 600;
-            color: #10b981;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Joyería - Semana 6-12 Abril 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --primary: #7c3aed;
+    --primary-light: #ede9fe;
+    --mia-color: #ec4899;
+    --mia-light: #fce7f3;
+    --ig-color: #8b5cf6;
+    --ig-light: #ede9fe;
+    --amber: #f59e0b;
+    --amber-light: #fef3c7;
+    --green: #10b981;
+    --green-light: #d1fae5;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--gray-50); color: var(--gray-800); }
+.header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--mia-color) 100%);
+    color: white; padding: 24px 32px; text-align: center;
+}
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.header p { font-size: 14px; opacity: 0.9; }
+.tabs {
+    display: flex; background: white; border-bottom: 2px solid var(--gray-200);
+    padding: 0 32px; position: sticky; top: 0; z-index: 10;
+}
+.tab {
+    padding: 12px 24px; cursor: pointer; font-weight: 600; font-size: 14px;
+    color: var(--gray-600); border-bottom: 3px solid transparent; transition: all 0.2s;
+}
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab:hover { color: var(--primary); }
+.tab-content { display: none; padding: 24px 32px; max-width: 1200px; margin: 0 auto; }
+.tab-content.active { display: block; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.kpi-card {
+    background: white; border-radius: 12px; padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center;
+}
+.kpi-card .label { font-size: 12px; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.5px; }
+.kpi-card .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+.kpi-card .sub { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+.kpi-card.mia .value { color: var(--mia-color); }
+.kpi-card.ig .value { color: var(--ig-color); }
+.kpi-card.total .value { color: var(--primary); }
+.kpi-card.cortesia .value { color: var(--green); }
+.section { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--gray-100); padding: 10px 12px; text-align: left; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-600); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--gray-200); }
+tr:hover { background: var(--gray-50); }
+.number { text-align: right; font-variant-numeric: tabular-nums; }
+.bold { font-weight: 700; }
+.discount { color: #dc2626; }
+.brand-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 11px; font-weight: 600;
+}
+.brand-badge.mia { background: var(--mia-light); color: var(--mia-color); }
+.brand-badge.ig { background: var(--ig-light); color: var(--ig-color); }
+.discount-section { background: var(--amber-light); border: 1px solid var(--amber); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.discount-section h3 { color: #92400e; }
+.cortesia-section { background: var(--green-light); border: 1px solid var(--green); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.cortesia-section h3 { color: #065f46; }
+.chart-container { max-width: 700px; margin: 0 auto; }
+.footer { text-align: center; padding: 16px; font-size: 11px; color: var(--gray-600); }
+.verif { display: inline-block; background: var(--green-light); color: #065f46; padding: 2px 8px; border-radius: 8px; font-size: 11px; margin: 2px; }
+@media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .tabs { padding: 0 16px; }
+    .tab { padding: 10px 14px; font-size: 13px; }
+    .tab-content { padding: 16px; }
+    table { font-size: 11px; }
+    td, th { padding: 8px 6px; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>💎 Reporte de Joyería</h1>
-            <p class="subtitle">Ivan Guaderrama Art Gallery</p>
-            <div class="badge">MIA Jewelry + IG Jewelry</div>
-        </header>
-        
-        <div class="verification-bar pass">
-            <span class="check-icon">✅</span>
-            <span>4/4 verificaciones OK</span>
-        </div>
-        
-        <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('semana')">📅 Semana</button>
-            <button class="tab-button" onclick="switchTab('ytd')">📊 Acumulado YTD</button>
-        </div>
-        
-        <!-- TAB: SEMANA -->
-        <div id="semana" class="tab-content active">
-            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: #9ca3af;">
-                6 de Abril - 12 de Abril 2026
-            </div>
-            
-            <!-- KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💎</div>
-                    <div class="kpi-label">Total Joyería</div>
-                    <div class="kpi-value">$411.05</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💜</div>
-                    <div class="kpi-label">MIA Jewelry</div>
-                    <div class="kpi-value">$411.05</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💙</div>
-                    <div class="kpi-label">IG Jewelry</div>
-                    <div class="kpi-value">$0.00</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">📦</div>
-                    <div class="kpi-label">Piezas Vendidas</div>
-                    <div class="kpi-value">4 pcs</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">🎫</div>
-                    <div class="kpi-label">Ticket Promedio</div>
-                    <div class="kpi-value">$102.76</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">📊</div>
-                    <div class="kpi-label">% del Total Galería</div>
-                    <div class="kpi-value">2.1%</div>
-                </div>
-            </div>
-            
-            <!-- Comparativo MIA vs IG -->
-            <div class="comparison-row">
-                <div class="comparison-card mia">
-                    <h3><span class="brand-badge mia-badge">MIA</span> Joyería</h3>
-                    <div class="stat-row">
-                        <span class="stat-label">Total</span>
-                        <span class="stat-value">$411.05</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Piezas</span>
-                        <span class="stat-value">4 pcs</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Ticket Promedio</span>
-                        <span class="stat-value">$102.76</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Top Colección</span>
-                        <span class="stat-value">Sea Bless</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Top Producto</span>
-                        <span class="stat-value">La Cruz</span>
-                    </div>
-                </div>
-                
-                <div class="comparison-card ig">
-                    <h3><span class="brand-badge ig-badge">IG</span> Joyería</h3>
-                    <div class="stat-row">
-                        <span class="stat-label">Total</span>
-                        <span class="stat-value">$0.00</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Piezas</span>
-                        <span class="stat-value">0 pcs</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Cortesías Entregadas</span>
-                        <span class="stat-value">4 pcs</span>
-                    </div>
-                    <div class="stat-row">
-                        <span class="stat-label">Estado</span>
-                        <span class="stat-value">Sin ventas</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Charts -->
-            <div class="charts-grid">
-                <div class="chart-section">
-                    <h3>MIA vs IG por Día</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartDaily"></canvas>
-                    </div>
-                </div>
-                <div class="chart-section">
-                    <h3>Top 10 Productos por Ingreso</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartTopProducts"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="charts-grid">
-                <div class="chart-section">
-                    <h3>Colecciones MIA</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartCollections"></canvas>
-                    </div>
-                </div>
-                <div class="chart-section">
-                    <h3>Tipos de Pieza</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartPieces"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Top Productos Table -->
-            <h2 class="section-title">Top Productos MIA Jewelry</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Producto</th>
-                        <th>Colección</th>
-                        <th>Tipo</th>
-                        <th>Piezas</th>
-                        <th>Ingreso</th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                    <tr>
-                        <td><span class="rank-badge rank-1">1</span></td>
-                        <td>La Cruz</td>
-                        <td>Masterpieces Of Love</td>
-                        <td>Necklace</td>
-                        <td>2 pcs</td>
-                        <td>$205.35</td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="rank-badge rank-2">2</span></td>
-                        <td>Protect My Love</td>
-                        <td>Sea Bless</td>
-                        <td>Ring</td>
-                        <td>1 pcs</td>
-                        <td>$130.05</td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="rank-badge rank-3">3</span></td>
-                        <td>Silver Ring</td>
-                        <td>Sea Bless</td>
-                        <td>Ring</td>
-                        <td>1 pcs</td>
-                        <td>$75.65</td>
-                    </tr>
-
-                </tbody>
-            </table>
-            
-            <!-- Cortesías Section -->
-            <div class="cortesias-section">
-                <h2 class="section-title" style="margin-top: 0;">🎁 Cortesías Entregadas</h2>
-                <div class="cortesias-note">
-                    Productos IG Jewelry entregados como obsequio con compra (4 piezas en total)
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td>2026-04-10</td>
-                            <td>IG Jewelry / Scarf / Woman / Capilla</td>
-                            <td>1 pcs</td>
-                        </tr>
-
-                        <tr>
-                            <td>2026-04-10</td>
-                            <td>IG Jewelry / Scarf / Woman / Unconditional Love</td>
-                            <td>2 pcs</td>
-                        </tr>
-
-                        <tr>
-                            <td>2026-04-09</td>
-                            <td>IG Jewelry / Scarf / Woman / Capilla</td>
-                            <td>1 pcs</td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-            
-            <!-- Descuentos Aplicados -->
-            <div class="cortesias-section" style="border-color: #f59e0b33; background: linear-gradient(135deg, #111827 0%, #1a1708 100%);">
-                <h2 class="section-title" style="margin-top: 0; color: #f59e0b;">🏷️ Descuentos Aplicados esta Semana</h2>
-                <div class="cortesias-note" style="background: #f59e0b15; border-color: #f59e0b33; color: #fbbf24;">
-                    Resumen de descuentos para verificación. Total de la semana: <strong>$52.95 USD</strong>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Factura</th>
-                            <th>Descuento</th>
-                            <th style="text-align: right;">Monto</th>
-                            <th>Productos Afectados</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2026-04-10</td>
-                            <td style="font-family: monospace; color: #60a5fa;">OBR13979</td>
-                            <td><span style="background: #f59e0b22; color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem;">Descuento autorizado</span></td>
-                            <td style="text-align: right; color: #f59e0b; font-weight: 600;">$52.95</td>
-                            <td style="font-size: 0.85rem; color: #9ca3af;">
-                                Silver Ring (-$13.35)<br>
-                                La Cruz (-$16.65)<br>
-                                Protect My Love (-$22.95)
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr style="border-top: 2px solid #f59e0b33;">
-                            <td colspan="3" style="text-align: right; font-weight: 600; color: #fbbf24;">Total Descuentos Semana:</td>
-                            <td style="text-align: right; font-weight: 700; color: #f59e0b; font-size: 1.1rem;">$52.95</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <div style="margin-top: 0.75rem; font-size: 0.8rem; color: #6b7280; font-style: italic;">
-                    📊 Acumulado YTD: $2,488.45 en descuentos (36 descuentos aplicados)
-                </div>
-            </div>
-
-            <!-- Payment Methods -->
-            <h2 class="section-title">💳 Métodos de Pago</h2>
-            <div class="payment-grid">
-
-                <div class="payment-card">
-                    <div class="payment-method">Credit Card USD</div>
-                    <div class="payment-detail">
-                        <span>Transacciones:</span>
-                        <span>3</span>
-                    </div>
-                    <div class="payment-detail">
-                        <span>Total:</span>
-                        <span>$300.05</span>
-                    </div>
-                </div>
-
-                <div class="payment-card">
-                    <div class="payment-method">American Express MNX</div>
-                    <div class="payment-detail">
-                        <span>Transacciones:</span>
-                        <span>1</span>
-                    </div>
-                    <div class="payment-detail">
-                        <span>Total:</span>
-                        <span>$111.00</span>
-                    </div>
-                </div>
-
-            </div>
-            
-            <!-- Transaction Details -->
-            <h2 class="section-title">📋 Detalle de Transacciones</h2>
-            <div class="transactions-section">
-<div class="day-group"><div class="day-header">📅 Friday, 10 de April</div>
-                <div class="transaction">
-                    <div class="transaction-row">
-                        <span>Silver Ring</span>
-                        <span class="transaction-time">19:42</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #9ca3af;">Sea Bless / Ring</span>
-                        <span class="transaction-amount">$75.65</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
-                    </div>
-                </div>
-
-                <div class="transaction">
-                    <div class="transaction-row">
-                        <span>La Cruz</span>
-                        <span class="transaction-time">19:42</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #9ca3af;">Masterpieces Of Love / Necklace</span>
-                        <span class="transaction-amount">$94.35</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
-                    </div>
-                </div>
-
-                <div class="transaction">
-                    <div class="transaction-row">
-                        <span>Protect My Love</span>
-                        <span class="transaction-time">19:42</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #9ca3af;">Sea Bless / Ring</span>
-                        <span class="transaction-amount">$130.05</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
-                    </div>
-                </div>
-
-                <div class="transaction">
-                    <div class="transaction-row">
-                        <span>La Cruz</span>
-                        <span class="transaction-time">17:24</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #9ca3af;">Masterpieces Of Love / Necklace</span>
-                        <span class="transaction-amount">$111.00</span>
-                    </div>
-                    <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">American Express MNX</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13978</span>
-                    </div>
-                </div>
+<div class="header">
+    <h1>💎 Reporte Semanal de Joyería</h1>
+    <p>IG Alvaro Obregon — Semana del 6 al 12 de Abril, 2026</p>
 </div>
-            </div>
+
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('semana')">📅 Semana</div>
+    <div class="tab" onclick="switchTab('ytd')">📊 Acumulado YTD</div>
+</div>
+
+<!-- TAB SEMANA -->
+<div id="tab-semana" class="tab-content active">
+    <div class="kpi-grid">
+        <div class="kpi-card total">
+            <div class="label">Ventas Netas</div>
+            <div class="value">$411.05</div>
+            <div class="sub">4 piezas vendidas</div>
         </div>
-        
-        <!-- TAB: YTD -->
-        <div id="ytd" class="tab-content">
-            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: #9ca3af;">
-                Acumulado desde el 1 de Enero de 2026
-            </div>
-            
-            <!-- KPI Cards YTD -->
-            <div class="kpi-grid">
-
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💎</div>
-                    <div class="kpi-label">Total Joyería (YTD)</div>
-                    <div class="kpi-value">$8,583.55</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💜</div>
-                    <div class="kpi-label">MIA Jewelry (YTD)</div>
-                    <div class="kpi-value">$8,583.55</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">💙</div>
-                    <div class="kpi-label">IG Jewelry (YTD)</div>
-                    <div class="kpi-value">$0.00</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">📦</div>
-                    <div class="kpi-label">Piezas Vendidas (YTD)</div>
-                    <div class="kpi-value">65 pcs</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">🎫</div>
-                    <div class="kpi-label">Ticket Promedio (YTD)</div>
-                    <div class="kpi-value">$132.05</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-emoji">📊</div>
-                    <div class="kpi-label">% del Total Galería (YTD)</div>
-                    <div class="kpi-value">9.0%</div>
-                </div>
-            </div>
-            
-            <!-- Monthly Trend Chart -->
-            <div class="chart-section">
-                <h3>Tendencia Mensual (MIA vs IG)</h3>
-                <div class="chart-wrapper">
-                    <canvas id="chartMonthly"></canvas>
-                </div>
-            </div>
-            
-            <div class="charts-grid">
-                <div class="chart-section">
-                    <h3>Colecciones Acumuladas (YTD)</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartCollectionsYTD"></canvas>
-                    </div>
-                </div>
-                <div class="chart-section">
-                    <h3>Tipos de Pieza (YTD)</h3>
-                    <div class="chart-wrapper">
-                        <canvas id="chartPiecesYTD"></canvas>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Top 15 Productos YTD -->
-            <h2 class="section-title">Top 15 Productos MIA Jewelry (YTD)</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Producto</th>
-                        <th>Colección</th>
-                        <th>Tipo</th>
-                        <th>Piezas</th>
-                        <th>Ingreso (YTD)</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td><span class="rank-badge rank-1">1</span></td>
-                        <td>Diseños Unicos</td>
-                        <td>Bags</td>
-                        <td>Bags</td>
-                        <td>3 pcs</td>
-                        <td>$885.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="rank-badge rank-2">2</span></td>
-                        <td>Protect My Love</td>
-                        <td>Sea Bless</td>
-                        <td>Ring</td>
-                        <td>5 pcs</td>
-                        <td>$742.05</td>
-                    </tr>
-
-                    <tr>
-                        <td><span class="rank-badge rank-3">3</span></td>
-                        <td>Protect My Love Big</td>
-                        <td>Sea Bless</td>
-                        <td>Ring</td>
-                        <td>3 pcs</td>
-                        <td>$528.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">4.</span></td>
-                        <td>La Cruz</td>
-                        <td>Masterpieces Of Love</td>
-                        <td>Necklace</td>
-                        <td>4 pcs</td>
-                        <td>$427.35</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">5.</span></td>
-                        <td>Loved</td>
-                        <td>Sea Bless</td>
-                        <td>Earrings</td>
-                        <td>2 pcs</td>
-                        <td>$366.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">6.</span></td>
-                        <td>Freedom - Libertad</td>
-                        <td>Bags</td>
-                        <td>Bags</td>
-                        <td>1 pcs</td>
-                        <td>$295.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">7.</span></td>
-                        <td>Beauty - Belleza</td>
-                        <td>Bags</td>
-                        <td>Bags</td>
-                        <td>1 pcs</td>
-                        <td>$295.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">8.</span></td>
-                        <td>Ajustable con Madre Perla</td>
-                        <td>Chosen</td>
-                        <td>Anillo</td>
-                        <td>1 pcs</td>
-                        <td>$250.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">9.</span></td>
-                        <td>Cruz</td>
-                        <td>Chosen</td>
-                        <td>Collar</td>
-                        <td>2 pcs</td>
-                        <td>$240.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">10.</span></td>
-                        <td>Sea Sigh</td>
-                        <td>Sea Bless</td>
-                        <td>Necklace</td>
-                        <td>2 pcs</td>
-                        <td>$232.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">11.</span></td>
-                        <td>Sea & Sun</td>
-                        <td>Sea Bless</td>
-                        <td>Bracelet</td>
-                        <td>2 pcs</td>
-                        <td>$230.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">12.</span></td>
-                        <td>MIA BF</td>
-                        <td>Sea Bless</td>
-                        <td>Unique Piece</td>
-                        <td>3 pcs</td>
-                        <td>$207.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">13.</span></td>
-                        <td>Silver Ring</td>
-                        <td>Sea Bless</td>
-                        <td>Ring</td>
-                        <td>2 pcs</td>
-                        <td>$203.65</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">14.</span></td>
-                        <td>Juego Madre Perla</td>
-                        <td>Chosen</td>
-                        <td>Set</td>
-                        <td>1 pcs</td>
-                        <td>$199.00</td>
-                    </tr>
-
-                    <tr>
-                        <td><span style="color: #9ca3af;">15.</span></td>
-                        <td>Alfiler con Perla</td>
-                        <td>Chosen</td>
-                        <td>Aretes</td>
-                        <td>2 pcs</td>
-                        <td>$190.00</td>
-                    </tr>
-
-                </tbody>
-            </table>
+        <div class="kpi-card mia">
+            <div class="label">MIA Jewelry</div>
+            <div class="value">$411.05</div>
+            <div class="sub">4 piezas</div>
         </div>
-        
-        <footer>
-            Generado automáticamente • Ivan Guaderrama Art Gallery • Datos de Vend POS
-        </footer>
+        <div class="kpi-card ig">
+            <div class="label">IG Jewelry</div>
+            <div class="value">$0.00</div>
+            <div class="sub">0 piezas</div>
+        </div>
+        <div class="kpi-card cortesia">
+            <div class="label">Cortesías</div>
+            <div class="value">3</div>
+            <div class="sub">Scarves obsequio</div>
+        </div>
     </div>
+
+    <div class="section">
+        <h3>💍 Detalle de Ventas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th><th>Factura</th><th>Marca</th><th>Producto</th>
+                    <th>Precio</th><th>Desc.</th><th>Neto</th><th>Cliente</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13978</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Necklace / La Cruz</td>
+        <td class="number">$111.00</td>
+        <td>—</td>
+        <td class="number bold">$111.00</td>
+        <td>SUSAN GELPI</td>
+    </tr>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13979</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Ring / Silver Ring</td>
+        <td class="number">$89.00</td>
+        <td class='discount'>-$13.35</td>
+        <td class="number bold">$75.65</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13979</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Necklace / La Cruz</td>
+        <td class="number">$111.00</td>
+        <td class='discount'>-$16.65</td>
+        <td class="number bold">$94.35</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13979</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Ring / Protect My Love</td>
+        <td class="number">$153.00</td>
+        <td class='discount'>-$22.95</td>
+        <td class="number bold">$130.05</td>
+        <td>—</td>
+    </tr></tbody>
+            <tfoot>
+                <tr style="background:var(--gray-100);font-weight:700;">
+                    <td colspan="4">TOTAL VENTAS NETAS</td>
+                    <td class="number">$464.00</td>
+                    <td class="discount">-$52.95</td>
+                    <td class="number">$411.05</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
     
-    <script>
-        let charts = {};
-        
-        function fmt_usd(val) {
-            return '$' + val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-        
-        function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-button').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-            
-            // Destroy and redraw charts
-            Object.values(charts).forEach(chart => {
-                if (chart) chart.destroy();
-            });
-            charts = {};
-            
-            if (tabName === 'semana') {
-                initSemanaCharts();
-            } else if (tabName === 'ytd') {
-                initYTDCharts();
+    <div class="discount-section">
+        <h3>🏷️ Descuentos Aplicados</h3>
+        <table>
+            <thead><tr><th>Fecha</th><th>Factura</th><th>Monto</th><th>Productos Afectados</th><th>Cliente</th></tr></thead>
+            <tbody>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13979</td>
+        <td class="discount">$52.95</td>
+        <td>MIA JEWELRY IG / Sea Bless / Ring / Silver Ring, MIA JEWELRY IG / Masterpieces Of Love / Necklace /, MIA JEWELRY IG / Sea Bless / Ring / Protect My Lov</td>
+        <td>—</td>
+    </tr></tbody>
+            <tfoot>
+                <tr style="font-weight:700;">
+                    <td colspan="2">TOTAL DESCUENTOS SEMANA</td>
+                    <td class="discount">$52.95</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    
+    <div class="cortesia-section">
+        <h3>🎁 Cortesías (Scarves Obsequio)</h3>
+        <table>
+            <thead><tr><th>Fecha</th><th>Factura</th><th>Producto</th><th>Qty</th><th>Cliente</th></tr></thead>
+            <tbody>
+    <tr>
+        <td>2026-04-09</td>
+        <td>OBR13961</td>
+        <td>Capilla</td>
+        <td class="number">1</td>
+        <td>Jill Jhonson</td>
+    </tr>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13980</td>
+        <td>Capilla</td>
+        <td class="number">1</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td>2026-04-11</td>
+        <td>OBR13980</td>
+        <td>Unconditional Love</td>
+        <td class="number">2</td>
+        <td>—</td>
+    </tr></tbody>
+        </table>
+        <p style="margin-top:8px;font-size:12px;color:#065f46;">Total cortesías esta semana: 3 scarves</p>
+    </div>
+
+    <div class="section">
+        <h3>✅ Verificaciones</h3>
+        <div>
+            <span class="verif">✅ Sumas correctas</span>
+            <span class="verif">✅ Conteo verificado</span>
+            <span class="verif">✅ Sin duplicados</span>
+            <span class="verif">✅ Fechas en rango</span>
+        </div>
+    </div>
+</div>
+
+<!-- TAB YTD -->
+<div id="tab-ytd" class="tab-content">
+    <div class="kpi-grid">
+        <div class="kpi-card total">
+            <div class="label">Ventas YTD</div>
+            <div class="value">$20856.70</div>
+            <div class="sub">157 piezas vendidas</div>
+        </div>
+        <div class="kpi-card mia">
+            <div class="label">MIA Jewelry YTD</div>
+            <div class="value">$20856.70</div>
+            <div class="sub">157 piezas</div>
+        </div>
+        <div class="kpi-card ig">
+            <div class="label">IG Jewelry YTD</div>
+            <div class="value">$0.00</div>
+            <div class="sub">0 piezas</div>
+        </div>
+        <div class="kpi-card cortesia">
+            <div class="label">Cortesías YTD</div>
+            <div class="value">66</div>
+            <div class="sub">Scarves obsequio</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📊 Tendencia Mensual</h3>
+        <div class="chart-container">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📅 Desglose por Mes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Mes</th><th>MIA Pzas</th><th>MIA $</th><th>IG Pzas</th><th>IG $</th>
+                    <th>Total Pzas</th><th>Total $</th><th>Cortesías</th>
+                </tr>
+            </thead>
+            <tbody>
+    <tr>
+        <td>Enero</td>
+        <td class="number">14</td>
+        <td class="number">$1764.00</td>
+        <td class="number">0</td>
+        <td class="number">$0.00</td>
+        <td class="number bold">14</td>
+        <td class="number bold">$1764.00</td>
+        <td class="number">6</td>
+    </tr>
+    <tr>
+        <td>Febrero</td>
+        <td class="number">30</td>
+        <td class="number">$3824.00</td>
+        <td class="number">0</td>
+        <td class="number">$0.00</td>
+        <td class="number bold">30</td>
+        <td class="number bold">$3824.00</td>
+        <td class="number">14</td>
+    </tr>
+    <tr>
+        <td>Marzo</td>
+        <td class="number">93</td>
+        <td class="number">$13084.50</td>
+        <td class="number">0</td>
+        <td class="number">$0.00</td>
+        <td class="number bold">93</td>
+        <td class="number bold">$13084.50</td>
+        <td class="number">30</td>
+    </tr>
+    <tr>
+        <td>Abril</td>
+        <td class="number">20</td>
+        <td class="number">$2184.20</td>
+        <td class="number">0</td>
+        <td class="number">$0.00</td>
+        <td class="number bold">20</td>
+        <td class="number bold">$2184.20</td>
+        <td class="number">20</td>
+    </tr></tbody>
+            <tfoot>
+                <tr style="background:var(--gray-100);font-weight:700;">
+                    <td>TOTAL YTD</td>
+                    <td class="number">157</td>
+                    <td class="number">$20856.70</td>
+                    <td class="number">0</td>
+                    <td class="number">$0.00</td>
+                    <td class="number">157</td>
+                    <td class="number">$20856.70</td>
+                    <td class="number">66</td>
+                </tr>
+            </tfoot>
+        </table>
+        <p style="margin-top:8px;font-size:12px;color:var(--gray-600);">🏷️ Descuentos acumulados YTD: $211.80</p>
+    </div>
+
+    <div class="section">
+        <h3>🏆 Top 15 Productos YTD</h3>
+        <table>
+            <thead><tr><th>#</th><th>Marca</th><th>Producto</th><th>Pzas</th><th>Revenue</th></tr></thead>
+            <tbody>
+    <tr>
+        <td>1</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Bags / Diseños Unicos</td>
+        <td class="number">9</td>
+        <td class="number bold">$2655.00</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Ring / Protect My Love</td>
+        <td class="number">12</td>
+        <td class="number bold">$1744.20</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Necklace / La Cruz</td>
+        <td class="number">13</td>
+        <td class="number bold">$1376.40</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Earrings / Loved</td>
+        <td class="number">6</td>
+        <td class="number bold">$1098.00</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Ring / Protect My Love Big</td>
+        <td class="number">6</td>
+        <td class="number bold">$1056.00</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Bags / Freedom - Libertad</td>
+        <td class="number">3</td>
+        <td class="number bold">$885.00</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Bags / Beauty - Belleza</td>
+        <td class="number">3</td>
+        <td class="number bold">$885.00</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Aretes / Rasimo de Perla</td>
+        <td class="number">6</td>
+        <td class="number bold">$570.00</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Earrings / Love Signs</td>
+        <td class="number">6</td>
+        <td class="number bold">$564.00</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Ring / Silver Ring</td>
+        <td class="number">6</td>
+        <td class="number bold">$558.60</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Unique Piece / MIA BF</td>
+        <td class="number">8</td>
+        <td class="number bold">$552.00</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Pulcera / Corazones Lizos</td>
+        <td class="number">4</td>
+        <td class="number bold">$540.00</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Anillo / Ajustable con Madre Perla</td>
+        <td class="number">2</td>
+        <td class="number bold">$500.00</td>
+    </tr>
+    <tr>
+        <td>14</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Earrings / Love Essence</td>
+        <td class="number">3</td>
+        <td class="number bold">$480.00</td>
+    </tr>
+    <tr>
+        <td>15</td>
+        <td><span class="brand-badge mia">MIA Jewelry</span></td>
+        <td>Necklace / Radiante Amanecer,</td>
+        <td class="number">3</td>
+        <td class="number bold">$441.00</td>
+    </tr></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="footer">
+    Generado automáticamente el 12/04/2026 08:34 · Ivan Guaderrama Art Gallery · Datos de Vend/Lightspeed POS
+</div>
+
+<script>
+function switchTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.target.classList.add('active');
+    if (tab === 'ytd') renderChart();
+}
+
+let chartRendered = false;
+function renderChart() {
+    if (chartRendered) return;
+    chartRendered = true;
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Enero", "Febrero", "Marzo", "Abril"],
+            datasets: [
+                { label: 'MIA Jewelry', data: [1764.0, 3824.0, 13084.5, 2184.2], backgroundColor: '#ec4899', borderRadius: 6 },
+                { label: 'IG Jewelry', data: [0, 0, 0, 0], backgroundColor: '#8b5cf6', borderRadius: 6 }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toLocaleString('en-US', {minimumFractionDigits:2}) } }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { callback: v => '$' + v.toLocaleString() } }
             }
         }
-        
-        function initSemanaCharts() {
-            const weekData = {"range": "6 Abr - 12 Abr 2026", "range_full": "6 de Abril - 12 de Abril 2026", "mia_total": 411.05, "ig_total": 0, "jewelry_total": 411.05, "mia_pcs": 4, "ig_pcs": 0, "total_pcs": 4, "avg_ticket": 102.76, "pct_gallery": 2.1, "gallery_total": 20045.55, "cortesias_pcs": 4, "collections": {"Sea Bless": {"revenue": 205.7, "pcs": 2}, "Masterpieces Of Love": {"revenue": 205.35, "pcs": 2}}, "pieces": {"Ring": {"revenue": 205.7, "pcs": 2}, "Necklace": {"revenue": 205.35, "pcs": 2}}, "daily": {"2026-04-10": {"mia": 411.05, "ig": 0}}, "top_mia": [{"name": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "revenue": 205.35, "pcs": 2, "collection": "Masterpieces Of Love", "piece_type": "Necklace"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "revenue": 130.05, "pcs": 1, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "revenue": 75.65, "pcs": 1, "collection": "Sea Bless", "piece_type": "Ring"}], "top_ig": [], "payments": {"Credit Card USD": {"count": 3, "total": 300.05}, "American Express MNX": {"count": 1, "total": 111.0}}, "cortesias": [{"date": "2026-04-10", "product_name": "IG Jewelry / Scarf / Woman / Capilla", "quantity": 1}, {"date": "2026-04-10", "product_name": "IG Jewelry / Scarf / Woman / Unconditional Love", "quantity": 2}, {"date": "2026-04-09", "product_name": "IG Jewelry / Scarf / Woman / Capilla", "quantity": 1}], "mia_items": [{"date": "2026-04-10", "time": "19:42", "product_name": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "piece_name": "Silver Ring", "collection": "Sea Bless", "piece_type": "Ring", "quantity": 1, "total_price": 75.65, "payment_method": "Credit Card USD", "invoice": "OBR13979"}, {"date": "2026-04-10", "time": "19:42", "product_name": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "piece_name": "La Cruz", "collection": "Masterpieces Of Love", "piece_type": "Necklace", "quantity": 1, "total_price": 94.35, "payment_method": "Credit Card USD", "invoice": "OBR13979"}, {"date": "2026-04-10", "time": "19:42", "product_name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "piece_name": "Protect My Love", "collection": "Sea Bless", "piece_type": "Ring", "quantity": 1, "total_price": 130.05, "payment_method": "Credit Card USD", "invoice": "OBR13979"}, {"date": "2026-04-10", "time": "17:24", "product_name": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "piece_name": "La Cruz", "collection": "Masterpieces Of Love", "piece_type": "Necklace", "quantity": 1, "total_price": 111.0, "payment_method": "American Express MNX", "invoice": "OBR13978"}], "ig_items": []};
-            const ytdData = {"mia_total": 8583.55, "ig_total": 0, "jewelry_total": 8583.55, "mia_pcs": 65, "ig_pcs": 0, "total_pcs": 65, "avg_ticket": 132.05, "pct_gallery": 9.0, "gallery_total": 95583.2, "cortesias_pcs": 28, "collections": {"Sea Bless": {"revenue": 3773.7, "pcs": 31}, "Chosen": {"revenue": 1817.0, "pcs": 14}, "Bags": {"revenue": 1475.0, "pcs": 5}, "Masterpieces Of Love": {"revenue": 974.35, "pcs": 8}, "Miyuki": {"revenue": 265.5, "pcs": 4}, "Gafas de Sol": {"revenue": 150.0, "pcs": 2}, "Alas de la Vida : Mujeres Elegidas": {"revenue": 128.0, "pcs": 1}}, "pieces": {"Necklace": {"revenue": 1852.35, "pcs": 17}, "Ring": {"revenue": 1601.7, "pcs": 11}, "Bags": {"revenue": 1475.0, "pcs": 5}, "Earrings": {"revenue": 1056.5, "pcs": 9}, "Aretes": {"revenue": 623.0, "pcs": 6}, "Collar": {"revenue": 500.0, "pcs": 4}, "Bracelet": {"revenue": 424.0, "pcs": 4}, "Set": {"revenue": 309.0, "pcs": 2}, "Anillo": {"revenue": 250.0, "pcs": 1}, "Unique Piece": {"revenue": 207.0, "pcs": 3}, "Unisex": {"revenue": 150.0, "pcs": 2}, "Pulcera": {"revenue": 135.0, "pcs": 1}}, "monthly": {"Ene": {"mia": 1846.0, "ig": 0, "mia_pcs": 15, "ig_pcs": 0}, "Feb": {"mia": 1830.0, "ig": 0, "mia_pcs": 14, "ig_pcs": 0}, "Mar": {"mia": 4361.5, "ig": 0, "mia_pcs": 31, "ig_pcs": 0}, "Abr": {"mia": 546.05, "ig": 0, "mia_pcs": 5, "ig_pcs": 0}}, "top_mia": [{"name": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "revenue": 885.0, "pcs": 3, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "revenue": 742.05, "pcs": 5, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "revenue": 528.0, "pcs": 3, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "revenue": 427.35, "pcs": 4, "collection": "Masterpieces Of Love", "piece_type": "Necklace"}, {"name": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "revenue": 366.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Earrings"}, {"name": "MIA JEWELRY IG / Bags / Bags / Freedom - Libertad", "revenue": 295.0, "pcs": 1, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Bags / Bags / Beauty - Belleza", "revenue": 295.0, "pcs": 1, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Chosen / Anillo / Ajustable con Madre Perla", "revenue": 250.0, "pcs": 1, "collection": "Chosen", "piece_type": "Anillo"}, {"name": "MIA JEWELRY IG / Chosen / Collar / Cruz", "revenue": 240.0, "pcs": 2, "collection": "Chosen", "piece_type": "Collar"}, {"name": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "revenue": 232.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Necklace"}, {"name": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "revenue": 230.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Bracelet"}, {"name": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "revenue": 207.0, "pcs": 3, "collection": "Sea Bless", "piece_type": "Unique Piece"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "revenue": 203.65, "pcs": 2, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Chosen / Set / Juego Madre Perla", "revenue": 199.0, "pcs": 1, "collection": "Chosen", "piece_type": "Set"}, {"name": "MIA JEWELRY IG / Chosen / Aretes / Alfiler con Perla", "revenue": 190.0, "pcs": 2, "collection": "Chosen", "piece_type": "Aretes"}]};
-            
-            // Daily Chart
-            const dailyDates = Object.keys(weekData.daily).sort();
-            const dailyMIA = dailyDates.map(d => weekData.daily[d].mia || 0);
-            const dailyIG = dailyDates.map(d => weekData.daily[d].ig || 0);
-            const dayLabels = dailyDates.map(d => {
-                const dt = new Date(d);
-                return dt.toLocaleDateString('es-MX', { weekday: 'short', month: 'short', day: 'numeric' });
-            });
-            
-            const ctxDaily = document.getElementById('chartDaily').getContext('2d');
-            charts.daily = new Chart(ctxDaily, {
-                type: 'bar',
-                data: {
-                    labels: dayLabels,
-                    datasets: [
-                        {
-                            label: 'MIA',
-                            data: dailyMIA,
-                            backgroundColor: '#a855f7',
-                            borderRadius: 4,
-                            maxBarThickness: 50
-                        },
-                        {
-                            label: 'IG',
-                            data: dailyIG,
-                            backgroundColor: '#3b82f6',
-                            borderRadius: 4,
-                            maxBarThickness: 50
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    },
-                    scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
-                    }
-                }
-            });
-            
-            // Top Products Chart
-            const topProducts = weekData.top_mia.slice(0, 10);
-            const productNames = topProducts.map(p => {
-                const parts = p.name.split(' / ');
-                return parts[parts.length - 1];
-            });
-            const productRevenue = topProducts.map(p => p.revenue);
-            
-            const ctxProducts = document.getElementById('chartTopProducts').getContext('2d');
-            charts.topProducts = new Chart(ctxProducts, {
-                type: 'bar',
-                data: {
-                    labels: productNames,
-                    datasets: [{
-                        label: 'Ingreso (USD)',
-                        data: productRevenue,
-                        backgroundColor: '#a855f7',
-                        borderRadius: 4,
-                        maxBarThickness: 50
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    },
-                    scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
-                    }
-                }
-            });
-            
-            // Collections Donut
-            const collectionNames = Object.keys(weekData.collections);
-            const collectionRevenue = Object.values(weekData.collections).map(c => c.revenue);
-            const collectionColors = ['#06b6d4', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#64748b'];
-            
-            const ctxCollections = document.getElementById('chartCollections').getContext('2d');
-            charts.collections = new Chart(ctxCollections, {
-                type: 'doughnut',
-                data: {
-                    labels: collectionNames,
-                    datasets: [{
-                        data: collectionRevenue,
-                        backgroundColor: collectionColors.slice(0, collectionNames.length),
-                        borderColor: '#0a0f1e',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    }
-                }
-            });
-            
-            // Pieces Donut
-            const pieceNames = Object.keys(weekData.pieces);
-            const pieceRevenue = Object.values(weekData.pieces).map(p => p.revenue);
-            const pieceColors = ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#8b5cf6'];
-            
-            const ctxPieces = document.getElementById('chartPieces').getContext('2d');
-            charts.pieces = new Chart(ctxPieces, {
-                type: 'doughnut',
-                data: {
-                    labels: pieceNames,
-                    datasets: [{
-                        data: pieceRevenue,
-                        backgroundColor: pieceColors.slice(0, pieceNames.length),
-                        borderColor: '#0a0f1e',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    }
-                }
-            });
-        }
-        
-        function initYTDCharts() {
-            const ytdData = {"mia_total": 8583.55, "ig_total": 0, "jewelry_total": 8583.55, "mia_pcs": 65, "ig_pcs": 0, "total_pcs": 65, "avg_ticket": 132.05, "pct_gallery": 9.0, "gallery_total": 95583.2, "cortesias_pcs": 28, "collections": {"Sea Bless": {"revenue": 3773.7, "pcs": 31}, "Chosen": {"revenue": 1817.0, "pcs": 14}, "Bags": {"revenue": 1475.0, "pcs": 5}, "Masterpieces Of Love": {"revenue": 974.35, "pcs": 8}, "Miyuki": {"revenue": 265.5, "pcs": 4}, "Gafas de Sol": {"revenue": 150.0, "pcs": 2}, "Alas de la Vida : Mujeres Elegidas": {"revenue": 128.0, "pcs": 1}}, "pieces": {"Necklace": {"revenue": 1852.35, "pcs": 17}, "Ring": {"revenue": 1601.7, "pcs": 11}, "Bags": {"revenue": 1475.0, "pcs": 5}, "Earrings": {"revenue": 1056.5, "pcs": 9}, "Aretes": {"revenue": 623.0, "pcs": 6}, "Collar": {"revenue": 500.0, "pcs": 4}, "Bracelet": {"revenue": 424.0, "pcs": 4}, "Set": {"revenue": 309.0, "pcs": 2}, "Anillo": {"revenue": 250.0, "pcs": 1}, "Unique Piece": {"revenue": 207.0, "pcs": 3}, "Unisex": {"revenue": 150.0, "pcs": 2}, "Pulcera": {"revenue": 135.0, "pcs": 1}}, "monthly": {"Ene": {"mia": 1846.0, "ig": 0, "mia_pcs": 15, "ig_pcs": 0}, "Feb": {"mia": 1830.0, "ig": 0, "mia_pcs": 14, "ig_pcs": 0}, "Mar": {"mia": 4361.5, "ig": 0, "mia_pcs": 31, "ig_pcs": 0}, "Abr": {"mia": 546.05, "ig": 0, "mia_pcs": 5, "ig_pcs": 0}}, "top_mia": [{"name": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "revenue": 885.0, "pcs": 3, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "revenue": 742.05, "pcs": 5, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "revenue": 528.0, "pcs": 3, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "revenue": 427.35, "pcs": 4, "collection": "Masterpieces Of Love", "piece_type": "Necklace"}, {"name": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "revenue": 366.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Earrings"}, {"name": "MIA JEWELRY IG / Bags / Bags / Freedom - Libertad", "revenue": 295.0, "pcs": 1, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Bags / Bags / Beauty - Belleza", "revenue": 295.0, "pcs": 1, "collection": "Bags", "piece_type": "Bags"}, {"name": "MIA JEWELRY IG / Chosen / Anillo / Ajustable con Madre Perla", "revenue": 250.0, "pcs": 1, "collection": "Chosen", "piece_type": "Anillo"}, {"name": "MIA JEWELRY IG / Chosen / Collar / Cruz", "revenue": 240.0, "pcs": 2, "collection": "Chosen", "piece_type": "Collar"}, {"name": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "revenue": 232.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Necklace"}, {"name": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "revenue": 230.0, "pcs": 2, "collection": "Sea Bless", "piece_type": "Bracelet"}, {"name": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "revenue": 207.0, "pcs": 3, "collection": "Sea Bless", "piece_type": "Unique Piece"}, {"name": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "revenue": 203.65, "pcs": 2, "collection": "Sea Bless", "piece_type": "Ring"}, {"name": "MIA JEWELRY IG / Chosen / Set / Juego Madre Perla", "revenue": 199.0, "pcs": 1, "collection": "Chosen", "piece_type": "Set"}, {"name": "MIA JEWELRY IG / Chosen / Aretes / Alfiler con Perla", "revenue": 190.0, "pcs": 2, "collection": "Chosen", "piece_type": "Aretes"}]};
-            
-            // Monthly Chart
-            const months = ['Ene', 'Feb', 'Mar', 'Abr'];
-            const monthlyMIA = months.map(m => ytdData.monthly[m]?.mia || 0);
-            const monthlyIG = months.map(m => ytdData.monthly[m]?.ig || 0);
-            
-            const ctxMonthly = document.getElementById('chartMonthly').getContext('2d');
-            charts.monthly = new Chart(ctxMonthly, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [
-                        {
-                            label: 'MIA',
-                            data: monthlyMIA,
-                            backgroundColor: '#a855f7',
-                            borderRadius: 4,
-                            maxBarThickness: 50
-                        },
-                        {
-                            label: 'IG',
-                            data: monthlyIG,
-                            backgroundColor: '#3b82f6',
-                            borderRadius: 4,
-                            maxBarThickness: 50
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    },
-                    scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
-                    }
-                }
-            });
-            
-            // Collections YTD
-            const collectionNames = Object.keys(ytdData.collections);
-            const collectionRevenue = Object.values(ytdData.collections).map(c => c.revenue);
-            const collectionColors = ['#06b6d4', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#64748b', '#d946ef'];
-            
-            const ctxCollectionsYTD = document.getElementById('chartCollectionsYTD').getContext('2d');
-            charts.collectionsYTD = new Chart(ctxCollectionsYTD, {
-                type: 'doughnut',
-                data: {
-                    labels: collectionNames,
-                    datasets: [{
-                        data: collectionRevenue,
-                        backgroundColor: collectionColors.slice(0, collectionNames.length),
-                        borderColor: '#0a0f1e',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    }
-                }
-            });
-            
-            // Pieces YTD
-            const pieceNames = Object.keys(ytdData.pieces);
-            const pieceRevenue = Object.values(ytdData.pieces).map(p => p.revenue);
-            const pieceColors = ['#3b82f6', '#ef4444', '#8b5cf6', '#f59e0b', '#10b981', '#06b6d4', '#ec4899', '#d946ef', '#fbbf24', '#059669', '#64748b', '#94a3b8'];
-            
-            const ctxPiecesYTD = document.getElementById('chartPiecesYTD').getContext('2d');
-            charts.piecesYTD = new Chart(ctxPiecesYTD, {
-                type: 'doughnut',
-                data: {
-                    labels: pieceNames,
-                    datasets: [{
-                        data: pieceRevenue,
-                        backgroundColor: pieceColors.slice(0, pieceNames.length),
-                        borderColor: '#0a0f1e',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
-                    }
-                }
-            });
-        }
-        
-        // Initialize on load
-        window.addEventListener('load', () => {
-            initSemanaCharts();
-        });
-    </script>
+    });
+}
+</script>
 </body>
 </html>
