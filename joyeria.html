@@ -6,440 +6,142 @@
     <title>Reporte de Joyería — Ivan Guaderrama Art Gallery</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
         
+        :root {
+            --tiffany: #81D8D0;
+            --tiffany-dark: #5CB8B2;
+            --tiffany-light: #B5EAE5;
+            --tiffany-pale: #E8F8F6;
+            --arena: #D4A574;
+            --arena-light: #E8C9A8;
+            --arena-pale: #F5E6D3;
+            --pearl: #FAFAF8;
+            --white: #FFFFFF;
+            --dark: #2D3436;
+            --text: #3D4F4F;
+            --muted: #7F8C8D;
+            --light-gray: #95A5A6;
+            --border: #E8E8E4;
+            --border-light: #F0F0EC;
+            --coral: #F8A4B8;
+            --coral-light: #FCD5E0;
+            --coral-dark: #E8849A;
+            --deep-teal: #008080;
+            --gold: #C9A96E;
+            --gold-light: #F5E6C8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #0a0f1e;
-            color: #e5e7eb;
-            line-height: 1.6;
-            padding: 1rem;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--pearl); color: var(--text); line-height: 1.6; padding: 1rem;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        
+        .container { max-width: 1400px; margin: 0 auto; }
         header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem 1rem;
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-            border-radius: 12px;
-            border: 1px solid #374151;
+            text-align: center; margin-bottom: 2rem; padding: 2.5rem 1rem;
+            background: linear-gradient(135deg, var(--tiffany-pale) 0%, var(--white) 50%, var(--arena-pale) 100%);
+            border-radius: 16px; border: 1px solid var(--tiffany-light); position: relative; overflow: hidden;
         }
-        
+        header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--tiffany), var(--arena), var(--coral));
+        }
+        .logo-placeholder {
+            width: 80px; height: 80px; margin: 0 auto 1rem; border-radius: 50%;
+            background: linear-gradient(135deg, var(--tiffany) 0%, var(--tiffany-dark) 100%);
+            display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;
+            box-shadow: 0 4px 15px rgba(129,216,208,0.3);
+        }
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Playfair Display', Georgia, serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--deep-teal) 0%, var(--tiffany-dark) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-        
-        .subtitle {
-            color: #9ca3af;
-            font-size: 1.1rem;
-        }
-        
+        .subtitle { color: var(--muted); font-size: 1.1rem; font-weight: 300; letter-spacing: 0.5px; }
         .badge {
-            display: inline-block;
-            background: #374151;
-            color: #f3f4f6;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            font-size: 0.9rem;
+            display: inline-block; background: linear-gradient(135deg, var(--tiffany-pale), var(--arena-pale));
+            color: var(--deep-teal); padding: 0.5rem 1.5rem; border-radius: 25px; margin-top: 1rem;
+            font-size: 0.9rem; font-weight: 500; border: 1px solid var(--tiffany-light);
         }
-        
         .verification-bar {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+            padding: 1rem; margin-bottom: 2rem; text-align: center;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        
-        .verification-bar.pass {
-            color: #10b981;
-        }
-        
-        .check-icon {
-            font-size: 1.2rem;
-        }
-        
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #374151;
-        }
-        
+        .verification-bar.pass { color: var(--deep-teal); border-color: var(--tiffany-light); background: var(--tiffany-pale); }
+        .check-icon { font-size: 1.2rem; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--border); }
         .tab-button {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: none;
-            color: #9ca3af;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
+            padding: 1rem 2rem; background: transparent; border: none; color: var(--muted);
+            font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500; cursor: pointer;
+            transition: all 0.3s; border-bottom: 2px solid transparent; margin-bottom: -2px;
         }
-        
-        .tab-button.active {
-            color: #a855f7;
-            border-bottom-color: #a855f7;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
+        .tab-button.active { color: var(--deep-teal); border-bottom-color: var(--tiffany); }
+        .tab-button:hover { color: var(--tiffany-dark); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         .kpi-card {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.3s, border-color 0.3s;
+            background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
-        
-        .kpi-card:hover {
-            border-color: #a855f7;
-            transform: translateY(-2px);
-        }
-        
-        .kpi-emoji {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .kpi-label {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .kpi-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #f3f4f6;
-        }
-        
-        .comparison-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .comparison-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .comparison-card {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-        }
-        
-        .comparison-card.mia {
-            border-left: 4px solid #a855f7;
-        }
-        
-        .comparison-card.ig {
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .comparison-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .brand-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        
-        .mia-badge {
-            background: #a855f7;
-            color: #fff;
-        }
-        
-        .ig-badge {
-            background: #3b82f6;
-            color: #fff;
-        }
-        
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.95rem;
-        }
-        
-        .stat-row:last-child {
-            border-bottom: none;
-        }
-        
-        .stat-label {
-            color: #9ca3af;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: #f3f4f6;
-        }
-        
-        .chart-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .chart-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: #f3f4f6;
-        }
-        
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-            overflow: hidden;
-        }
-        
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 1024px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-wrapper {
-                height: 350px;
-            }
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        thead {
-            background: #1f2937;
-            border-bottom: 2px solid #374151;
-        }
-        
-        th {
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: #f3f4f6;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid #1f2937;
-            font-size: 0.95rem;
-        }
-        
-        tbody tr:hover {
-            background: #1f2937;
-        }
-        
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .rank-badge {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #fff;
-            margin-right: 0.5rem;
-        }
-        
-        .rank-1 {
-            background: #fbbf24;
-        }
-        
-        .rank-2 {
-            background: #c0c0c0;
-        }
-        
-        .rank-3 {
-            background: #b87333;
-        }
-        
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-            color: #f3f4f6;
-        }
-        
-        .cortesias-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .cortesias-note {
-            background: #1f2937;
-            border-left: 4px solid #ec4899;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            color: #d1d5db;
-        }
-        
-        .payment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .payment-card {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 6px;
-            padding: 1rem;
-        }
-        
-        .payment-method {
-            font-weight: 600;
-            color: #f3f4f6;
-            margin-bottom: 0.5rem;
-        }
-        
-        .payment-detail {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #6b7280;
-            font-size: 0.9rem;
-            border-top: 1px solid #374151;
-            margin-top: 3rem;
-        }
-        
-        .transactions-section {
-            background: #111827;
-            border: 1px solid #374151;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .day-group {
-            margin-bottom: 2rem;
-        }
-        
-        .day-header {
-            font-weight: 600;
-            color: #a855f7;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .transaction {
-            background: #1f2937;
-            border-left: 3px solid #374151;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .transaction-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .transaction-row:last-child {
-            margin-bottom: 0;
-        }
-        
-        .transaction-time {
-            color: #9ca3af;
-            font-size: 0.85rem;
-        }
-        
-        .transaction-amount {
-            font-weight: 600;
-            color: #10b981;
-        }
+        .kpi-card:hover { box-shadow: 0 8px 25px rgba(129,216,208,0.15); transform: translateY(-2px); }
+        .kpi-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+        .kpi-label { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .kpi-value { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--dark); }
+        .comparison-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        @media (max-width: 768px) { .comparison-row { grid-template-columns: 1fr; } }
+        .comparison-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .comparison-card.mia { border-left: 4px solid var(--tiffany); }
+        .comparison-card.ig { border-left: 4px solid var(--arena); }
+        .comparison-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; color: var(--dark); }
+        .brand-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; font-family: 'Inter', sans-serif; }
+        .mia-badge { background: var(--tiffany); color: #fff; }
+        .ig-badge { background: var(--arena); color: #fff; }
+        .stat-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border-light); font-size: 0.95rem; }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: var(--muted); }
+        .stat-value { font-weight: 600; color: var(--dark); }
+        .chart-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .chart-section h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--dark); }
+        .chart-wrapper { position: relative; height: 400px; overflow: hidden; }
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr; } .chart-wrapper { height: 350px; } }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        thead { background: linear-gradient(135deg, var(--tiffany-pale), var(--white)); border-bottom: 2px solid var(--tiffany-light); }
+        th { padding: 1rem; text-align: left; font-weight: 600; color: var(--deep-teal); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 1rem; border-bottom: 1px solid var(--border-light); font-size: 0.95rem; color: var(--text); }
+        tbody tr:hover { background: var(--tiffany-pale); }
+        tbody tr:last-child td { border-bottom: none; }
+        .rank-badge { display: inline-block; width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; font-size: 0.85rem; color: #fff; margin-right: 0.5rem; }
+        .rank-1 { background: var(--gold); }
+        .rank-2 { background: #B8B8B8; }
+        .rank-3 { background: var(--arena); }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1.5rem; color: var(--dark); }
+        .cortesias-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .cortesias-note { background: var(--coral-light); border-left: 4px solid var(--coral); padding: 1rem; border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--text); }
+        .payment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .payment-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .payment-method { font-weight: 600; color: var(--dark); margin-bottom: 0.5rem; }
+        .payment-detail { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--muted); }
+        footer { text-align: center; padding: 2rem; color: var(--light-gray); font-size: 0.9rem; border-top: 2px solid var(--border); margin-top: 3rem; font-style: italic; }
+        .transactions-section { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .day-group { margin-bottom: 2rem; }
+        .day-header { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--deep-teal); margin-bottom: 1rem; font-size: 1.1rem; }
+        .transaction { background: var(--pearl); border-left: 3px solid var(--tiffany-light); padding: 1rem; margin-bottom: 0.5rem; border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+        .transaction-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .transaction-row:last-child { margin-bottom: 0; }
+        .transaction-time { color: var(--muted); font-size: 0.85rem; }
+        .transaction-amount { font-weight: 600; color: var(--deep-teal); }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>💎 Reporte de Joyería</h1>
+            <div class="logo-placeholder">ð</div>
+            <div class="logo-placeholder">💎</div>
+            <h1>Reporte de Joyería</h1>
             <p class="subtitle">Ivan Guaderrama Art Gallery</p>
             <div class="badge">MIA Jewelry + IG Jewelry</div>
         </header>
@@ -456,7 +158,7 @@
         
         <!-- TAB: SEMANA -->
         <div id="semana" class="tab-content active">
-            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: #9ca3af;">
+            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: var(--muted);">
                 6 de Abril - 12 de Abril 2026
             </div>
             
@@ -576,8 +278,8 @@
                 <div class="chart-wrapper">
                     <canvas id="chartHorariosSemana" height="80"></canvas>
                 </div>
-                <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: #111827; border-radius: 8px; border-left: 3px solid #a855f7;">
-                    <p style="color: #e5e7eb; margin: 0;"><strong>Hora pico de la semana:</strong> 7:00 PM ($300.05, 3 piezas)</p>
+                <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: var(--white); border-radius: 8px; border-left: 3px solid var(--tiffany);">
+                    <p style="color: var(--text); margin: 0;"><strong>Hora pico de la semana:</strong> 7:00 PM ($300.05, 3 piezas)</p>
                 </div>
             </div>
             
@@ -667,9 +369,9 @@
             </div>
             
             <!-- Descuentos Aplicados -->
-            <div class="cortesias-section" style="border-color: #f59e0b33; background: linear-gradient(135deg, #111827 0%, #1a1708 100%);">
-                <h2 class="section-title" style="margin-top: 0; color: #f59e0b;">🏷️ Descuentos Aplicados esta Semana</h2>
-                <div class="cortesias-note" style="background: #f59e0b15; border-color: #f59e0b33; color: #fbbf24;">
+            <div class="cortesias-section" style="border-color: var(--arena)33; background: linear-gradient(135deg, var(--white) 0%, var(--arena-pale) 100%);">
+                <h2 class="section-title" style="margin-top: 0; color: var(--arena);">🏷️ Descuentos Aplicados esta Semana</h2>
+                <div class="cortesias-note" style="background: var(--arena-pale); border-color: var(--arena)33; color: var(--arena);">
                     Resumen de descuentos para verificación. Total de la semana: <strong>$52.95 USD</strong>
                 </div>
                 <table>
@@ -685,10 +387,10 @@
                     <tbody>
                         <tr>
                             <td>2026-04-10</td>
-                            <td style="font-family: monospace; color: #60a5fa;">OBR13979</td>
-                            <td><span style="background: #f59e0b22; color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem;">Descuento autorizado</span></td>
-                            <td style="text-align: right; color: #f59e0b; font-weight: 600;">$52.95</td>
-                            <td style="font-size: 0.85rem; color: #9ca3af;">
+                            <td style="font-family: monospace; color: var(--deep-teal);">OBR13979</td>
+                            <td><span style="background: var(--arena-pale); color: var(--arena); padding: 2px 8px; border-radius: 4px; font-size: 0.85rem;">Descuento autorizado</span></td>
+                            <td style="text-align: right; color: var(--arena); font-weight: 600;">$52.95</td>
+                            <td style="font-size: 0.85rem; color: var(--muted);">
                                 Silver Ring (-$13.35)<br>
                                 La Cruz (-$16.65)<br>
                                 Protect My Love (-$22.95)
@@ -697,64 +399,64 @@
                     </tbody>
                     <tfoot>
                         <tr style="border-top: 2px solid #f59e0b33;">
-                            <td colspan="3" style="text-align: right; font-weight: 600; color: #fbbf24;">Total Descuentos Semana:</td>
-                            <td style="text-align: right; font-weight: 700; color: #f59e0b; font-size: 1.1rem;">$52.95</td>
+                            <td colspan="3" style="text-align: right; font-weight: 600; color: var(--arena);">Total Descuentos Semana:</td>
+                            <td style="text-align: right; font-weight: 700; color: var(--arena); font-size: 1.1rem;">$52.95</td>
                             <td></td>
                         </tr>
                     </tfoot>
                 </table>
-                <div style="margin-top: 0.75rem; font-size: 0.8rem; color: #6b7280; font-style: italic;">
+                <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--light-gray); font-style: italic;">
                     📊 Acumulado YTD: $2,488.45 en descuentos (36 descuentos aplicados)
                 </div>
             </div>
 
             <!-- Clientes de Joyería -->
-            <div class="cortesias-section" style="border-color: #10b98133; background: linear-gradient(135deg, #111827 0%, #0a1a14 100%);">
-                <h2 class="section-title" style="margin-top: 0; color: #10b981;">👥 Clientes de Joyería esta Semana</h2>
-                <div class="cortesias-note" style="background: #10b98115; border-color: #10b98133; color: #34d399;">
+            <div class="cortesias-section" style="border-color: var(--deep-teal)33; background: linear-gradient(135deg, var(--white) 0%, var(--tiffany-pale) 100%);">
+                <h2 class="section-title" style="margin-top: 0; color: var(--deep-teal);">👥 Clientes de Joyería esta Semana</h2>
+                <div class="cortesias-note" style="background: var(--tiffany-pale); border-color: var(--deep-teal)33; color: var(--tiffany-dark);">
                     2 clientes compraron joyería esta semana
                 </div>
 
                 <!-- Customer 1 -->
-                <div style="background: #1f2937; border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid #10b981;">
+                <div style="background: var(--pearl); border-radius: 10px; padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid var(--tiffany);">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                         <div>
-                            <span style="font-size: 1.1rem; font-weight: 600; color: #f3f4f6;">Cliente sin registrar</span>
-                            <span style="background: #f59e0b22; color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">⚠️ Sin datos</span>
+                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--dark);">Cliente sin registrar</span>
+                            <span style="background: var(--arena-pale); color: var(--arena); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem;">⚠️ Sin datos</span>
                         </div>
-                        <span style="font-size: 1.3rem; font-weight: 700; color: #10b981;">$300.05</span>
+                        <span style="font-size: 1.3rem; font-weight: 700; color: var(--deep-teal);">$300.05</span>
                     </div>
                     <div style="margin-top: 0.75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; font-size: 0.9rem;">
-                        <div><span style="color: #6b7280;">📧 Email:</span> <span style="color: #9ca3af;">No registrado</span></div>
-                        <div><span style="color: #6b7280;">📦 Piezas:</span> <span style="color: #e5e7eb;">3</span></div>
-                        <div><span style="color: #6b7280;">🧾 Factura:</span> <span style="color: #60a5fa; font-family: monospace;">OBR13979</span></div>
-                        <div><span style="color: #6b7280;">💳 Pago:</span> <span style="color: #e5e7eb;">Credit Card USD</span></div>
+                        <div><span style="color: var(--light-gray);">📧 Email:</span> <span style="color: var(--muted);">No registrado</span></div>
+                        <div><span style="color: var(--light-gray);">📦 Piezas:</span> <span style="color: var(--text);">3</span></div>
+                        <div><span style="color: var(--light-gray);">🧾 Factura:</span> <span style="color: var(--deep-teal); font-family: monospace;">OBR13979</span></div>
+                        <div><span style="color: var(--light-gray);">💳 Pago:</span> <span style="color: var(--text);">Credit Card USD</span></div>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #9ca3af;">
+                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
                         🛍️ Silver Ring ($75.65), La Cruz ($94.35), Protect My Love ($130.05)
                     </div>
                 </div>
 
                 <!-- Customer 2 -->
-                <div style="background: #1f2937; border-radius: 10px; padding: 1.25rem; margin-bottom: 0.5rem; border-left: 4px solid #10b981;">
+                <div style="background: var(--pearl); border-radius: 10px; padding: 1.25rem; margin-bottom: 0.5rem; border-left: 4px solid var(--tiffany);">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                         <div>
-                            <span style="font-size: 1.1rem; font-weight: 600; color: #f3f4f6;">SUSAN GELPI</span>
+                            <span style="font-size: 1.1rem; font-weight: 600; color: var(--dark);">SUSAN GELPI</span>
                         </div>
-                        <span style="font-size: 1.3rem; font-weight: 700; color: #10b981;">$111.00</span>
+                        <span style="font-size: 1.3rem; font-weight: 700; color: var(--deep-teal);">$111.00</span>
                     </div>
                     <div style="margin-top: 0.75rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.5rem; font-size: 0.9rem;">
-                        <div><span style="color: #6b7280;">📧 Email:</span> <span style="color: #9ca3af;">No registrado</span></div>
-                        <div><span style="color: #6b7280;">📦 Piezas:</span> <span style="color: #e5e7eb;">1</span></div>
-                        <div><span style="color: #6b7280;">🧾 Factura:</span> <span style="color: #60a5fa; font-family: monospace;">OBR13978</span></div>
-                        <div><span style="color: #6b7280;">💳 Pago:</span> <span style="color: #e5e7eb;">American Express MNX</span></div>
+                        <div><span style="color: var(--light-gray);">📧 Email:</span> <span style="color: var(--muted);">No registrado</span></div>
+                        <div><span style="color: var(--light-gray);">📦 Piezas:</span> <span style="color: var(--text);">1</span></div>
+                        <div><span style="color: var(--light-gray);">🧾 Factura:</span> <span style="color: var(--deep-teal); font-family: monospace;">OBR13978</span></div>
+                        <div><span style="color: var(--light-gray);">💳 Pago:</span> <span style="color: var(--text);">American Express MNX</span></div>
                     </div>
-                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #9ca3af;">
+                    <div style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted);">
                         🛍️ La Cruz ($111.00)
                     </div>
                 </div>
 
-                <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f59e0b11; border: 1px solid #f59e0b33; border-radius: 8px; font-size: 0.85rem; color: #fbbf24;">
+                <div style="margin-top: 0.75rem; padding: 0.75rem; background: var(--arena-pale); border: 1px solid var(--arena-light); border-radius: 8px; font-size: 0.85rem; color: var(--arena);">
                     ⚠️ Solo 2 de 40 clientes de joyería YTD tienen email registrado en Vend. Registrar emails permitiría hacer seguimiento post-venta.
                 </div>
             </div>
@@ -799,12 +501,12 @@
                         <span class="transaction-time">19:42</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #9ca3af;">Sea Bless / Ring</span>
+                        <span style="color: var(--muted);">Sea Bless / Ring</span>
                         <span class="transaction-amount">$75.65</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Credit Card USD</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Inv. OBR13979</span>
                     </div>
                 </div>
 
@@ -814,12 +516,12 @@
                         <span class="transaction-time">19:42</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #9ca3af;">Masterpieces Of Love / Necklace</span>
+                        <span style="color: var(--muted);">Masterpieces Of Love / Necklace</span>
                         <span class="transaction-amount">$94.35</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Credit Card USD</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Inv. OBR13979</span>
                     </div>
                 </div>
 
@@ -829,12 +531,12 @@
                         <span class="transaction-time">19:42</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #9ca3af;">Sea Bless / Ring</span>
+                        <span style="color: var(--muted);">Sea Bless / Ring</span>
                         <span class="transaction-amount">$130.05</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">Credit Card USD</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13979</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Credit Card USD</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Inv. OBR13979</span>
                     </div>
                 </div>
 
@@ -844,12 +546,12 @@
                         <span class="transaction-time">17:24</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #9ca3af;">Masterpieces Of Love / Necklace</span>
+                        <span style="color: var(--muted);">Masterpieces Of Love / Necklace</span>
                         <span class="transaction-amount">$111.00</span>
                     </div>
                     <div class="transaction-row">
-                        <span style="color: #6b7280; font-size: 0.85rem;">American Express MNX</span>
-                        <span style="color: #6b7280; font-size: 0.85rem;">Inv. OBR13978</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">American Express MNX</span>
+                        <span style="color: var(--light-gray); font-size: 0.85rem;">Inv. OBR13978</span>
                     </div>
                 </div>
 </div>
@@ -858,7 +560,7 @@
         
         <!-- TAB: YTD -->
         <div id="ytd" class="tab-content">
-            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: #9ca3af;">
+            <div class="subtitle" style="text-align: center; margin-bottom: 2rem; color: var(--muted);">
                 Acumulado desde el 1 de Enero de 2026
             </div>
             
@@ -963,7 +665,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">4.</span></td>
+                        <td><span style="color: var(--muted);">4.</span></td>
                         <td>La Cruz</td>
                         <td>Masterpieces Of Love</td>
                         <td>Necklace</td>
@@ -972,7 +674,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">5.</span></td>
+                        <td><span style="color: var(--muted);">5.</span></td>
                         <td>Loved</td>
                         <td>Sea Bless</td>
                         <td>Earrings</td>
@@ -981,7 +683,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">6.</span></td>
+                        <td><span style="color: var(--muted);">6.</span></td>
                         <td>Freedom - Libertad</td>
                         <td>Bags</td>
                         <td>Bags</td>
@@ -990,7 +692,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">7.</span></td>
+                        <td><span style="color: var(--muted);">7.</span></td>
                         <td>Beauty - Belleza</td>
                         <td>Bags</td>
                         <td>Bags</td>
@@ -999,7 +701,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">8.</span></td>
+                        <td><span style="color: var(--muted);">8.</span></td>
                         <td>Ajustable con Madre Perla</td>
                         <td>Chosen</td>
                         <td>Anillo</td>
@@ -1008,7 +710,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">9.</span></td>
+                        <td><span style="color: var(--muted);">9.</span></td>
                         <td>Cruz</td>
                         <td>Chosen</td>
                         <td>Collar</td>
@@ -1017,7 +719,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">10.</span></td>
+                        <td><span style="color: var(--muted);">10.</span></td>
                         <td>Sea Sigh</td>
                         <td>Sea Bless</td>
                         <td>Necklace</td>
@@ -1026,7 +728,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">11.</span></td>
+                        <td><span style="color: var(--muted);">11.</span></td>
                         <td>Sea & Sun</td>
                         <td>Sea Bless</td>
                         <td>Bracelet</td>
@@ -1035,7 +737,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">12.</span></td>
+                        <td><span style="color: var(--muted);">12.</span></td>
                         <td>MIA BF</td>
                         <td>Sea Bless</td>
                         <td>Unique Piece</td>
@@ -1044,7 +746,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">13.</span></td>
+                        <td><span style="color: var(--muted);">13.</span></td>
                         <td>Silver Ring</td>
                         <td>Sea Bless</td>
                         <td>Ring</td>
@@ -1053,7 +755,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">14.</span></td>
+                        <td><span style="color: var(--muted);">14.</span></td>
                         <td>Juego Madre Perla</td>
                         <td>Chosen</td>
                         <td>Set</td>
@@ -1062,7 +764,7 @@
                     </tr>
 
                     <tr>
-                        <td><span style="color: #9ca3af;">15.</span></td>
+                        <td><span style="color: var(--muted);">15.</span></td>
                         <td>Alfiler con Perla</td>
                         <td>Chosen</td>
                         <td>Aretes</td>
@@ -1078,37 +780,37 @@
                 
                 <!-- Top 3 Horarios Pico -->
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: #e5e7eb; font-size: 1.1rem; margin-bottom: 1.5rem;">Top 3 Horarios Pico</h3>
+                    <h3 style="color: var(--text); font-size: 1.1rem; margin-bottom: 1.5rem;">Top 3 Horarios Pico</h3>
                     <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                        <div style="background: linear-gradient(135deg, #1a2332 0%, #1a1e2e 100%); border: 1px solid #fbbf24; border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: #fbbf24;">1</div>
-                            <div style="display: inline-block; width: 40px; height: 40px; background: #fbbf24; color: #111827; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">1</div>
-                            <p style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Martes 12:00-13:00</p>
-                            <p style="color: #fbbf24; font-size: 1.3rem; font-weight: bold; margin: 0;">$1,475.00</p>
-                            <p style="color: #6b7280; font-size: 0.8rem; margin-top: 0.5rem;">5 piezas</p>
+                        <div style="background: linear-gradient(135deg, var(--white) 0%, var(--tiffany-pale) 100%); border: 1px solid var(--gold); border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: var(--arena);">1</div>
+                            <div style="display: inline-block; width: 40px; height: 40px; background: var(--gold); color: #fff; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">1</div>
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Martes 12:00-13:00</p>
+                            <p style="color: var(--arena); font-size: 1.3rem; font-weight: bold; margin: 0;">$1,475.00</p>
+                            <p style="color: var(--light-gray); font-size: 0.8rem; margin-top: 0.5rem;">5 piezas</p>
                         </div>
                         
-                        <div style="background: linear-gradient(135deg, #1a2332 0%, #1a1e2e 100%); border: 1px solid #c0a080; border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: #c0a080;">2</div>
-                            <div style="display: inline-block; width: 40px; height: 40px; background: #c0a080; color: #111827; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">2</div>
-                            <p style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Jueves 20:00-21:00</p>
-                            <p style="color: #c0a080; font-size: 1.3rem; font-weight: bold; margin: 0;">$854.00</p>
-                            <p style="color: #6b7280; font-size: 0.8rem; margin-top: 0.5rem;">8 piezas</p>
+                        <div style="background: linear-gradient(135deg, var(--white) 0%, var(--tiffany-pale) 100%); border: 1px solid var(--arena-light); border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: var(--arena);">2</div>
+                            <div style="display: inline-block; width: 40px; height: 40px; background: var(--arena-light); color: #fff; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">2</div>
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Jueves 20:00-21:00</p>
+                            <p style="color: var(--arena); font-size: 1.3rem; font-weight: bold; margin: 0;">$854.00</p>
+                            <p style="color: var(--light-gray); font-size: 0.8rem; margin-top: 0.5rem;">8 piezas</p>
                         </div>
                         
-                        <div style="background: linear-gradient(135deg, #1a2332 0%, #1a1e2e 100%); border: 1px solid #a78965; border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: #a78965;">3</div>
-                            <div style="display: inline-block; width: 40px; height: 40px; background: #a78965; color: #111827; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">3</div>
-                            <p style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Jueves 21:00-22:00</p>
-                            <p style="color: #a78965; font-size: 1.3rem; font-weight: bold; margin: 0;">$603.00</p>
-                            <p style="color: #6b7280; font-size: 0.8rem; margin-top: 0.5rem;">5 piezas</p>
+                        <div style="background: linear-gradient(135deg, var(--white) 0%, var(--tiffany-pale) 100%); border: 1px solid var(--arena); border-radius: 12px; padding: 1.5rem; text-align: center; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; right: -10px; font-size: 4rem; opacity: 0.1; color: var(--arena);">3</div>
+                            <div style="display: inline-block; width: 40px; height: 40px; background: var(--arena); color: #fff; border-radius: 50%; font-weight: bold; font-size: 1.2rem; line-height: 40px; margin-bottom: 0.5rem;">3</div>
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 0.5rem; margin-top: 0;">Jueves 21:00-22:00</p>
+                            <p style="color: var(--arena); font-size: 1.3rem; font-weight: bold; margin: 0;">$603.00</p>
+                            <p style="color: var(--light-gray); font-size: 0.8rem; margin-top: 0.5rem;">5 piezas</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Ventas por Dia de la Semana -->
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: #e5e7eb; font-size: 1.1rem; margin-bottom: 1rem;">Ventas por Dia de la Semana (YTD)</h3>
+                    <h3 style="color: var(--text); font-size: 1.1rem; margin-bottom: 1rem;">Ventas por Dia de la Semana (YTD)</h3>
                     <div class="chart-wrapper">
                         <canvas id="chartDiasSemana" height="100"></canvas>
                     </div>
@@ -1116,7 +818,7 @@
                 
                 <!-- Ventas por Hora del Dia -->
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: #e5e7eb; font-size: 1.1rem; margin-bottom: 1rem;">Ventas por Hora del Dia (YTD)</h3>
+                    <h3 style="color: var(--text); font-size: 1.1rem; margin-bottom: 1rem;">Ventas por Hora del Dia (YTD)</h3>
                     <div class="chart-wrapper">
                         <canvas id="chartHorasYTD" height="100"></canvas>
                     </div>
@@ -1124,22 +826,22 @@
                 
                 <!-- Heatmap Dia x Hora -->
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: #e5e7eb; font-size: 1.1rem; margin-bottom: 1rem;">Mapa de Calor: Dia x Hora</h3>
-                    <div style="overflow-x: auto; background: #111827; border-radius: 8px; padding: 1rem; border: 1px solid #374151;">
+                    <h3 style="color: var(--text); font-size: 1.1rem; margin-bottom: 1rem;">Mapa de Calor: Dia x Hora</h3>
+                    <div style="overflow-x: auto; background: var(--white); border-radius: 8px; padding: 1rem; border: 1px solid var(--border);">
                         <div id="heatmapContainer" style="display: inline-block; min-width: 100%;"></div>
                     </div>
                 </div>
                 
                 <!-- Key Insight -->
-                <div style="background: linear-gradient(135deg, #1a1708 0%, #111827 100%); border-left: 4px solid #f59e0b; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
-                    <p style="color: #fbbf24; margin: 0; line-height: 1.8;">
+                <div style="background: linear-gradient(135deg, var(--arena-pale) 0%, var(--white) 100%); border-left: 4px solid var(--arena); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;">
+                    <p style="color: var(--arena); margin: 0; line-height: 1.8;">
                         <strong>Hallazgo:</strong> Los jueves concentran el <strong>49.5%</strong> de las ventas de joyeria (<strong>$4,251</strong> de <strong>$8,583.55</strong> YTD). El mejor horario individual es martes a las 12:00 PM (<strong>$1,475</strong>). No se han registrado ventas de joyeria en domingo.
                     </p>
                 </div>
 
                 <!-- VIPs de Joyería YTD -->
-                <h2 class="section-title" style="color: #10b981;">👥 Clientes VIP de Joyería — YTD 2026</h2>
-                <div class="cortesias-note" style="background: #10b98115; border: 1px solid #10b98133; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; color: #34d399; font-size: 0.9rem;">
+                <h2 class="section-title" style="color: var(--deep-teal);">👥 Clientes VIP de Joyería — YTD 2026</h2>
+                <div class="cortesias-note" style="background: var(--tiffany-pale); border: 1px solid var(--tiffany-light); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; color: var(--tiffany-dark); font-size: 0.9rem;">
                     Top 15 clientes por gasto en joyería. 40 clientes únicos en el año.
                 </div>
 
@@ -1160,175 +862,175 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><span style="background: #f59e0b; color: #000; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">1</span></td>
-                            <td style="font-weight: 600; color: #f3f4f6;">Cliente Recurrente *</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 700; color: #10b981;">$875.05</td>
+                            <td><span style="background: var(--gold); color: #fff; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">1</span></td>
+                            <td style="font-weight: 600; color: var(--dark);">Cliente Recurrente *</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 700; color: var(--deep-teal);">$875.05</td>
                             <td style="text-align: center;">8</td>
-                            <td style="text-align: center;"><span style="background: #a855f722; color: #c084fc; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">6</span></td>
+                            <td style="text-align: center;"><span style="background: var(--tiffany-pale); color: var(--deep-teal); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">6</span></td>
                             <td style="text-align: right;">$145.84</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">Varios (8 piezas)</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">Varios (8 piezas)</td>
                             <td style="font-size: 0.85rem;">10 Abr</td>
                         </tr>
                         <tr>
-                            <td><span style="background: #9ca3af; color: #000; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">2</span></td>
-                            <td style="font-weight: 600; color: #f3f4f6;">Walk-in</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 700; color: #10b981;">$612.00</td>
+                            <td><span style="background: #B8B8B8; color: #fff; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">2</span></td>
+                            <td style="font-weight: 600; color: var(--dark);">Walk-in</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 700; color: var(--deep-teal);">$612.00</td>
                             <td style="text-align: center;">5</td>
-                            <td style="text-align: center;"><span style="background: #a855f722; color: #c084fc; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">5</span></td>
+                            <td style="text-align: center;"><span style="background: var(--tiffany-pale); color: var(--deep-teal); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">5</span></td>
                             <td style="text-align: right;">$122.40</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">Varios (5 piezas)</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">Varios (5 piezas)</td>
                             <td style="font-size: 0.85rem;">02 Mar</td>
                         </tr>
                         <tr>
-                            <td><span style="background: #cd7f32; color: #000; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">3</span></td>
-                            <td style="font-weight: 600; color: #f3f4f6;">MARGARET C VAUGHAN</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$590.00</td>
+                            <td><span style="background: var(--arena); color: #fff; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem;">3</span></td>
+                            <td style="font-weight: 600; color: var(--dark);">MARGARET C VAUGHAN</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$590.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$590.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">31 Mar</td>
                         </tr>
                         <tr>
                             <td>4</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">MARY SMOLIK</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$590.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">MARY SMOLIK</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$590.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$590.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">31 Mar</td>
                         </tr>
                         <tr>
                             <td>5</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">ALISA BLACK</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$437.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">ALISA BLACK</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$437.00</td>
                             <td style="text-align: center;">3</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$437.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">3 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">3 piezas</td>
                             <td style="font-size: 0.85rem;">05 Mar</td>
                         </tr>
                         <tr>
                             <td>6</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">Renee Cherpin</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$332.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">Renee Cherpin</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$332.00</td>
                             <td style="text-align: center;">3</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$332.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">3 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">3 piezas</td>
                             <td style="font-size: 0.85rem;">19 Mar</td>
                         </tr>
                         <tr>
                             <td>7</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">KATHLEEN STOVER</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$295.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">KATHLEEN STOVER</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$295.00</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$295.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">1 pieza</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">1 pieza</td>
                             <td style="font-size: 0.85rem;">31 Mar</td>
                         </tr>
                         <tr>
                             <td>8</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">Rosemarie Baldwin</td>
-                            <td style="color: #60a5fa; font-size: 0.85rem;">rosemarie.baldwin@comcast.net</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$273.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">Rosemarie Baldwin</td>
+                            <td style="color: var(--deep-teal); font-size: 0.85rem;">rosemarie.baldwin@comcast.net</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$273.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$273.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">22 Ene</td>
                         </tr>
                         <tr>
                             <td>9</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">PAUL SKUTA</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$250.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">PAUL SKUTA</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$250.00</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$250.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">1 pieza</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">1 pieza</td>
                             <td style="font-size: 0.85rem;">12 Feb</td>
                         </tr>
                         <tr>
                             <td>10</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">JOSE PERELMUT</td>
-                            <td style="color: #60a5fa; font-size: 0.85rem;">jperelmu@gmail.com</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$235.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">JOSE PERELMUT</td>
+                            <td style="color: var(--deep-teal); font-size: 0.85rem;">jperelmu@gmail.com</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$235.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$235.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">02 Mar</td>
                         </tr>
                         <tr>
                             <td>11</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">Katherin Jacob</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$231.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">Katherin Jacob</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$231.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$231.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">29 Ene</td>
                         </tr>
                         <tr>
                             <td>12</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">GAIL L RASK</td>
-                            <td style="color: #60a5fa; font-size: 0.85rem;">gailrask@gmail.com</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$227.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">GAIL L RASK</td>
+                            <td style="color: var(--deep-teal); font-size: 0.85rem;">gailrask@gmail.com</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$227.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$227.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">05 Feb</td>
                         </tr>
                         <tr>
                             <td>13</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">SUSAN BLACK</td>
-                            <td style="color: #60a5fa; font-size: 0.85rem;">susanblack1958@gmail.com</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$199.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">SUSAN BLACK</td>
+                            <td style="color: var(--deep-teal); font-size: 0.85rem;">susanblack1958@gmail.com</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$199.00</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$199.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">1 pieza</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">1 pieza</td>
                             <td style="font-size: 0.85rem;">22 Ene</td>
                         </tr>
                         <tr>
                             <td>14</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">LOREANN MERCE</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$190.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">LOREANN MERCE</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$190.00</td>
                             <td style="text-align: center;">2</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$190.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">2 piezas</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">2 piezas</td>
                             <td style="font-size: 0.85rem;">10 Mar</td>
                         </tr>
                         <tr>
                             <td>15</td>
-                            <td style="font-weight: 600; color: #f3f4f6;">CINDY HINCKLEY</td>
-                            <td style="color: #6b7280; font-size: 0.85rem;">—</td>
-                            <td style="text-align: right; font-weight: 600; color: #e5e7eb;">$188.00</td>
+                            <td style="font-weight: 600; color: var(--dark);">CINDY HINCKLEY</td>
+                            <td style="color: var(--light-gray); font-size: 0.85rem;">—</td>
+                            <td style="text-align: right; font-weight: 600; color: var(--text);">$188.00</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: center;">1</td>
                             <td style="text-align: right;">$188.00</td>
-                            <td style="font-size: 0.8rem; color: #9ca3af;">1 pieza</td>
+                            <td style="font-size: 0.8rem; color: var(--muted);">1 pieza</td>
                             <td style="font-size: 0.85rem;">28 Ene</td>
                         </tr>
                     </tbody>
                 </table>
                 </div>
 
-                <div style="margin-top: 1rem; padding: 0.75rem; background: #10b98111; border: 1px solid #10b98133; border-radius: 8px; font-size: 0.85rem; color: #34d399;">
+                <div style="margin-top: 1rem; padding: 0.75rem; background: var(--tiffany-pale); border: 1px solid var(--tiffany-light); border-radius: 8px; font-size: 0.85rem; color: var(--tiffany-dark);">
                     📊 <strong>40 clientes únicos</strong> han comprado joyería en 2026. El cliente #1 ha visitado <strong>6 veces</strong> con ticket promedio de $145.84 — solo <strong>4 clientes (10%)</strong> tienen email registrado en Vend.
                 </div>
 
@@ -1337,7 +1039,7 @@
         </div>
 
         <footer>
-            Generado automáticamente • Ivan Guaderrama Art Gallery • Datos de Vend POS
+            ✨ Generado automáticamente • Ivan Guaderrama Art Gallery • Datos de Vend POS ✨
         </footer>
     </div>
     
@@ -1371,7 +1073,7 @@
                         datasets: [{
                             label: 'Ingresos USD',
                             data: hourRevenue,
-                            backgroundColor: '#a855f7',
+                            backgroundColor: '#81D8D0',
                             borderRadius: 4,
                             maxBarThickness: 50
                         }]
@@ -1381,11 +1083,11 @@
                         maintainAspectRatio: false,
                         indexAxis: 'x',
                         plugins: {
-                            legend: { labels: { color: '#9ca3af' } }
+                            legend: { labels: { color: '#7F8C8D' } }
                         },
                         scales: {
-                            x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                            y: { ticks: { color: '#9ca3af', callback: val => fmt_usd(val) }, grid: { color: '#1f2937' } }
+                            x: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } },
+                            y: { ticks: { color: '#7F8C8D', callback: val => fmt_usd(val) }, grid: { color: '#E8E8E4' } }
                         }
                     }
                 });
@@ -1414,8 +1116,8 @@
                             label: 'Ingresos USD',
                             data: dowRevenue,
                             backgroundColor: (ctx) => {
-                                if (ctx.dataIndex === 3) return '#f59e0b';
-                                return '#a855f7';
+                                if (ctx.dataIndex === 3) return '#D4A574';
+                                return '#81D8D0';
                             },
                             borderRadius: 4,
                             maxBarThickness: 50
@@ -1426,7 +1128,7 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#9ca3af' } },
+                            legend: { labels: { color: '#7F8C8D' } },
                             tooltip: {
                                 callbacks: {
                                     afterLabel: function(ctx) {
@@ -1437,8 +1139,8 @@
                             }
                         },
                         scales: {
-                            x: { ticks: { color: '#9ca3af', callback: val => fmt_usd(val) }, grid: { color: '#1f2937' } },
-                            y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
+                            x: { ticks: { color: '#7F8C8D', callback: val => fmt_usd(val) }, grid: { color: '#E8E8E4' } },
+                            y: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } }
                         }
                     }
                 });
@@ -1464,8 +1166,8 @@
                             label: 'Ingresos USD',
                             data: hourRevenue,
                             backgroundColor: (ctx) => {
-                                if (hourOrder[ctx.dataIndex] === 12) return '#f59e0b';
-                                return '#a855f7';
+                                if (hourOrder[ctx.dataIndex] === 12) return '#D4A574';
+                                return '#81D8D0';
                             },
                             borderRadius: 4,
                             maxBarThickness: 50
@@ -1475,11 +1177,11 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { labels: { color: '#9ca3af' } }
+                            legend: { labels: { color: '#7F8C8D' } }
                         },
                         scales: {
-                            x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                            y: { ticks: { color: '#9ca3af', callback: val => fmt_usd(val) }, grid: { color: '#1f2937' } }
+                            x: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } },
+                            y: { ticks: { color: '#7F8C8D', callback: val => fmt_usd(val) }, grid: { color: '#E8E8E4' } }
                         }
                     }
                 });
@@ -1507,28 +1209,28 @@
             
             let html = '<div style="display: grid; grid-template-columns: 60px repeat(' + hourRange.length + ', 50px); gap: 2px; font-size: 0.75rem;">';
             
-            html += '<div style="background: #111827; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-weight: bold; padding: 4px;">Hora</div>';
+            html += '<div style="background: #E8F8F6; color: #2D3436; display: flex; align-items: center; justify-content: center; font-weight: bold; padding: 4px;">Hora</div>';
             hourRange.forEach(h => {
                 const meridiem = h >= 12 ? 'PM' : 'AM';
                 const displayHour = h > 12 ? h - 12 : (h === 0 ? 12 : h);
-                html += '<div style="background: #111827; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.7rem; padding: 4px;">' + displayHour + '</div>';
+                html += '<div style="background: #E8F8F6; color: #2D3436; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.7rem; padding: 4px;">' + displayHour + '</div>';
             });
             
             days.forEach(day => {
-                html += '<div style="background: #111827; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-weight: bold; padding: 4px; font-size: 0.7rem;">' + day + '</div>';
+                html += '<div style="background: #E8F8F6; color: #2D3436; display: flex; align-items: center; justify-content: center; font-weight: bold; padding: 4px; font-size: 0.7rem;">' + day + '</div>';
                 
                 hourRange.forEach(h => {
                     const cell = heatmapData[day]?.[h.toString()];
                     if (cell) {
                         const intensity = cell.revenue / maxRevenue;
-                        const r = Math.round(26 + (168 - 26) * intensity);
-                        const g = Math.round(10 + (85 - 10) * intensity);
-                        const b = Math.round(46 + (247 - 46) * intensity);
+                        const r = Math.round(232 + (0 - 232) * intensity);
+                        const g = Math.round(248 + (128 - 248) * intensity);
+                        const b = Math.round(240 + (128 - 240) * intensity);
                         const bgColor = 'rgb(' + r + ',' + g + ',' + b + ')';
-                        const textColor = intensity > 0.5 ? '#fff' : '#9ca3af';
+                        const textColor = intensity > 0.5 ? '#fff' : '#7F8C8D';
                         html += '<div style="background: ' + bgColor + '; color: ' + textColor + '; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 3px; cursor: help; min-height: 30px; font-size: 0.65rem; font-weight: 600;" title="' + fmt_usd(cell.revenue) + ' (' + cell.pcs + ' pcs)">' + fmt_usd(cell.revenue) + '</div>';
                     } else {
-                        html += '<div style="background: #0a0a14; border: 1px dashed #1f2937; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 3px; min-height: 30px;"></div>';
+                        html += '<div style="background: #F5F5F2; border: 1px dashed #E8E8E4; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 3px; min-height: 30px;"></div>';
                     }
                 });
             });
@@ -1587,14 +1289,14 @@
                         {
                             label: 'MIA',
                             data: dailyMIA,
-                            backgroundColor: '#a855f7',
+                            backgroundColor: '#81D8D0',
                             borderRadius: 4,
                             maxBarThickness: 50
                         },
                         {
                             label: 'IG',
                             data: dailyIG,
-                            backgroundColor: '#3b82f6',
+                            backgroundColor: '#D4A574',
                             borderRadius: 4,
                             maxBarThickness: 50
                         }
@@ -1604,11 +1306,11 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     },
                     scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
+                        x: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } },
+                        y: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } }
                     }
                 }
             });
@@ -1629,7 +1331,7 @@
                     datasets: [{
                         label: 'Ingreso (USD)',
                         data: productRevenue,
-                        backgroundColor: '#a855f7',
+                        backgroundColor: '#81D8D0',
                         borderRadius: 4,
                         maxBarThickness: 50
                     }]
@@ -1639,11 +1341,11 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     },
                     scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
+                        x: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } },
+                        y: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } }
                     }
                 }
             });
@@ -1651,7 +1353,7 @@
             // Collections Donut
             const collectionNames = Object.keys(weekData.collections);
             const collectionRevenue = Object.values(weekData.collections).map(c => c.revenue);
-            const collectionColors = ['#06b6d4', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#64748b'];
+            const collectionColors = ['#81D8D0', '#F8A4B8', '#D4A574', '#5CB8B2', '#C9A96E', '#95A5A6'];
             
             const ctxCollections = document.getElementById('chartCollections').getContext('2d');
             charts.collections = new Chart(ctxCollections, {
@@ -1661,7 +1363,7 @@
                     datasets: [{
                         data: collectionRevenue,
                         backgroundColor: collectionColors.slice(0, collectionNames.length),
-                        borderColor: '#0a0f1e',
+                        borderColor: '#FFFFFF',
                         borderWidth: 2
                     }]
                 },
@@ -1669,7 +1371,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     }
                 }
             });
@@ -1677,7 +1379,7 @@
             // Pieces Donut
             const pieceNames = Object.keys(weekData.pieces);
             const pieceRevenue = Object.values(weekData.pieces).map(p => p.revenue);
-            const pieceColors = ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#8b5cf6'];
+            const pieceColors = ['#008080', '#D4A574', '#D4A574', '#5CB8B2', '#C9A96E'];
             
             const ctxPieces = document.getElementById('chartPieces').getContext('2d');
             charts.pieces = new Chart(ctxPieces, {
@@ -1687,7 +1389,7 @@
                     datasets: [{
                         data: pieceRevenue,
                         backgroundColor: pieceColors.slice(0, pieceNames.length),
-                        borderColor: '#0a0f1e',
+                        borderColor: '#FFFFFF',
                         borderWidth: 2
                     }]
                 },
@@ -1695,7 +1397,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     }
                 }
             });
@@ -1718,14 +1420,14 @@
                         {
                             label: 'MIA',
                             data: monthlyMIA,
-                            backgroundColor: '#a855f7',
+                            backgroundColor: '#81D8D0',
                             borderRadius: 4,
                             maxBarThickness: 50
                         },
                         {
                             label: 'IG',
                             data: monthlyIG,
-                            backgroundColor: '#3b82f6',
+                            backgroundColor: '#D4A574',
                             borderRadius: 4,
                             maxBarThickness: 50
                         }
@@ -1735,11 +1437,11 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     },
                     scales: {
-                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } },
-                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#1f2937' } }
+                        x: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } },
+                        y: { ticks: { color: '#7F8C8D' }, grid: { color: '#E8E8E4' } }
                     }
                 }
             });
@@ -1747,7 +1449,7 @@
             // Collections YTD
             const collectionNames = Object.keys(ytdData.collections);
             const collectionRevenue = Object.values(ytdData.collections).map(c => c.revenue);
-            const collectionColors = ['#06b6d4', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6', '#64748b', '#d946ef'];
+            const collectionColors = ['#81D8D0', '#F8A4B8', '#D4A574', '#5CB8B2', '#C9A96E', '#95A5A6', '#E8849A'];
             
             const ctxCollectionsYTD = document.getElementById('chartCollectionsYTD').getContext('2d');
             charts.collectionsYTD = new Chart(ctxCollectionsYTD, {
@@ -1757,7 +1459,7 @@
                     datasets: [{
                         data: collectionRevenue,
                         backgroundColor: collectionColors.slice(0, collectionNames.length),
-                        borderColor: '#0a0f1e',
+                        borderColor: '#FFFFFF',
                         borderWidth: 2
                     }]
                 },
@@ -1765,7 +1467,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     }
                 }
             });
@@ -1773,7 +1475,7 @@
             // Pieces YTD
             const pieceNames = Object.keys(ytdData.pieces);
             const pieceRevenue = Object.values(ytdData.pieces).map(p => p.revenue);
-            const pieceColors = ['#3b82f6', '#ef4444', '#8b5cf6', '#f59e0b', '#10b981', '#06b6d4', '#ec4899', '#d946ef', '#fbbf24', '#059669', '#64748b', '#94a3b8'];
+            const pieceColors = ['#D4A574', '#008080', '#C9A96E', '#D4A574', '#5CB8B2', '#81D8D0', '#F8A4B8', '#E8849A', '#C9A96E', '#5CB8B2', '#95A5A6', '#B8B8B8'];
             
             const ctxPiecesYTD = document.getElementById('chartPiecesYTD').getContext('2d');
             charts.piecesYTD = new Chart(ctxPiecesYTD, {
@@ -1783,7 +1485,7 @@
                     datasets: [{
                         data: pieceRevenue,
                         backgroundColor: pieceColors.slice(0, pieceNames.length),
-                        borderColor: '#0a0f1e',
+                        borderColor: '#FFFFFF',
                         borderWidth: 2
                     }]
                 },
@@ -1791,7 +1493,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: '#9ca3af' } }
+                        legend: { labels: { color: '#7F8C8D' } }
                     }
                 }
             });
