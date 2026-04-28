@@ -3,832 +3,506 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Semanal - IG Alvaro Obregon - 6-12 Abril 2026</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<title>Reporte Ventas Semanal — IG Alvaro Obregon</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #0f172a; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; }
-.container { max-width: 1400px; margin: 0 auto; }
-.header { text-align: center; margin-bottom: 30px; padding: 30px; background: linear-gradient(135deg, #1e293b, #334155); border-radius: 16px; border: 1px solid #475569; }
-.header h1 { font-size: 28px; color: #f8fafc; margin-bottom: 8px; }
-.header .subtitle { color: #94a3b8; font-size: 16px; }
-.header .week { color: #3b82f6; font-size: 20px; font-weight: 600; margin-top: 8px; }
-
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px; }
-.kpi-card { background: #1e293b; border-radius: 12px; padding: 20px; text-align: center; border: 1px solid #334155; transition: transform 0.2s; }
-.kpi-card:hover { transform: translateY(-2px); border-color: #3b82f6; }
-.kpi-label { color: #94a3b8; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
-.kpi-value { font-size: 28px; font-weight: 700; color: #f8fafc; margin: 8px 0; }
-.kpi-value.revenue { color: #10b981; }
-
-.day-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 30px; }
-.day-card { background: #1e293b; border-radius: 12px; padding: 16px; text-align: center; border: 1px solid #334155; position: relative; }
-.day-card.best-day { border-color: #f59e0b; background: linear-gradient(135deg, #1e293b, #422006); }
-.day-card.no-sales { opacity: 0.5; }
-.day-name { font-size: 14px; font-weight: 600; color: #94a3b8; }
-.day-date { font-size: 12px; color: #64748b; }
-.day-revenue { font-size: 20px; font-weight: 700; color: #10b981; margin: 8px 0 4px; }
-.day-count { font-size: 12px; color: #94a3b8; }
-.star { position: absolute; top: 8px; right: 8px; }
-
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; margin-bottom: 30px; }
-.chart-card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #334155; }
-.chart-card h3 { color: #f8fafc; margin-bottom: 16px; font-size: 16px; }
-.chart-card canvas { max-height: 350px; }
-
-.section { margin-bottom: 30px; }
-.section h2 { color: #f8fafc; font-size: 20px; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid #3b82f6; }
-
-table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; }
-th { background: #334155; color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 12px 16px; text-align: left; }
-td { padding: 10px 16px; border-bottom: 1px solid #1e293b; font-size: 14px; }
-tr:hover { background: #334155; }
-.amount { font-weight: 600; color: #10b981; text-align: right; }
-
-.rank-badge { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 50%; font-size: 12px; font-weight: 700; background: #334155; color: #94a3b8; }
-.rank-badge.gold { background: #f59e0b; color: #000; }
-.rank-badge.silver { background: #94a3b8; color: #000; }
-.rank-badge.bronze { background: #b45309; color: #fff; }
-
-.cat-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; background: #334155; color: #94a3b8; }
-
-.progress-bar { width: 100%; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); border-radius: 4px; transition: width 0.3s; }
-
-.day-section { margin-bottom: 20px; }
-.day-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #334155; border-radius: 8px 8px 0 0; }
-.day-header h3 { color: #f8fafc; font-size: 16px; }
-.day-summary { color: #10b981; font-weight: 600; }
-.tx-table { border-radius: 0 0 8px 8px; }
-.products-cell { font-size: 12px; color: #94a3b8; max-width: 300px; }
-tr.voided td { text-decoration: line-through; opacity: 0.5; }
-.badge-void { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; background: #ef4444; color: #fff; margin-left: 4px; text-decoration: none; }
-
-.footer { text-align: center; padding: 20px; color: #64748b; font-size: 12px; margin-top: 30px; border-top: 1px solid #334155; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;padding:20px;max-width:1400px;margin:0 auto}
+h1{text-align:center;font-size:1.8em;margin-bottom:5px;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{text-align:center;color:#94a3b8;margin-bottom:30px;font-size:0.95em}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:30px}
+.kpi-card{background:linear-gradient(135deg,#1e293b,#334155);border-radius:12px;padding:20px;text-align:center;border:1px solid #475569}
+.kpi-value{font-size:2em;font-weight:700;color:#60a5fa}
+.kpi-value.green{color:#34d399}
+.kpi-value.purple{color:#a78bfa}
+.kpi-value.amber{color:#fbbf24}
+.kpi-value.pink{color:#f472b6}
+.kpi-label{color:#94a3b8;font-size:0.85em;margin-top:5px}
+.day-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:30px}
+.day-card{background:#1e293b;border-radius:10px;padding:15px;text-align:center;border:1px solid #334155;transition:transform 0.2s}
+.day-card:hover{transform:translateY(-2px)}
+.day-card.best-day{border-color:#fbbf24;background:linear-gradient(135deg,#1e293b,#422006)}
+.day-name{font-weight:600;font-size:0.95em;margin-bottom:3px}
+.day-date{color:#64748b;font-size:0.75em;margin-bottom:8px}
+.day-revenue{font-size:1.3em;font-weight:700;color:#60a5fa}
+.day-count{color:#94a3b8;font-size:0.8em;margin-top:3px}
+.section{margin-bottom:30px}
+.section-title{font-size:1.3em;font-weight:600;margin-bottom:15px;padding-left:10px;border-left:3px solid #60a5fa}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:20px;margin-bottom:30px}
+.chart-card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155}
+.chart-title{font-size:1em;font-weight:600;margin-bottom:15px;color:#cbd5e1}
+table{width:100%;border-collapse:collapse;margin-bottom:15px}
+th{background:#1e293b;color:#94a3b8;padding:10px 12px;text-align:left;font-size:0.8em;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid #334155}
+td{padding:10px 12px;border-bottom:1px solid #1e293b}
+tr:hover{background:#1e293b80}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.progress-bar{width:100%;height:6px;background:#334155;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#60a5fa);border-radius:3px}
+.rank-badge{display:inline-block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;font-weight:700;font-size:0.8em}
+.rank-badge.gold{background:#fbbf24;color:#1e293b}
+.rank-badge.silver{background:#94a3b8;color:#1e293b}
+.rank-badge.bronze{background:#d97706;color:#1e293b}
+.rank-num{color:#64748b;font-size:0.85em}
+.cat-badge{background:#334155;color:#94a3b8;padding:2px 8px;border-radius:4px;font-size:0.75em}
+.vip-badge{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1e293b;padding:1px 6px;border-radius:3px;font-size:0.7em;font-weight:600}
+.day-group{margin-bottom:20px}
+.day-header{font-size:1.1em;padding:10px 15px;background:#1e293b;border-radius:8px 8px 0 0;border:1px solid #334155;border-bottom:none}
+.txn-card{background:#1e293b;padding:12px 15px;border:1px solid #334155;border-top:none;font-size:0.9em}
+.txn-card:last-child{border-radius:0 0 8px 8px}
+.txn-card.voided{opacity:0.5;text-decoration:line-through}
+.txn-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:5px}
+.txn-invoice{font-weight:600;color:#60a5fa}
+.txn-time{color:#94a3b8}
+.txn-total{font-weight:700;color:#34d399}
+.txn-customer{color:#a78bfa;font-size:0.85em;margin:4px 0}
+.txn-item{display:flex;justify-content:space-between;color:#94a3b8;font-size:0.85em;padding:2px 0}
+.badge-void{background:#ef4444;color:white;padding:1px 6px;border-radius:3px;font-size:0.7em}
+.footer{text-align:center;color:#475569;font-size:0.8em;margin-top:40px;padding:20px;border-top:1px solid #1e293b}
+@media(max-width:600px){
+  .chart-grid{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .day-grid{grid-template-columns:repeat(3,1fr)}
+  body{padding:10px}
+}
 </style>
 </head>
 <body>
-<div class="container">
 
-<div class="header">
-    <h1>Ivan Guaderrama Gallery</h1>
-    <div class="subtitle">Reporte Semanal de Ventas — IG Alvaro Obregon</div>
-    <div class="week">Semana del 6-12 Abril 2026</div>
-</div>
+<h1>Ivan Guaderrama Gallery</h1>
+<div class="subtitle">Reporte Semanal de Ventas — IG Alvaro Obregón<br>2026-04-20 al 2026-04-26</div>
 
 <div class="kpi-grid">
-    <div class="kpi-card">
-        <div class="kpi-label">Ventas Totales</div>
-        <div class="kpi-value revenue">$20,071.55</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label">Transacciones</div>
-        <div class="kpi-value">28</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label">Ticket Promedio</div>
-        <div class="kpi-value">$716.84</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label">Productos Únicos</div>
-        <div class="kpi-value">38</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label">Clientes Únicos</div>
-        <div class="kpi-value">24</div>
-    </div>
+    <div class="kpi-card"><div class="kpi-value">$13,371.00</div><div class="kpi-label">Ventas Totales</div></div>
+    <div class="kpi-card"><div class="kpi-value green">12</div><div class="kpi-label">Transacciones</div></div>
+    <div class="kpi-card"><div class="kpi-value purple">$1,114.25</div><div class="kpi-label">Ticket Promedio</div></div>
+    <div class="kpi-card"><div class="kpi-value amber">9</div><div class="kpi-label">Productos Únicos</div></div>
+    <div class="kpi-card"><div class="kpi-value pink">12</div><div class="kpi-label">Clientes Únicos</div></div>
 </div>
 
-<div class="day-cards">
-    <div class="day-card">
-        
+<div class="section">
+    <div class="section-title">Ventas por Día</div>
+    <div class="day-grid"><div class="day-card">
         <div class="day-name">Lunes</div>
-        <div class="day-date">06/04</div>
-        <div class="day-revenue">$48.00</div>
-        <div class="day-count">1 ventas</div>
+        <div class="day-date"></div>
+        <div class="day-revenue">$0.00</div>
+        <div class="day-count">0 ventas</div>
     </div><div class="day-card">
-        
         <div class="day-name">Martes</div>
-        <div class="day-date">07/04</div>
-        <div class="day-revenue">$49.00</div>
-        <div class="day-count">1 ventas</div>
-    </div><div class="day-card best-day">
-        <span class="star">⭐</span>
+        <div class="day-date">2026-04-21</div>
+        <div class="day-revenue">$52.00</div>
+        <div class="day-count">1 venta</div>
+    </div><div class="day-card">
         <div class="day-name">Miércoles</div>
-        <div class="day-date">08/04</div>
-        <div class="day-revenue">$8,832.00</div>
-        <div class="day-count">5 ventas</div>
+        <div class="day-date"></div>
+        <div class="day-revenue">$0.00</div>
+        <div class="day-count">0 ventas</div>
+    </div><div class="day-card best-day">
+        <div class="day-name">👑 Jueves</div>
+        <div class="day-date">2026-04-23</div>
+        <div class="day-revenue">$13,049.00</div>
+        <div class="day-count">9 ventas</div>
     </div><div class="day-card">
-        
-        <div class="day-name">Jueves</div>
-        <div class="day-date">09/04</div>
-        <div class="day-revenue">$4,821.00</div>
-        <div class="day-count">14 ventas</div>
-    </div><div class="day-card">
-        
         <div class="day-name">Viernes</div>
-        <div class="day-date">10/04</div>
-        <div class="day-revenue">$6,295.55</div>
-        <div class="day-count">6 ventas</div>
+        <div class="day-date">2026-04-24</div>
+        <div class="day-revenue">$80.00</div>
+        <div class="day-count">1 venta</div>
     </div><div class="day-card">
-        
         <div class="day-name">Sábado</div>
-        <div class="day-date">11/04</div>
-        <div class="day-revenue">$26.00</div>
-        <div class="day-count">1 ventas</div>
-    </div><div class="day-card no-sales">
-            <div class="day-name">Domingo</div>
-            <div class="day-date">12/04</div>
-            <div class="day-revenue">$0.00</div>
-            <div class="day-count">0 ventas</div>
-        </div>
+        <div class="day-date">2026-04-25</div>
+        <div class="day-revenue">$190.00</div>
+        <div class="day-count">1 venta</div>
+    </div><div class="day-card">
+        <div class="day-name">Domingo</div>
+        <div class="day-date"></div>
+        <div class="day-revenue">$0.00</div>
+        <div class="day-count">0 ventas</div>
+    </div></div>
 </div>
 
-<div class="charts-grid">
+<div class="chart-grid">
     <div class="chart-card">
-        <h3>Ingresos por Día</h3>
-        <canvas id="revenueChart"></canvas>
+        <div class="chart-title">Ingresos por Día</div>
+        <canvas id="chartDayRev"></canvas>
     </div>
     <div class="chart-card">
-        <h3>Distribución por Categoría</h3>
-        <canvas id="categoryChart"></canvas>
+        <div class="chart-title">Distribución por Categoría</div>
+        <canvas id="chartCat"></canvas>
     </div>
     <div class="chart-card">
-        <h3>Top 10 Productos por Cantidad</h3>
-        <canvas id="topProductsChart"></canvas>
+        <div class="chart-title">Top Productos por Cantidad</div>
+        <canvas id="chartProdQty"></canvas>
     </div>
     <div class="chart-card">
-        <h3>Transacciones por Día</h3>
-        <canvas id="txChart"></canvas>
+        <div class="chart-title">Transacciones por Día</div>
+        <canvas id="chartDayCount"></canvas>
     </div>
-    <div class="chart-card" style="grid-column: 1 / -1;">
-        <h3>Ventas por Hora (Ingresos y Transacciones)</h3>
-        <canvas id="hourlyChart"></canvas>
+    <div class="chart-card" style="grid-column:1/-1">
+        <div class="chart-title">Ventas por Hora (Ingresos y Transacciones)</div>
+        <canvas id="chartHour"></canvas>
     </div>
 </div>
 
 <div class="section">
-    <h2>Top Productos por Ingreso</h2>
+    <div class="section-title">Productos por Ingreso</div>
     <table>
-        <thead><tr><th>Rank</th><th>Producto</th><th>SKU</th><th>Categoría</th><th>Ingreso</th><th>% del Top</th></tr></thead>
+        <thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Cant.</th><th>Ingreso</th><th>%</th></tr></thead>
         <tbody><tr>
         <td><span class="rank-badge gold">#1</span></td>
-        <td>Butterfly Heart Burst</td>
-        <td>40452</td>
-        <td><span class="cat-badge">Wall sculpture /Limited Edition</span></td>
-        <td class="amount">$9,204.00</td>
+        <td>Original Paint</td>
+        <td><span class="cat-badge">Original</span></td>
+        <td class="num">1</td>
+        <td class="num">$12,300.00</td>
         <td><div class="progress-bar"><div class="progress-fill" style="width:100.0%"></div></div></td>
     </tr><tr>
         <td><span class="rank-badge silver">#2</span></td>
-        <td>Original / Thankful Hearts</td>
-        <td>40317</td>
-        <td><span class="cat-badge">Original Paint</span></td>
-        <td class="amount">$4,930.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:53.563667970447625%"></div></div></td>
+        <td>GICLEE COLLECTION</td>
+        <td><span class="cat-badge">Canvas</span></td>
+        <td class="num">3</td>
+        <td class="num">$559.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:4.544715447154472%"></div></div></td>
     </tr><tr>
         <td><span class="rank-badge bronze">#3</span></td>
-        <td>Ay Chihuahua</td>
-        <td>11463</td>
-        <td><span class="cat-badge">Interactive & Hand Retouch Painting</span></td>
-        <td class="amount">$4,674.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:50.78226857887876%"></div></div></td>
+        <td>Big Canvas</td>
+        <td><span class="cat-badge">Canvas</span></td>
+        <td class="num">4</td>
+        <td class="num">$236.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:1.91869918699187%"></div></div></td>
     </tr><tr>
-        <td><span class="rank-badge ">#4</span></td>
+        <td><span class="rank-num">#4</span></td>
+        <td>Perfume</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">2</td>
+        <td class="num">$80.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.6504065040650406%"></div></div></td>
+    </tr><tr>
+        <td><span class="rank-num">#5</span></td>
+        <td>MINI canvas desk</td>
+        <td><span class="cat-badge">Mini canvas desk</span></td>
+        <td class="num">2</td>
+        <td class="num">$78.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.6341463414634146%"></div></div></td>
+    </tr><tr>
+        <td><span class="rank-num">#6</span></td>
+        <td>Mirrors</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">2</td>
+        <td class="num">$52.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.42276422764227645%"></div></div></td>
+    </tr><tr>
+        <td><span class="rank-num">#7</span></td>
+        <td>Small Canvas</td>
+        <td><span class="cat-badge">Sin categoría</span></td>
+        <td class="num">2</td>
+        <td class="num">$36.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.2926829268292683%"></div></div></td>
+    </tr><tr>
+        <td><span class="rank-num">#8</span></td>
+        <td>Magnets</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">1</td>
+        <td class="num">$30.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.24390243902439024%"></div></div></td>
+    </tr><tr>
+        <td><span class="rank-num">#9</span></td>
         <td>Custom Shipping</td>
-        <td>10963</td>
-        <td><span class="cat-badge">Custom Shipping</span></td>
-        <td class="amount">$1,167.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:12.679269882659714%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#5</span></td>
-        <td>Masterpieces Of Love / Necklace / La Cruz</td>
-        <td>40220</td>
-        <td><span class="cat-badge">MIA JEWELRY IG</span></td>
-        <td class="amount">$222.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.411994784876141%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#6</span></td>
-        <td>INTERACTIVE / LAST SUPPER LANDSCAPE 96X60</td>
-        <td>IN60LS</td>
-        <td><span class="cat-badge">INTERACTIVE GICLEE 60 X 60</span></td>
-        <td class="amount">$190.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.06431986093003%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#7</span></td>
-        <td>INTERACTIVE / Love Is Patient</td>
-        <td>40202</td>
-        <td><span class="cat-badge">GICLEE COLLECTION</span></td>
-        <td class="amount">$190.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.06431986093003%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#8</span></td>
-        <td>Sea Bless / Ring / Protect My Love</td>
-        <td>34687</td>
-        <td><span class="cat-badge">MIA JEWELRY IG</span></td>
-        <td class="amount">$153.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.6623207301173404%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#9</span></td>
-        <td>Interactive / Celebrating life</td>
-        <td>41441</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$144.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.564537157757497%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#10</span></td>
-        <td>Interactive / Los cabos In Your Heart</td>
-        <td>40132</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$144.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.564537157757497%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#11</span></td>
-        <td>Interactive / Angel of Protection</td>
-        <td>11002</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.0430247718383312%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#12</span></td>
-        <td>Interactive / Colors of Faith Los Cabos</td>
-        <td>39893</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.0430247718383312%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#13</span></td>
-        <td>Interactive / Los Cabos Whale</td>
-        <td>11393</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.0430247718383312%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#14</span></td>
-        <td>Interactive / Love is Patient Love is Kind</td>
-        <td>11007</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.0430247718383312%"></div></div></td>
-    </tr><tr>
-        <td><span class="rank-badge ">#15</span></td>
-        <td>Sea Bless / Ring / Silver Ring</td>
-        <td>40109</td>
-        <td><span class="cat-badge">MIA JEWELRY IG</span></td>
-        <td class="amount">$89.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.9669708822251195%"></div></div></td>
+        <td><span class="cat-badge">Services</span></td>
+        <td class="num">1</td>
+        <td class="num">$0.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.0%"></div></div></td>
     </tr></tbody>
     </table>
 </div>
 
 <div class="section">
-    <h2>Top Productos por Cantidad</h2>
+    <div class="section-title">Productos por Cantidad</div>
     <table>
-        <thead><tr><th>#</th><th>Producto</th><th>SKU</th><th>Categoría</th><th>Qty</th><th>Ingreso</th></tr></thead>
+        <thead><tr><th>#</th><th>Producto</th><th>Categoría</th><th>Cant.</th><th>Ingreso</th><th>%</th></tr></thead>
         <tbody><tr>
         <td>#1</td>
-        <td>Interactive / Celebrating life</td>
-        <td>41441</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>3</td>
-        <td class="amount">$144.00</td>
-    </tr><tr>
-        <td>#2</td>
-        <td>Interactive / Los cabos In Your Heart</td>
-        <td>40132</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>3</td>
-        <td class="amount">$144.00</td>
-    </tr><tr>
-        <td>#3</td>
-        <td>Scarf / Woman / Capilla</td>
-        <td>40089</td>
-        <td><span class="cat-badge">IG Jewelry</span></td>
-        <td>2</td>
-        <td class="amount">$0.00</td>
-    </tr><tr>
-        <td>#4</td>
-        <td>Scarf / Woman / Unconditional Love</td>
-        <td>40090</td>
-        <td><span class="cat-badge">IG Jewelry</span></td>
-        <td>2</td>
-        <td class="amount">$0.00</td>
-    </tr><tr>
-        <td>#5</td>
-        <td>Masterpieces Of Love / Necklace / La Cruz</td>
-        <td>40220</td>
-        <td><span class="cat-badge">MIA JEWELRY IG</span></td>
-        <td>2</td>
-        <td class="amount">$222.00</td>
-    </tr><tr>
-        <td>#6</td>
-        <td>Custom Shipping</td>
-        <td>10963</td>
-        <td><span class="cat-badge">Custom Shipping</span></td>
-        <td>2</td>
-        <td class="amount">$1,167.00</td>
-    </tr><tr>
-        <td>#7</td>
-        <td>Textured Magnets / On My Way To Heaven</td>
-        <td>40088</td>
-        <td><span class="cat-badge">Magnets</span></td>
-        <td>2</td>
-        <td class="amount">$60.00</td>
-    </tr><tr>
-        <td>#8</td>
-        <td>Interactive / Family is Love</td>
-        <td>11004</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$48.00</td>
-    </tr><tr>
-        <td>#9</td>
-        <td>Interactive / Angel of Protection</td>
-        <td>11002</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$96.00</td>
-    </tr><tr>
-        <td>#10</td>
-        <td>Family is Love</td>
-        <td>11025</td>
-        <td><span class="cat-badge">Small Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$0.00</td>
-    </tr><tr>
-        <td>#11</td>
-        <td>Ay Chihuahua</td>
-        <td>11463</td>
-        <td><span class="cat-badge">Interactive & Hand Retouch Painting</span></td>
-        <td>2</td>
-        <td class="amount">$4,674.00</td>
-    </tr><tr>
-        <td>#12</td>
-        <td>Interactive / Colors of Faith Los Cabos</td>
-        <td>39893</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$96.00</td>
-    </tr><tr>
-        <td>#13</td>
-        <td>Interactive / Los Cabos Whale</td>
-        <td>11393</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$96.00</td>
-    </tr><tr>
-        <td>#14</td>
-        <td>Interactive / Love is Patient Love is Kind</td>
-        <td>11007</td>
-        <td><span class="cat-badge">Big Canvas</span></td>
-        <td>2</td>
-        <td class="amount">$96.00</td>
-    </tr><tr>
-        <td>#15</td>
-        <td>Azel / Mirror</td>
-        <td>10038</td>
-        <td><span class="cat-badge">Mirrors</span></td>
-        <td>1</td>
-        <td class="amount">$26.00</td>
-    </tr></tbody>
-    </table>
-</div>
-
-<div class="section">
-    <h2>Clientes</h2>
-    <table>
-        <thead><tr><th>Cliente</th><th>Compras</th><th>Total</th><th>% del Top</th></tr></thead>
-        <tbody><tr>
-        <td>Jill Jhonson 🌟</td>
-        <td>2</td>
-        <td class="amount">$8,400.00</td>
+        <td>Big Canvas</td>
+        <td><span class="cat-badge">Canvas</span></td>
+        <td class="num">4</td>
+        <td class="num">$236.00</td>
         <td><div class="progress-bar"><div class="progress-fill" style="width:100.0%"></div></div></td>
     </tr><tr>
-        <td>Tracy Kot 🌟</td>
-        <td>1</td>
-        <td class="amount">$5,491.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:65.36904761904762%"></div></div></td>
+        <td>#2</td>
+        <td>GICLEE COLLECTION</td>
+        <td><span class="cat-badge">Canvas</span></td>
+        <td class="num">3</td>
+        <td class="num">$559.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:75.0%"></div></div></td>
     </tr><tr>
-        <td>ROBERT PAZDERKA 🌟</td>
-        <td>1</td>
-        <td class="amount">$4,000.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:47.61904761904761%"></div></div></td>
+        <td>#3</td>
+        <td>Mirrors</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">2</td>
+        <td class="num">$52.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:50.0%"></div></div></td>
     </tr><tr>
-        <td>Walk-in</td>
-        <td>2</td>
-        <td class="amount">$300.05</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:3.5720238095238095%"></div></div></td>
+        <td>#4</td>
+        <td>MINI canvas desk</td>
+        <td><span class="cat-badge">Mini canvas desk</span></td>
+        <td class="num">2</td>
+        <td class="num">$78.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:50.0%"></div></div></td>
     </tr><tr>
-        <td>YUCA</td>
-        <td>2</td>
-        <td class="amount">$240.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.857142857142857%"></div></div></td>
+        <td>#5</td>
+        <td>Small Canvas</td>
+        <td><span class="cat-badge">Sin categoría</span></td>
+        <td class="num">2</td>
+        <td class="num">$36.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:50.0%"></div></div></td>
     </tr><tr>
-        <td>walk inn</td>
-        <td>2</td>
-        <td class="amount">$238.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.833333333333333%"></div></div></td>
+        <td>#6</td>
+        <td>Perfume</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">2</td>
+        <td class="num">$80.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:50.0%"></div></div></td>
     </tr><tr>
-        <td>stephen shipley</td>
-        <td>1</td>
-        <td class="amount">$203.50</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.422619047619048%"></div></div></td>
+        <td>#7</td>
+        <td>Magnets</td>
+        <td><span class="cat-badge">Souvenir</span></td>
+        <td class="num">1</td>
+        <td class="num">$30.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:25.0%"></div></div></td>
     </tr><tr>
-        <td>MICHEL ALLARD</td>
-        <td>1</td>
-        <td class="amount">$190.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:2.261904761904762%"></div></div></td>
+        <td>#8</td>
+        <td>Original Paint</td>
+        <td><span class="cat-badge">Original</span></td>
+        <td class="num">1</td>
+        <td class="num">$12,300.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:25.0%"></div></div></td>
     </tr><tr>
-        <td>marine sauter</td>
-        <td>1</td>
-        <td class="amount">$144.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.7142857142857144%"></div></div></td>
-    </tr><tr>
-        <td>SUSAN GELPI</td>
-        <td>1</td>
-        <td class="amount">$111.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.3214285714285714%"></div></div></td>
-    </tr><tr>
-        <td>HECTOR VALDES</td>
-        <td>1</td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.1428571428571428%"></div></div></td>
-    </tr><tr>
-        <td>JULIO E CASANOVAS</td>
-        <td>1</td>
-        <td class="amount">$96.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:1.1428571428571428%"></div></div></td>
-    </tr><tr>
-        <td>ANA GUERRERO</td>
-        <td>1</td>
-        <td class="amount">$72.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.8571428571428572%"></div></div></td>
-    </tr><tr>
-        <td>Janeen Thompson</td>
-        <td>1</td>
-        <td class="amount">$49.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5833333333333334%"></div></div></td>
-    </tr><tr>
-        <td>walking</td>
-        <td>1</td>
-        <td class="amount">$49.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5833333333333334%"></div></div></td>
-    </tr><tr>
-        <td>SCOTT IAN MCCALLUM</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5714285714285714%"></div></div></td>
-    </tr><tr>
-        <td>DAVID RICHER</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5714285714285714%"></div></div></td>
-    </tr><tr>
-        <td>christinemrs solar</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5714285714285714%"></div></div></td>
-    </tr><tr>
-        <td>walk inn</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5714285714285714%"></div></div></td>
-    </tr><tr>
-        <td>Amanda winn</td>
-        <td>1</td>
-        <td class="amount">$48.00</td>
-        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5714285714285714%"></div></div></td>
+        <td>#9</td>
+        <td>Custom Shipping</td>
+        <td><span class="cat-badge">Services</span></td>
+        <td class="num">1</td>
+        <td class="num">$0.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:25.0%"></div></div></td>
     </tr></tbody>
     </table>
 </div>
 
 <div class="section">
-    <h2>Detalle de Transacciones</h2>
-    <div class="day-section">
-    <div class="day-header">
-        <h3>Lunes 06/04/2026</h3>
-        <span class="day-summary">1 transacciones · $48.00 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
+    <div class="section-title">Clientes</div>
+    <table>
+        <thead><tr><th>Cliente</th><th>Compras</th><th>Total</th><th>%</th></tr></thead>
         <tbody><tr>
-            <td>11:42</td>
-            <td>OBR13954</td>
-            <td>ANGELA F LUCHTERHAND</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Los cabos In Your Heart x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr></tbody></table></div><div class="day-section">
-    <div class="day-header">
-        <h3>Martes 07/04/2026</h3>
-        <span class="day-summary">1 transacciones · $49.00 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
-        <tbody><tr>
-            <td>12:50</td>
-            <td>OBR13955</td>
-            <td>walking</td>
-            <td>Fatima</td>
-            <td class="products-cell">Big / Woman / Baja Bloom x1 ($49.00)</td>
-            <td class="amount">$49.00</td>
-        </tr></tbody></table></div><div class="day-section">
-    <div class="day-header">
-        <h3>Miércoles 08/04/2026</h3>
-        <span class="day-summary">5 transacciones · $8,832.00 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
-        <tbody><tr>
-            <td>14:23</td>
-            <td>OBR13956</td>
-            <td>Jill Jhonson</td>
-            <td>lluvia</td>
-            <td class="products-cell">Butterfly Heart Burst x1 ($9,204.00)<br>Custom Shipping x1 ($606.00)<br>Discount x-1 ($-1,410.00)</td>
-            <td class="amount">$8,400.00</td>
-        </tr><tr>
-            <td>18:11</td>
-            <td>OBR13957</td>
-            <td>Amanda winn</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Colors of Faith Los Cabos x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>19:44</td>
-            <td>OBR13958</td>
-            <td>YUCA</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Los Cabos Whale x1 ($48.00)<br>Interactive / Angel of Protection x1 ($48.00)<br>Interactive / Love is Patient Love is Kind x1 ($48.00)<br>Interactive / Ay Chihuahua x1 ($48.00)<br>Paint Horse x1 ($0.00)<br>James 2:26 x1 ($0.00)</td>
-            <td class="amount">$192.00</td>
-        </tr><tr>
-            <td>19:53</td>
-            <td>OBR13959</td>
-            <td>marine sauter</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Los Cabos Whale x1 ($48.00)<br>Interactive / Eternal Flame x1 ($48.00)<br>Interactive / Love is Patient Love is Kind x1 ($48.00)<br>Family is Love x1 ($0.00)</td>
-            <td class="amount">$144.00</td>
-        </tr><tr>
-            <td>20:30</td>
-            <td>OBR13960</td>
-            <td>YUCA</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Celebrating life x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr></tbody></table></div><div class="day-section">
-    <div class="day-header">
-        <h3>Jueves 09/04/2026</h3>
-        <span class="day-summary">14 transacciones · $4,821.00 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
-        <tbody><tr>
-            <td>10:43</td>
-            <td>OBR13961</td>
-            <td>Jill Jhonson</td>
-            <td>lluvia</td>
-            <td class="products-cell">Scarf / Woman / Capilla x1 ($0.00)</td>
-            <td class="amount">$0.00</td>
-        </tr><tr>
-            <td>13:28</td>
-            <td>OBR13962</td>
-            <td>walk inn</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Los cabos In Your Heart x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>13:55</td>
-            <td>OBR13963</td>
-            <td>walk inn</td>
-            <td>Fatima</td>
-            <td class="products-cell">Interactive / Colors of Faith Los Cabos x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>16:26</td>
-            <td>OBR13964</td>
-            <td>christinemrs solar</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / Blessed x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>17:57</td>
-            <td>OBR13965</td>
-            <td>Janeen Thompson</td>
-            <td>Imelda</td>
-            <td class="products-cell">Big / Woman / Blue Hope x1 ($49.00)</td>
-            <td class="amount">$49.00</td>
-        </tr><tr>
-            <td>18:20</td>
-            <td>OBR13966</td>
-            <td>ROBERT PAZDERKA</td>
-            <td>lluvia</td>
-            <td class="products-cell">Ay Chihuahua x2 ($4,674.00)<br>Discount x-1 ($-674.00)</td>
-            <td class="amount">$4,000.00</td>
-        </tr><tr>
-            <td>18:46</td>
-            <td>OBR13967</td>
-            <td>DAVID RICHER</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / Los cabos In Your Heart x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>18:59</td>
-            <td>OBR13968</td>
-            <td>MICHEL ALLARD</td>
-            <td>lluvia</td>
-            <td class="products-cell">INTERACTIVE / Love Is Patient x1 ($190.00)</td>
-            <td class="amount">$190.00</td>
-        </tr><tr>
-            <td>19:27</td>
-            <td>OBR13969</td>
-            <td>walking</td>
-            <td>lluvia</td>
-            <td class="products-cell">15 X 15 / Angel of protection x1 ($39.00)</td>
-            <td class="amount">$39.00</td>
-        </tr><tr>
-            <td>19:33</td>
-            <td>OBR13970</td>
-            <td>SCOTT IAN MCCALLUM</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / Celebrating life x1 ($48.00)</td>
-            <td class="amount">$48.00</td>
-        </tr><tr>
-            <td>19:52</td>
-            <td>OBR13971</td>
-            <td>JULIO E CASANOVAS</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / Today I Choose Hope x1 ($48.00)<br>Interactive / Walk By Faith x1 ($48.00)<br>God Is Able x1 ($0.00)</td>
-            <td class="amount">$96.00</td>
-        </tr><tr>
-            <td>20:55</td>
-            <td>OBR13972</td>
-            <td>ANA GUERRERO</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / With Love x1 ($48.00)<br>Interactive / Family is Love x1 ($24.00)</td>
-            <td class="amount">$72.00</td>
-        </tr><tr>
-            <td>21:01</td>
-            <td>OBR13973</td>
-            <td>HECTOR VALDES</td>
-            <td>lluvia</td>
-            <td class="products-cell">Interactive / Angel of Protection x1 ($48.00)<br>Interactive / Celebrating life x1 ($48.00)<br>Family is Love x1 ($0.00)</td>
-            <td class="amount">$96.00</td>
-        </tr><tr>
-            <td>21:12</td>
-            <td>OBR13974</td>
-            <td>MARY MCGUIRE KOLAK</td>
-            <td>lluvia</td>
-            <td class="products-cell">15 X 15 / Today i choose joy x1 ($39.00)</td>
-            <td class="amount">$39.00</td>
-        </tr></tbody></table></div><div class="day-section">
-    <div class="day-header">
-        <h3>Viernes 10/04/2026</h3>
-        <span class="day-summary">6 transacciones · $6,295.55 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
-        <tbody><tr>
-            <td>11:37</td>
-            <td>OBR13975</td>
-            <td>stephen shipley</td>
-            <td>Fatima</td>
-            <td class="products-cell">Be The ligth x1 ($19.50)<br>Textured Magnets / On My Way To Heaven x2 ($60.00)<br>Textured Magnets / Love Is Patient Love Is Kind x1 ($30.00)<br>Interactive / Family is Love x1 ($24.00)<br>Interactive / A story of Stars and Night Winds x1 ($70.00)</td>
-            <td class="amount">$203.50</td>
-        </tr><tr>
-            <td>13:22</td>
-            <td>OBR13976</td>
-            <td>walk inn</td>
-            <td>Fatima</td>
-            <td class="products-cell">INTERACTIVE / LAST SUPPER LANDSCAPE 96X60 x1 ($190.00)</td>
-            <td class="amount">$190.00</td>
-        </tr><tr>
-            <td>13:54</td>
-            <td>OBR13977</td>
-            <td>Tracy Kot</td>
-            <td>Fatima</td>
-            <td class="products-cell">Original / Thankful Hearts x1 ($4,930.00)<br>Custom Shipping x1 ($561.00)</td>
-            <td class="amount">$5,491.00</td>
-        </tr><tr>
-            <td>17:24</td>
-            <td>OBR13978</td>
-            <td>SUSAN GELPI</td>
-            <td>Fatima</td>
-            <td class="products-cell">Masterpieces Of Love / Necklace / La Cruz x1 ($111.00)</td>
-            <td class="amount">$111.00</td>
-        </tr><tr>
-            <td>19:42</td>
-            <td>OBR13979</td>
-            <td>Walk-in</td>
-            <td>Fatima</td>
-            <td class="products-cell">Sea Bless / Ring / Silver Ring x1 ($89.00)<br>Masterpieces Of Love / Necklace / La Cruz x1 ($111.00)<br>Sea Bless / Ring / Protect My Love x1 ($153.00)<br>Discount x-1 ($-52.95)</td>
-            <td class="amount">$300.05</td>
-        </tr><tr>
-            <td>19:59</td>
-            <td>OBR13980</td>
-            <td>Walk-in</td>
-            <td>Fatima</td>
-            <td class="products-cell">Scarf / Woman / Capilla x1 ($0.00)<br>Scarf / Woman / Unconditional Love x2 ($0.00)</td>
-            <td class="amount">$0.00</td>
-        </tr></tbody></table></div><div class="day-section">
-    <div class="day-header">
-        <h3>Sábado 11/04/2026</h3>
-        <span class="day-summary">1 transacciones · $26.00 USD</span>
-    </div>
-    <table class="tx-table">
-        <thead><tr><th>Hora</th><th>Factura</th><th>Cliente</th><th>Vendedor</th><th>Productos</th><th>Total</th></tr></thead>
-        <tbody><tr>
-            <td>19:00</td>
-            <td>OBR13981</td>
-            <td>ELIZABETH MORSE</td>
-            <td>Fatima</td>
-            <td class="products-cell">Azel / Mirror x1 ($26.00)</td>
-            <td class="amount">$26.00</td>
-        </tr></tbody></table></div>
+        <td>Cameron Mason <span class="vip-badge">VIP</span></td>
+        <td class="num">1</td>
+        <td class="num">$12,300.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:100.0%"></div></div></td>
+    </tr><tr>
+        <td>ALEJANDRO ALVAREZ</td>
+        <td class="num">1</td>
+        <td class="num">$190.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:1.5447154471544715%"></div></div></td>
+    </tr><tr>
+        <td>JASON TAYLOR</td>
+        <td class="num">1</td>
+        <td class="num">$190.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:1.5447154471544715%"></div></div></td>
+    </tr><tr>
+        <td>Steven Barry</td>
+        <td class="num">1</td>
+        <td class="num">$179.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:1.4552845528455285%"></div></div></td>
+    </tr><tr>
+        <td>JAN BLACKHAM</td>
+        <td class="num">1</td>
+        <td class="num">$118.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.959349593495935%"></div></div></td>
+    </tr><tr>
+        <td>Sara Henrichsen</td>
+        <td class="num">1</td>
+        <td class="num">$80.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.6504065040650406%"></div></div></td>
+    </tr><tr>
+        <td>JAN M TAYLOR</td>
+        <td class="num">1</td>
+        <td class="num">$70.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5691056910569106%"></div></div></td>
+    </tr><tr>
+        <td>RICKY TRICHELL</td>
+        <td class="num">1</td>
+        <td class="num">$69.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.5609756097560975%"></div></div></td>
+    </tr><tr>
+        <td>CLAUDIA CORTEZ LOPEZ</td>
+        <td class="num">1</td>
+        <td class="num">$52.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.42276422764227645%"></div></div></td>
+    </tr><tr>
+        <td>DEBORAH E ZEMAN</td>
+        <td class="num">1</td>
+        <td class="num">$48.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.3902439024390244%"></div></div></td>
+    </tr><tr>
+        <td>HEINKE TEICHMANN</td>
+        <td class="num">1</td>
+        <td class="num">$39.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.3170731707317073%"></div></div></td>
+    </tr><tr>
+        <td>Gregory N Shuck</td>
+        <td class="num">1</td>
+        <td class="num">$36.00</td>
+        <td><div class="progress-bar"><div class="progress-fill" style="width:0.2926829268292683%"></div></div></td>
+    </tr></tbody>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-title">Detalle de Transacciones</div>
+    <div class="day-group"><h3 class="day-header">Martes (2026-04-21) — $52.00</h3><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14015</span>
+                <span class="txn-time">14:17</span>
+                <span class="txn-total">$52.00</span>
+            </div>
+            <div class="txn-customer">CLAUDIA CORTEZ LOPEZ</div>
+            <div class="txn-item"><span>Mirrors</span><span>x2 — $52.00</span></div>
+        </div></div><div class="day-group"><h3 class="day-header">Jueves (2026-04-23) — $13,049.00</h3><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14016</span>
+                <span class="txn-time">11:47</span>
+                <span class="txn-total">$69.00</span>
+            </div>
+            <div class="txn-customer">RICKY TRICHELL</div>
+            <div class="txn-item"><span>MINI canvas desk</span><span>x1 — $39.00</span></div><div class="txn-item"><span>Magnets</span><span>x1 — $30.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14017</span>
+                <span class="txn-time">17:27</span>
+                <span class="txn-total">$70.00</span>
+            </div>
+            <div class="txn-customer">JAN M TAYLOR</div>
+            <div class="txn-item"><span>Big Canvas</span><span>x1 — $70.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14018</span>
+                <span class="txn-time">17:57</span>
+                <span class="txn-total">$118.00</span>
+            </div>
+            <div class="txn-customer">JAN BLACKHAM</div>
+            <div class="txn-item"><span>Big Canvas</span><span>x1 — $70.00</span></div><div class="txn-item"><span>Big Canvas</span><span>x1 — $48.00</span></div><div class="txn-item"><span>Small Canvas</span><span>x1 — $0.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14019</span>
+                <span class="txn-time">18:56</span>
+                <span class="txn-total">$39.00</span>
+            </div>
+            <div class="txn-customer">HEINKE TEICHMANN</div>
+            <div class="txn-item"><span>MINI canvas desk</span><span>x1 — $39.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14020</span>
+                <span class="txn-time">19:43</span>
+                <span class="txn-total">$190.00</span>
+            </div>
+            <div class="txn-customer">ALEJANDRO ALVAREZ</div>
+            <div class="txn-item"><span>GICLEE COLLECTION</span><span>x1 — $190.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14021</span>
+                <span class="txn-time">19:47</span>
+                <span class="txn-total">$48.00</span>
+            </div>
+            <div class="txn-customer">DEBORAH E ZEMAN</div>
+            <div class="txn-item"><span>Big Canvas</span><span>x1 — $48.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14022</span>
+                <span class="txn-time">20:05</span>
+                <span class="txn-total">$179.00</span>
+            </div>
+            <div class="txn-customer">Steven Barry</div>
+            <div class="txn-item"><span>GICLEE COLLECTION</span><span>x1 — $179.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14023</span>
+                <span class="txn-time">20:09</span>
+                <span class="txn-total">$36.00</span>
+            </div>
+            <div class="txn-customer">Gregory N Shuck</div>
+            <div class="txn-item"><span>Small Canvas</span><span>x1 — $36.00</span></div>
+        </div><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14024</span>
+                <span class="txn-time">21:23</span>
+                <span class="txn-total">$12,300.00</span>
+            </div>
+            <div class="txn-customer">Cameron Mason</div>
+            <div class="txn-item"><span>Original Paint</span><span>x1 — $12,300.00</span></div><div class="txn-item"><span>Custom Shipping</span><span>x1 — $0.00</span></div>
+        </div></div><div class="day-group"><h3 class="day-header">Viernes (2026-04-24) — $80.00</h3><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14025</span>
+                <span class="txn-time">11:42</span>
+                <span class="txn-total">$80.00</span>
+            </div>
+            <div class="txn-customer">Sara Henrichsen</div>
+            <div class="txn-item"><span>Perfume</span><span>x2 — $80.00</span></div>
+        </div></div><div class="day-group"><h3 class="day-header">Sábado (2026-04-25) — $190.00</h3><div class="txn-card">
+            <div class="txn-header">
+                <span class="txn-invoice">OBR14026</span>
+                <span class="txn-time">12:52</span>
+                <span class="txn-total">$190.00</span>
+            </div>
+            <div class="txn-customer">JASON TAYLOR</div>
+            <div class="txn-item"><span>GICLEE COLLECTION</span><span>x1 — $190.00</span></div>
+        </div></div>
 </div>
 
 <div class="footer">
-    Generado el 12/04/2026 08:38:14 · Hora Mazatlán (UTC-7) · Ivan Guaderrama Gallery · IG Alvaro Obregon
-</div>
-
+    Generado el 28/04/2026 13:05 — Hora Mazatlán (UTC-7)<br>
+    Ivan Guaderrama Gallery — IG Alvaro Obregón, San José del Cabo
 </div>
 
 <script>
-Chart.defaults.color = '#94a3b8';
-Chart.defaults.borderColor = '#334155';
+Chart.defaults.color='#94a3b8';
+Chart.defaults.borderColor='#334155';
+const catColors=['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#06b6d4','#f43f5e','#84cc16'];
 
-// 1. Revenue by Day
-new Chart(document.getElementById('revenueChart'), {
-    type: 'bar',
-    data: {
-        labels: ["Lunes 06/04", "Martes 07/04", "Mi\u00e9rcoles 08/04", "Jueves 09/04", "Viernes 10/04", "S\u00e1bado 11/04"],
-        datasets: [{ label: 'Ingresos USD', data: [48.0, 49.0, 8832.0, 4821.0, 6295.55, 26.0], backgroundColor: '#3b82f6', borderRadius: 8 }]
-    },
-    options: {
-        responsive: true,
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toLocaleString('en-US', {minimumFractionDigits:2}) } } },
-        scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + v.toLocaleString() } } }
-    }
+// 1. Revenue by day
+new Chart(document.getElementById('chartDayRev'),{
+    type:'bar',
+    data:{labels:["Lunes", "Martes", "Mi\u00e9rcoles", "Jueves", "Viernes", "S\u00e1bado", "Domingo"],datasets:[{label:'Ingresos USD',data:[0, 52.0, 0, 13049.0, 80.0, 190.0, 0],backgroundColor:'#3b82f680',borderColor:'#3b82f6',borderWidth:1,borderRadius:6}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v.toLocaleString()}}}}
 });
 
-// 2. Category Donut
-new Chart(document.getElementById('categoryChart'), {
-    type: 'doughnut',
-    data: {
-        labels: ["Wall sculpture /Limited Edition", "Original Paint", "Interactive & Hand Retouch Painting", "Custom Shipping", "Big Canvas", "MIA JEWELRY IG", "INTERACTIVE GICLEE 60 X 60", "GICLEE COLLECTION"],
-        datasets: [{ data: [9204.0, 4930.0, 4674.0, 1167.0, 1078.0, 464.0, 190.0, 190.0], backgroundColor: ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16"], borderWidth: 0 }]
-    },
-    options: {
-        responsive: true,
-        plugins: { legend: { position: 'right', labels: { padding: 12, font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => ctx.label + ': $' + ctx.parsed.toLocaleString('en-US', {minimumFractionDigits:2}) } } }
-    }
+// 2. Category donut
+new Chart(document.getElementById('chartCat'),{
+    type:'doughnut',
+    data:{labels:["Original", "Canvas", "Souvenir", "Mini canvas desk", "Sin categor\u00eda", "Services"],datasets:[{data:[12300.0, 795.0, 162.0, 78.0, 36.0, 0.0],backgroundColor:catColors,borderWidth:0}]},
+    options:{responsive:true,plugins:{legend:{position:'right',labels:{padding:12}}}}
 });
 
-// 3. Top Products Horizontal Bar
-new Chart(document.getElementById('topProductsChart'), {
-    type: 'bar',
-    data: {
-        labels: ["Interactive / Celebrating life", "Interactive / Los cabos In You", "Scarf / Woman / Capilla", "Scarf / Woman / Unconditional ", "Masterpieces Of Love / Necklac", "Custom Shipping", "Textured Magnets / On My Way T", "Interactive / Family is Love", "Interactive / Angel of Protect", "Family is Love"],
-        datasets: [{ label: 'Cantidad', data: [3.0, 3.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0], backgroundColor: '#10b981', borderRadius: 6 }]
-    },
-    options: {
-        indexAxis: 'y',
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true } }
-    }
+// 3. Top products by qty (horizontal bar)
+new Chart(document.getElementById('chartProdQty'),{
+    type:'bar',
+    data:{labels:["Big Canvas", "GICLEE COLLECTION", "Mirrors", "MINI canvas desk", "Small Canvas", "Perfume", "Magnets", "Original Paint", "Custom Shipping"],datasets:[{label:'Cantidad',data:[4.0, 3.0, 2.0, 2.0, 2.0, 2.0, 1.0, 1.0, 1.0],backgroundColor:'#8b5cf680',borderColor:'#8b5cf6',borderWidth:1,borderRadius:6}]},
+    options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}
 });
 
-// 4. Transactions by Day
-new Chart(document.getElementById('txChart'), {
-    type: 'line',
-    data: {
-        labels: ["Lunes 06/04", "Martes 07/04", "Mi\u00e9rcoles 08/04", "Jueves 09/04", "Viernes 10/04", "S\u00e1bado 11/04"],
-        datasets: [{ label: 'Transacciones', data: [1, 1, 5, 14, 6, 1], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', fill: true, tension: 0.3, pointRadius: 6, pointBackgroundColor: '#f59e0b' }]
-    },
-    options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
-    }
+// 4. Transactions by day
+new Chart(document.getElementById('chartDayCount'),{
+    type:'line',
+    data:{labels:["Lunes", "Martes", "Mi\u00e9rcoles", "Jueves", "Viernes", "S\u00e1bado", "Domingo"],datasets:[{label:'Transacciones',data:[0, 1, 0, 9, 1, 1, 0],borderColor:'#34d399',backgroundColor:'#34d39920',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#34d399'}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}
 });
 
-// 5. Hourly Dual-Axis
-new Chart(document.getElementById('hourlyChart'), {
-    type: 'bar',
-    data: {
-        labels: ["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"],
-        datasets: [
-            { type: 'bar', label: 'Ingresos USD', data: [0, 0.0, 251.5, 49.0, 5777.0, 8400.0, 0, 48.0, 160.0, 4286.0, 845.05, 120.0, 135.0, 0], backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6, yAxisID: 'y' },
-            { type: 'line', label: 'Transacciones', data: [0, 1, 2, 1, 4, 1, 0, 1, 2, 4, 8, 2, 2, 0], borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', pointRadius: 4, pointBackgroundColor: '#f59e0b', yAxisID: 'y1', tension: 0.3 }
+// 5. Sales by hour (dual axis)
+new Chart(document.getElementById('chartHour'),{
+    type:'bar',
+    data:{
+        labels:["9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00"],
+        datasets:[
+            {label:'Ingresos USD',data:[0, 0, 149.0, 190.0, 0, 52.0, 0, 0, 188.0, 39.0, 238.0, 215.0, 12300.0, 0],backgroundColor:'#3b82f650',borderColor:'#3b82f6',borderWidth:1,borderRadius:4,yAxisID:'y',order:2},
+            {label:'Transacciones',data:[0, 0, 2, 1, 0, 1, 0, 0, 2, 1, 2, 2, 1, 0],type:'line',borderColor:'#f59e0b',backgroundColor:'#f59e0b',pointRadius:4,pointBackgroundColor:'#f59e0b',tension:0.3,yAxisID:'y1',order:1}
         ]
     },
-    options: {
-        responsive: true,
-        scales: {
-            y: { beginAtZero: true, position: 'left', ticks: { callback: v => '$' + v.toLocaleString() } },
-            y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { stepSize: 1 } }
-        }
-    }
+    options:{responsive:true,scales:{y:{beginAtZero:true,position:'left',ticks:{callback:v=>'$'+v.toLocaleString()}},y1:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},ticks:{stepSize:1}}}}
 });
 </script>
-
 </body>
 </html>
