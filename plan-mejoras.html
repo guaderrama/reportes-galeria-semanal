@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Acción — Mejoras UX, SEO y Marketing — ivanguaderramaonlinestore.com</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --border: #2a2d3a; --text: #e4e4e7; --muted: #9ca3af;
+    --accent: #6366f1; --green: #22c55e; --yellow: #eab308; --red: #ef4444; --orange: #f97316; --blue: #3b82f6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; padding:24px; max-width:1000px; margin:0 auto; line-height:1.6; }
+
+  .header { text-align:center; padding:30px 0 24px; border-bottom:2px solid var(--accent); margin-bottom:30px; }
+  .header h1 { font-size:1.7rem; font-weight:700; background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .header p { color:var(--muted); margin-top:6px; font-size:0.9rem; }
+  .header .tag { display:inline-block; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:4px 14px; margin-top:10px; font-size:0.8rem; color:var(--accent); }
+
+  .phase { margin-bottom:36px; }
+  .phase-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding:12px 16px; border-radius:10px; }
+  .phase-header.urgent { background:rgba(239,68,68,0.12); border-left:4px solid var(--red); }
+  .phase-header.high { background:rgba(249,115,22,0.12); border-left:4px solid var(--orange); }
+  .phase-header.medium { background:rgba(99,102,241,0.12); border-left:4px solid var(--accent); }
+  .phase-header.growth { background:rgba(34,197,94,0.12); border-left:4px solid var(--green); }
+  .phase-header h2 { font-size:1.1rem; }
+  .phase-header .timeline { font-size:0.8rem; color:var(--muted); margin-left:auto; background:var(--card); padding:3px 10px; border-radius:6px; }
+
+  .action { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:14px; }
+  .action-top { display:flex; align-items:flex-start; gap:12px; margin-bottom:10px; }
+  .action-num { background:var(--accent); color:white; width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.85rem; flex-shrink:0; }
+  .action-num.red { background:var(--red); }
+  .action-num.orange { background:var(--orange); }
+  .action-num.blue { background:var(--accent); }
+  .action-num.green { background:var(--green); }
+  .action h3 { font-size:0.95rem; font-weight:600; }
+  .action .why { font-size:0.85rem; color:var(--muted); margin-bottom:12px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px; border-left:2px solid var(--border); }
+
+  .steps { list-style:none; }
+  .steps li { padding:6px 0 6px 24px; position:relative; font-size:0.85rem; }
+  .steps li::before { content:"→"; position:absolute; left:4px; color:var(--accent); font-weight:700; }
+  .steps li strong { color:var(--text); }
+  .steps li span.tool { display:inline-block; background:rgba(99,102,241,0.15); color:var(--accent); padding:1px 6px; border-radius:4px; font-size:0.72rem; font-weight:600; margin-left:4px; }
+  .steps li span.manual { display:inline-block; background:rgba(249,115,22,0.15); color:var(--orange); padding:1px 6px; border-radius:4px; font-size:0.72rem; font-weight:600; margin-left:4px; }
+  .steps li span.dev { display:inline-block; background:rgba(234,179,8,0.15); color:var(--yellow); padding:1px 6px; border-radius:4px; font-size:0.72rem; font-weight:600; margin-left:4px; }
+
+  .metric-row { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+  .metric { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; padding:6px 12px; font-size:0.78rem; }
+  .metric .mlabel { color:var(--muted); }
+  .metric .mvalue { font-weight:600; }
+  .metric .mbad { color:var(--red); }
+  .metric .mgood { color:var(--green); }
+
+  .impact { display:inline-block; padding:3px 10px; border-radius:6px; font-size:0.75rem; font-weight:600; margin-left:auto; }
+  .impact-high { background:rgba(239,68,68,0.12); color:var(--red); }
+  .impact-med { background:rgba(249,115,22,0.12); color:var(--orange); }
+  .impact-growth { background:rgba(34,197,94,0.12); color:var(--green); }
+
+  .summary-box { background:var(--card); border:2px solid var(--accent); border-radius:14px; padding:24px; margin-top:30px; }
+  .summary-box h2 { font-size:1.1rem; margin-bottom:14px; color:var(--accent); }
+  .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media(max-width:600px) { .summary-grid { grid-template-columns:1fr; } }
+  .summary-item { background:rgba(255,255,255,0.03); border-radius:8px; padding:12px; }
+  .summary-item h4 { font-size:0.85rem; margin-bottom:4px; }
+  .summary-item p { font-size:0.8rem; color:var(--muted); }
+
+  .footer { text-align:center; padding:24px 0; color:var(--muted); font-size:0.78rem; border-top:1px solid var(--border); margin-top:30px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Plan de Acción: Mejoras UX, SEO y Marketing</h1>
+  <p>ivanguaderramaonlinestore.com — Basado en datos reales de Microsoft Clarity</p>
+  <div class="tag">Generado el 5 de mayo 2026 · Datos del 29 abril al 5 mayo</div>
+</div>
+
+<!-- ═══════════ FASE 1 ═══════════ -->
+<div class="phase">
+  <div class="phase-header urgent">
+    <h2>Fase 1 — Arreglar lo que está roto</h2>
+    <div class="timeline">Semana 1-2</div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num red">1</div>
+      <div>
+        <h3>Arreglar dead clicks en imágenes de producto</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">Los usuarios cliquean las fotos de arte esperando zoom y no pasa nada. "Garden of Companionship" tiene 24 dead clicks, "Family Is Love" 16, "Today I Choose Hope" 12. En una tienda de arte, no poder ver la obra en detalle mata la venta.</div>
+    <ul class="steps">
+      <li><strong>Verificar si el theme de Shopify tiene image zoom activado</strong> — ir a Theme Editor → Product Template → Media <span class="manual">Shopify Admin</span></li>
+      <li><strong>Activar lightbox/zoom en click</strong> — si el theme no lo soporta, instalar una app como "Image Zoom" o cambiar a un theme que lo incluya <span class="manual">Shopify Admin</span></li>
+      <li><strong>Verificar el selector de tamaño</strong> — en "Today I Choose Hope" el selector genera dead clicks, probablemente no responde visualmente al clic <span class="manual">Shopify Admin</span></li>
+      <li><strong>Testear en mobile y desktop</strong> — abrir cada producto top en ambos dispositivos y verificar que el zoom funciona <span class="manual">Manual</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Ahora: </span><span class="mvalue mbad">52 dead clicks en 3 productos</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">&lt;5 dead clicks totales</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num red">2</div>
+      <div>
+        <h3>Resolver errores JavaScript críticos</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">"Maximum call stack size exceeded" (5 veces) indica recursión infinita — posiblemente una app de Shopify. "NetworkError: Load failed" (5 veces) indica recursos que no cargan. Estos errores pueden romper el AR, el checkout, o el zoom de imágenes.</div>
+    <ul class="steps">
+      <li><strong>Abrir el sitio con DevTools (F12 → Console)</strong> — identificar qué script causa el stack overflow <span class="manual">Manual</span></li>
+      <li><strong>Desactivar apps de Shopify una por una</strong> — probar: Loox Reviews, app de AR, apps de popup, apps de analytics <span class="manual">Shopify Admin</span></li>
+      <li><strong>Verificar la app de AR</strong> — el stack overflow puede venir de la inicialización de WebXR/8th Wall <span class="dev">Desarrollo</span></li>
+      <li><strong>Revisar "NetworkError: Load failed"</strong> — abrir Network tab en DevTools, filtrar por errores rojos, identificar qué recursos fallan <span class="manual">Manual</span></li>
+      <li><strong>Contactar soporte del theme</strong> si el error viene del theme base <span class="manual">Manual</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Ahora: </span><span class="mvalue mbad">21 errores JS (5 críticos)</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">0 errores críticos</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num red">3</div>
+      <div>
+        <h3>Optimizar velocidad de carga (LCP)</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">LCP promedio de 3.9 segundos — Google penaliza sitios con LCP &gt; 2.5s en rankings. El 53% de usuarios mobile abandona si tarda más de 3 segundos. Para una tienda de arte con imágenes grandes, esto es el cuello de botella #1.</div>
+    <ul class="steps">
+      <li><strong>Convertir imágenes a WebP/AVIF</strong> — Shopify lo hace automático si usas el tag img correcto en el theme. Verificar que no estás forzando PNG/JPG <span class="dev">Desarrollo</span></li>
+      <li><strong>Activar lazy loading en imágenes</strong> — solo cargar las que se ven en pantalla, el resto al hacer scroll <span class="dev">Desarrollo</span></li>
+      <li><strong>Reducir tamaño de hero image</strong> — el banner principal probablemente es la imagen más pesada. Servir 1200px max para desktop, 600px para mobile <span class="manual">Shopify Admin</span></li>
+      <li><strong>Auditar apps instaladas</strong> — cada app agrega JavaScript. Eliminar las que no uses <span class="manual">Shopify Admin</span></li>
+      <li><strong>Correr auditoría SEO técnica</strong> — puedo hacer esto ahora mismo con mi skill de SEO <span class="tool">Claude SEO</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">LCP actual: </span><span class="mvalue mbad">3,897ms</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">&lt;2,500ms</span></div>
+      <div class="metric"><span class="mlabel">FID: </span><span class="mvalue" style="color:var(--yellow)">63ms (aceptable)</span></div>
+      <div class="metric"><span class="mlabel">CLS: </span><span class="mvalue mgood">0.037 (bueno)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FASE 2 ═══════════ -->
+<div class="phase">
+  <div class="phase-header high">
+    <h2>Fase 2 — Mejorar la experiencia de navegación</h2>
+    <div class="timeline">Semana 3-4</div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num orange">4</div>
+      <div>
+        <h3>Rediseñar el Home — above the fold</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">Solo 17% de scroll en el Home — el 83% de los visitantes nunca ven lo que hay debajo del primer pantallazo. El Home tiene 62 pageviews y 1:35 de tiempo, lo que indica que la gente SE QUEDA mirando el hero pero no explora más. El hero los atrapa visualmente pero no los invita a descubrir.</div>
+    <ul class="steps">
+      <li><strong>Reducir la altura del hero banner</strong> — que no ocupe más del 60% de la pantalla, dejando visible un adelanto de lo que sigue <span class="dev">Desarrollo</span></li>
+      <li><strong>Agregar flecha o indicador de scroll animado</strong> — señal visual de "hay más abajo" <span class="dev">Desarrollo</span></li>
+      <li><strong>Mostrar 3-4 colecciones destacadas debajo del hero</strong> — con imagen, nombre y "Explorar →" como primer contenido visible <span class="manual">Shopify Admin</span></li>
+      <li><strong>CTA principal visible sin scroll</strong> — "Explora la Colección" o "Ver Arte Interactivo" encima del fold <span class="manual">Shopify Admin</span></li>
+      <li><strong>En mobile: hero al 40% de pantalla</strong> — el espacio vertical es oro en mobile, no lo desperdicies en un banner gigante <span class="dev">Desarrollo</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Scroll actual: </span><span class="mvalue mbad">17%</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">&gt;50%</span></div>
+      <div class="metric"><span class="mlabel">Pageviews: </span><span class="mvalue">62/semana</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num orange">5</div>
+      <div>
+        <h3>Mejorar la página de producto (template)</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">"Guard Your Heart" retiene 1:58 min. "Today I Choose Hope" solo 13 segundos con 3× más tráfico. La diferencia probablemente está en la presentación: fotos, descripción, organización de la información. El tiempo promedio en páginas de producto es solo 47 segundos — debería ser más para arte.</div>
+    <ul class="steps">
+      <li><strong>Auditar "Guard Your Heart" vs "Today I Choose Hope"</strong> — comparar lado a lado: cantidad de fotos, largo de descripción, ubicación del precio, botón Add to Cart <span class="manual">Manual</span></li>
+      <li><strong>Precio visible sin scroll</strong> — en arte, esconder el precio genera desconfianza. Debe verse junto a la imagen principal <span class="dev">Desarrollo</span></li>
+      <li><strong>Galería de imágenes con zoom funcional</strong> — mínimo 4-5 fotos: obra completa, detalle, en contexto (pared), dimensiones, empaque <span class="manual">Shopify Admin</span></li>
+      <li><strong>Descripción con storytelling</strong> — no solo "óleo sobre lienzo 24x36". Contar la historia de la pieza: inspiración, técnica, qué transmite <span class="manual">Contenido</span></li>
+      <li><strong>Agregar sección "También te puede gustar"</strong> — productos relacionados al final para que exploren más <span class="manual">Shopify Admin</span></li>
+      <li><strong>Breadcrumbs visibles</strong> — Home → Colección → Producto. Facilita la navegación y ayuda al SEO <span class="dev">Desarrollo</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Tiempo producto actual: </span><span class="mvalue mbad">47s promedio</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">&gt;90s promedio</span></div>
+      <div class="metric"><span class="mlabel">Referencia: </span><span class="mvalue mgood">Guard Your Heart = 1:58</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num orange">6</div>
+      <div>
+        <h3>Reducir Quick Backs (37% de sesiones)</h3>
+        <span class="impact impact-med">Impacto: Medio-Alto</span>
+      </div>
+    </div>
+    <div class="why">56 quick backs = el usuario entra a una página y regresa inmediatamente. Las páginas más afectadas: Interactive Premium Canvas (9), Home (8), New Art (7), Limited Edition (6). El contenido no coincide con lo que esperaban encontrar, o la carga lenta los espanta.</div>
+    <ul class="steps">
+      <li><strong>Revisar meta descriptions de las páginas afectadas</strong> — lo que Google muestra debe coincidir con lo que el usuario encuentra <span class="tool">Claude SEO</span></li>
+      <li><strong>Mejorar las previews de colecciones</strong> — si alguien entra a "Interactive Premium Canvas" esperando ver precios y encuentra un grid sin precios, se va <span class="manual">Shopify Admin</span></li>
+      <li><strong>Mostrar precios en el grid de colección</strong> — no obligar al usuario a entrar a cada producto para ver el precio <span class="dev">Desarrollo</span></li>
+      <li><strong>Optimizar velocidad</strong> — muchos quick backs son por carga lenta: el usuario hace clic, espera, y regresa (ver Acción #3) <span class="dev">Desarrollo</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Quick backs: </span><span class="mvalue mbad">56 (37% de sesiones)</span></div>
+      <div class="metric"><span class="mlabel">Meta: </span><span class="mvalue mgood">&lt;15% de sesiones</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FASE 3 ═══════════ -->
+<div class="phase">
+  <div class="phase-header medium">
+    <h2>Fase 3 — Retención y conversión</h2>
+    <div class="timeline">Mes 2</div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num blue">7</div>
+      <div>
+        <h3>Implementar captura de email</h3>
+        <span class="impact impact-high">Impacto: Alto</span>
+      </div>
+    </div>
+    <div class="why">99.2% de usuarios son nuevos, solo 3 regresaron de 131. El arte necesita múltiples visitas para decidir comprar. Sin captura de email, pierdes al 99% de tu tráfico para siempre. Esta es posiblemente la mejora con mayor ROI del plan completo.</div>
+    <ul class="steps">
+      <li><strong>Popup de email con incentivo</strong> — "Recibe acceso anticipado a nuevas colecciones" o "10% en tu primera compra". Activar después de 15 segundos o al 30% de scroll <span class="manual">Shopify App</span></li>
+      <li><strong>Formulario de email en footer</strong> — para los que no quieren popup pero sí suscribirse <span class="manual">Shopify Admin</span></li>
+      <li><strong>Exit intent popup en desktop</strong> — cuando el cursor se mueve hacia el botón de cerrar, mostrar "¿Te vas? Guarda tu colección favorita" <span class="manual">Shopify App</span></li>
+      <li><strong>Diseñar secuencia de bienvenida</strong> — 3-4 emails automáticos: bienvenida → historia del artista → colección destacada → oferta especial <span class="tool">Claude Marketing</span></li>
+      <li><strong>Conectar con Klaviyo o Mailchimp</strong> — para automatizar los flujos de email <span class="manual">Shopify App</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Recurrentes actual: </span><span class="mvalue mbad">2.3% (3 de 131)</span></div>
+      <div class="metric"><span class="mlabel">Meta mes 1: </span><span class="mvalue mgood">&gt;10% recurrentes</span></div>
+      <div class="metric"><span class="mlabel">Meta mes 3: </span><span class="mvalue mgood">&gt;20% recurrentes</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num blue">8</div>
+      <div>
+        <h3>Optimizar experiencia mobile</h3>
+        <span class="impact impact-med">Impacto: Medio-Alto</span>
+      </div>
+    </div>
+    <div class="why">Mobile y desktop empatan en sesiones (73 vs 73) pero desktop retiene 3.7× más tiempo (3:18 vs 0:53). El patrón "descubre en mobile, decide en desktop" es normal para arte, pero necesitas que mobile facilite GUARDAR y VOLVER.</div>
+    <ul class="steps">
+      <li><strong>Botón "Guardar para después" (wishlist sin registro)</strong> — que guarde con solo email, sin crear cuenta completa <span class="manual">Shopify App</span></li>
+      <li><strong>Botón de compartir por WhatsApp</strong> — el 18.5% del tráfico es México, WhatsApp es el canal #1. "Comparte esta obra" con preview de imagen <span class="dev">Desarrollo</span></li>
+      <li><strong>Precio y Add to Cart fijos en mobile</strong> — sticky bar al fondo de la pantalla en páginas de producto <span class="dev">Desarrollo</span></li>
+      <li><strong>Imágenes responsive</strong> — servir 600px para mobile, 1200px para desktop. No cargar imágenes de 3000px en un teléfono <span class="dev">Desarrollo</span></li>
+      <li><strong>Reducir hero en mobile</strong> — máximo 40% de la pantalla para dejar espacio al contenido <span class="dev">Desarrollo</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Mobile duración: </span><span class="mvalue mbad">0:53</span></div>
+      <div class="metric"><span class="mlabel">Desktop duración: </span><span class="mvalue mgood">3:18</span></div>
+      <div class="metric"><span class="mlabel">Meta mobile: </span><span class="mvalue mgood">&gt;1:30</span></div>
+    </div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num blue">9</div>
+      <div>
+        <h3>Auditoría SEO completa</h3>
+        <span class="impact impact-med">Impacto: Medio-Alto</span>
+      </div>
+    </div>
+    <div class="why">Solo 13 sesiones vinieron de Google (8.6% del tráfico). Para una tienda con colecciones únicas como "Smiling Jesus Paintings" o "Interactive AR Canvas Prints", hay mucho potencial SEO sin explotar. Ranking más alto = tráfico gratis.</div>
+    <ul class="steps">
+      <li><strong>Auditoría SEO técnica del sitio</strong> — crawlability, indexability, meta tags, schema markup, sitemap <span class="tool">Claude SEO</span></li>
+      <li><strong>Optimizar meta descriptions</strong> — cada colección y producto debe tener description única y atractiva <span class="tool">Claude SEO</span></li>
+      <li><strong>Schema markup de Product</strong> — agregar JSON-LD con precio, disponibilidad, reviews para rich snippets en Google <span class="tool">Claude SEO</span></li>
+      <li><strong>Alt text en todas las imágenes</strong> — cada obra debe tener alt text descriptivo: "Today I Choose Hope - Interactive Canvas Art with AR by Ivan Guaderrama" <span class="manual">Shopify Admin</span></li>
+      <li><strong>Blog con keywords de arte</strong> — artículos sobre "interactive art", "AR canvas prints", "christian wall art" para capturar tráfico orgánico <span class="tool">Claude Marketing</span></li>
+    </ul>
+    <div class="metric-row">
+      <div class="metric"><span class="mlabel">Orgánico actual: </span><span class="mvalue mbad">13 sesiones (8.6%)</span></div>
+      <div class="metric"><span class="mlabel">Meta 3 meses: </span><span class="mvalue mgood">&gt;50 sesiones/semana orgánicas</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FASE 4 ═══════════ -->
+<div class="phase">
+  <div class="phase-header growth">
+    <h2>Fase 4 — Crecimiento y analytics avanzados</h2>
+    <div class="timeline">Mes 3</div>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num green">10</div>
+      <div>
+        <h3>Activar Smart Events en Clarity</h3>
+        <span class="impact impact-med">Impacto: Medio</span>
+      </div>
+    </div>
+    <div class="why">Clarity detecta automáticamente Purchase, Add to Cart, Begin Checkout. Actualmente no estamos rastreando ninguno. Sin estos eventos, no podemos medir la tasa de conversión real ni saber qué páginas llevan a compras.</div>
+    <ul class="steps">
+      <li><strong>Ir a Clarity Dashboard → Settings → Smart Events</strong> <span class="manual">Clarity Admin</span></li>
+      <li><strong>Activar: Purchase, Add to Cart, Begin Checkout, Contact Us</strong> <span class="manual">Clarity Admin</span></li>
+      <li><strong>Crear evento personalizado "Ver en AR"</strong> — para medir cuántos activan la experiencia AR <span class="manual">Clarity Admin</span></li>
+      <li><strong>Esperar 1-2 semanas para tener datos</strong> y luego agregar sección de conversión al reporte semanal <span class="tool">Claude Clarity</span></li>
+    </ul>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num green">11</div>
+      <div>
+        <h3>Crear funnel de navegación en Clarity</h3>
+        <span class="impact impact-med">Impacto: Medio</span>
+      </div>
+    </div>
+    <div class="why">Ahora sabemos que la mayoría llega directo a productos sin pasar por colecciones. Un funnel nos mostraría exactamente dónde se pierde la gente: Home → Colección → Producto → Add to Cart → Checkout.</div>
+    <ul class="steps">
+      <li><strong>Ir a Clarity Dashboard → Funnels → Create</strong> <span class="manual">Clarity Admin</span></li>
+      <li><strong>Definir funnel:</strong> Home → Any Collection → Any Product → Add to Cart (Smart Event) <span class="manual">Clarity Admin</span></li>
+      <li><strong>Analizar drop-off rates</strong> por paso después de 2 semanas de datos <span class="tool">Claude Clarity</span></li>
+    </ul>
+  </div>
+
+  <div class="action">
+    <div class="action-top">
+      <div class="action-num green">12</div>
+      <div>
+        <h3>Conectar Google Analytics 4</h3>
+        <span class="impact impact-growth">Impacto: Crecimiento</span>
+      </div>
+    </div>
+    <div class="why">Al conectar GA4 con Clarity, los eventos de conversión y revenue de GA4 aparecen directamente en el dashboard de Clarity. Esto permitiría incluir ventas reales y valor promedio de orden en el reporte semanal.</div>
+    <ul class="steps">
+      <li><strong>Verificar que GA4 está instalado en Shopify</strong> <span class="manual">Shopify Admin</span></li>
+      <li><strong>Ir a Clarity → Settings → GA4 Integration → Connect</strong> <span class="manual">Clarity Admin</span></li>
+      <li><strong>Actualizar el reporte semanal</strong> para incluir datos de conversión y revenue <span class="tool">Claude Clarity</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════ RESUMEN ═══════════ -->
+<div class="summary-box">
+  <h2>Resumen Ejecutivo del Plan</h2>
+  <div class="summary-grid">
+    <div class="summary-item">
+      <h4 style="color:var(--red)">Semana 1-2: Lo roto</h4>
+      <p>Dead clicks en imágenes, errores JS, velocidad de carga. Son problemas técnicos que están perdiendo ventas ahora mismo.</p>
+    </div>
+    <div class="summary-item">
+      <h4 style="color:var(--orange)">Semana 3-4: La experiencia</h4>
+      <p>Home page, páginas de producto, quick backs. Mejorar cómo la gente navega y explora tu arte.</p>
+    </div>
+    <div class="summary-item">
+      <h4 style="color:var(--accent)">Mes 2: Retención y SEO</h4>
+      <p>Captura de email, mobile UX, auditoría SEO. Convertir visitantes únicos en audiencia recurrente.</p>
+    </div>
+    <div class="summary-item">
+      <h4 style="color:var(--green)">Mes 3: Analytics avanzados</h4>
+      <p>Smart Events, funnels, GA4. Medir conversiones reales para optimizar con datos de venta, no solo visitas.</p>
+    </div>
+  </div>
+</div>
+
+<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:20px">
+  <h3 style="font-size:0.95rem;color:var(--accent);margin-bottom:10px">Lo que yo puedo hacer ahora mismo desde Cowork</h3>
+  <ul class="steps">
+    <li><strong>Auditoría SEO técnica completa</strong> del sitio (Core Web Vitals, meta tags, schema, sitemap, indexability) <span class="tool">Skill: SEO Audit</span></li>
+    <li><strong>Diseñar secuencia de email</strong> de bienvenida (3-4 emails automáticos) <span class="tool">Skill: Email Sequence</span></li>
+    <li><strong>Generar meta descriptions</strong> optimizadas para cada colección y producto top <span class="tool">Skill: SEO Content</span></li>
+    <li><strong>Plan de contenido SEO</strong> para blog con keywords de arte interactivo <span class="tool">Skill: SEO Plan</span></li>
+    <li><strong>Análisis de competidores</strong> — qué hacen otras galerías de arte online <span class="tool">Skill: Competitive Intel</span></li>
+    <li><strong>Programar reporte semanal automático</strong> para monitorear el progreso <span class="tool">Skill: Schedule</span></li>
+  </ul>
+</div>
+
+<div class="footer">
+  Plan generado por Claude · Basado en datos de Microsoft Clarity (29 abril — 5 mayo 2026)<br>
+  Ivan Guaderrama Art Gallery · ivanguaderramaonlinestore.com
+</div>
+
+</body>
+</html>
