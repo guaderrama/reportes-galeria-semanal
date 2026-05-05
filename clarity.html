@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Clarity Semanal — ivanguaderramaonlinestore.com</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-border: #2a2d3a;
+    --text: #e4e4e7;
+    --text-muted: #9ca3af;
+    --accent: #6366f1;
+    --accent-light: #818cf8;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.12);
+    --yellow: #eab308;
+    --yellow-bg: rgba(234,179,8,0.12);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.12);
+    --orange: #f97316;
+    --orange-bg: rgba(249,115,22,0.12);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; padding:20px; max-width:1200px; margin:0 auto; }
+  
+  .header { text-align:center; padding:30px 0 20px; border-bottom:1px solid var(--card-border); margin-bottom:30px; }
+  .header h1 { font-size:1.8rem; font-weight:700; background:linear-gradient(135deg,var(--accent-light),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
+  .header .subtitle { color:var(--text-muted); margin-top:6px; font-size:0.95rem; }
+  .header .date-range { display:inline-block; background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:6px 16px; margin-top:12px; font-size:0.85rem; color:var(--accent-light); }
+
+  .section-title { font-size:1.2rem; font-weight:600; margin:30px 0 16px; padding-left:12px; border-left:3px solid var(--accent); }
+  
+  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:24px; }
+  .kpi-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px; text-align:center; }
+  .kpi-card .label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); margin-bottom:6px; }
+  .kpi-card .value { font-size:1.6rem; font-weight:700; }
+  .kpi-card .detail { font-size:0.75rem; color:var(--text-muted); margin-top:4px; }
+  
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:20px; }
+  @media(max-width:768px) { .grid-2,.grid-3 { grid-template-columns:1fr; } }
+  
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .card h3 { font-size:0.95rem; font-weight:600; margin-bottom:14px; color:var(--accent-light); }
+  
+  table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+  th { text-align:left; padding:8px 10px; border-bottom:1px solid var(--card-border); color:var(--text-muted); font-weight:500; font-size:0.75rem; text-transform:uppercase; }
+  td { padding:8px 10px; border-bottom:1px solid rgba(42,45,58,0.5); }
+  tr:hover td { background:rgba(99,102,241,0.05); }
+  
+  .badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:600; }
+  .badge-green { background:var(--green-bg); color:var(--green); }
+  .badge-yellow { background:var(--yellow-bg); color:var(--yellow); }
+  .badge-red { background:var(--red-bg); color:var(--red); }
+  .badge-orange { background:var(--orange-bg); color:var(--orange); }
+  .badge-blue { background:var(--blue-bg); color:var(--blue); }
+  
+  .progress-bar { height:6px; border-radius:3px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:4px; }
+  .progress-bar .fill { height:100%; border-radius:3px; transition:width 0.5s; }
+  
+  .insight-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px; margin-bottom:12px; border-left:3px solid var(--accent); }
+  .insight-card .insight-title { font-weight:600; font-size:0.9rem; margin-bottom:6px; }
+  .insight-card .insight-text { font-size:0.85rem; color:var(--text-muted); line-height:1.5; }
+  
+  .chart-container { position:relative; height:250px; }
+  
+  .semaforo { display:inline-flex; align-items:center; gap:6px; }
+  .semaforo .dot { width:10px; height:10px; border-radius:50%; }
+  .dot-green { background:var(--green); }
+  .dot-yellow { background:var(--yellow); }
+  .dot-red { background:var(--red); }
+  
+  .footer { text-align:center; padding:30px 0; color:var(--text-muted); font-size:0.8rem; border-top:1px solid var(--card-border); margin-top:30px; }
+  
+  .device-compare { display:grid; grid-template-columns:1fr 1fr; gap:0; }
+  .device-col { padding:16px; }
+  .device-col:first-child { border-right:1px solid var(--card-border); }
+  .device-col h4 { font-size:0.85rem; margin-bottom:10px; }
+  .device-stat { display:flex; justify-content:space-between; padding:4px 0; font-size:0.82rem; }
+  .device-stat .ds-label { color:var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Reporte Semanal de Clarity</h1>
+  <div class="subtitle">ivanguaderramaonlinestore.com</div>
+  <div class="date-range">29 abril — 5 mayo 2026</div>
+</div>
+
+<!-- SECCION 1: RESUMEN EJECUTIVO -->
+<div class="section-title">1. Resumen Ejecutivo</div>
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="label">Sesiones</div>
+    <div class="value">151</div>
+    <div class="detail">Últimos 7 días</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Usuarios</div>
+    <div class="value">131</div>
+    <div class="detail">130 nuevos · 3 recurrentes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Duración Promedio</div>
+    <div class="value">2:02</div>
+    <div class="detail">122 segundos</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Páginas/Sesión</div>
+    <div class="value">2.06</div>
+    <div class="detail">Promedio global</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">% Nuevos</div>
+    <div class="value" style="color:var(--accent-light)">99.2%</div>
+    <div class="detail">Solo 2.3% recurrentes</div>
+  </div>
+  <div class="kpi-card">
+    <div class="label">Quick Backs</div>
+    <div class="value" style="color:var(--orange)">56</div>
+    <div class="detail">37% de sesiones</div>
+  </div>
+</div>
+
+<!-- SECCION 2: TRAFICO Y ADQUISICION -->
+<div class="section-title">2. Tráfico y Adquisición</div>
+<div class="grid-2">
+  <div class="card">
+    <h3>Canales de Tráfico</h3>
+    <div class="chart-container"><canvas id="channelChart"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>Fuentes de Referencia</h3>
+    <table>
+      <thead><tr><th>Fuente</th><th>Canal</th><th>Sesiones</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>ivanguaderramaonlinestore.com</td><td><span class="badge badge-blue">Direct</span></td><td>49</td><td>32.5%</td></tr>
+        <tr><td>google</td><td><span class="badge badge-green">Organic</span></td><td>13</td><td>8.6%</td></tr>
+        <tr><td>bit.ly</td><td><span class="badge badge-orange">Referral</span></td><td>8</td><td>5.3%</td></tr>
+        <tr><td>ivanguaderrama.com</td><td><span class="badge badge-orange">Referral</span></td><td>6</td><td>4.0%</td></tr>
+        <tr><td>Instagram</td><td><span class="badge badge-yellow">Social</span></td><td>3</td><td>2.0%</td></tr>
+        <tr><td>Facebook</td><td><span class="badge badge-orange">Referral</span></td><td>3</td><td>2.0%</td></tr>
+        <tr><td>marriott.com</td><td><span class="badge badge-orange">Referral</span></td><td>1</td><td>0.7%</td></tr>
+        <tr><td>loscabosmx (Simpleview)</td><td><span class="badge badge-orange">Referral</span></td><td>1</td><td>0.7%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Tendencia Diaria de Sesiones</h3>
+    <div class="chart-container"><canvas id="dailyChart"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>Geografía — Top Países</h3>
+    <table>
+      <thead><tr><th>País</th><th>Sesiones</th><th>%</th><th></th></tr></thead>
+      <tbody>
+        <tr><td>🇺🇸 Estados Unidos</td><td>94</td><td>62.3%</td><td><div class="progress-bar"><div class="fill" style="width:62.3%;background:var(--accent)"></div></div></td></tr>
+        <tr><td>🇲🇽 México</td><td>28</td><td>18.5%</td><td><div class="progress-bar"><div class="fill" style="width:18.5%;background:var(--green)"></div></div></td></tr>
+        <tr><td>🇨🇳 China</td><td>10</td><td>6.6%</td><td><div class="progress-bar"><div class="fill" style="width:6.6%;background:var(--yellow)"></div></div></td></tr>
+        <tr><td>🇨🇦 Canadá</td><td>3</td><td>2.0%</td><td><div class="progress-bar"><div class="fill" style="width:2%;background:var(--orange)"></div></div></td></tr>
+        <tr><td>🇵🇱 Polonia</td><td>3</td><td>2.0%</td><td><div class="progress-bar"><div class="fill" style="width:2%;background:var(--blue)"></div></div></td></tr>
+        <tr><td>🇳🇱 Países Bajos</td><td>3</td><td>2.0%</td><td><div class="progress-bar"><div class="fill" style="width:2%;background:var(--blue)"></div></div></td></tr>
+        <tr><td>🇮🇱 Israel</td><td>2</td><td>1.3%</td><td><div class="progress-bar"><div class="fill" style="width:1.3%;background:var(--text-muted)"></div></div></td></tr>
+        <tr><td>Otros</td><td>8</td><td>5.3%</td><td><div class="progress-bar"><div class="fill" style="width:5.3%;background:var(--text-muted)"></div></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECCION 3: COMPORTAMIENTO Y ENGAGEMENT -->
+<div class="section-title">3. Comportamiento y Engagement</div>
+
+<div class="card">
+  <h3>Mobile vs Desktop — Comparativa de Experiencia</h3>
+  <div class="device-compare">
+    <div class="device-col">
+      <h4 style="color:var(--accent-light)">📱 Mobile (73 sesiones · 48.3%)</h4>
+      <div class="device-stat"><span class="ds-label">Duración promedio</span><span>0:53</span></div>
+      <div class="device-stat"><span class="ds-label">Páginas/sesión</span><span>2.08</span></div>
+      <div class="device-stat"><span class="ds-label">Navegadores</span><span>MobileSafari (42), Chrome (17), Samsung (1)</span></div>
+    </div>
+    <div class="device-col">
+      <h4 style="color:var(--green)">🖥️ Desktop (73 sesiones · 48.3%)</h4>
+      <div class="device-stat"><span class="ds-label">Duración promedio</span><span style="color:var(--green);font-weight:600">3:18</span></div>
+      <div class="device-stat"><span class="ds-label">Páginas/sesión</span><span>2.08</span></div>
+      <div class="device-stat"><span class="ds-label">Navegadores</span><span>Chrome (61), Edge (6), Safari (4), Firefox (2)</span></div>
+    </div>
+  </div>
+  <div style="padding:12px 16px;background:var(--blue-bg);border-radius:8px;margin-top:14px;font-size:0.82rem;color:var(--blue)">
+    💡 <strong>Insight:</strong> Desktop retiene 3.7× más tiempo que mobile (3:18 vs 0:53). Mismas páginas por sesión sugiere que mobile descubre y se va rápido — típico patrón de arte: descubren en mobile, deciden en desktop.
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Scroll Depth por Página</h3>
+    <div class="chart-container"><canvas id="scrollChart"></canvas></div>
+  </div>
+  <div class="card">
+    <h3>Top Colecciones por Tráfico</h3>
+    <table>
+      <thead><tr><th>Colección</th><th>Vistas</th><th>Scroll</th></tr></thead>
+      <tbody>
+        <tr><td>Interactive Premium Canvas</td><td>38</td><td><span class="badge badge-yellow">46%</span></td></tr>
+        <tr><td>Mother's Day 2026</td><td>18</td><td><span class="badge badge-green">62%</span></td></tr>
+        <tr><td>New Art</td><td>15</td><td><span class="badge badge-green">69%</span></td></tr>
+        <tr><td>Christian Wall Art</td><td>12</td><td><span class="badge badge-green">97%</span></td></tr>
+        <tr><td>All Originals</td><td>10</td><td><span class="badge badge-green">62%</span></td></tr>
+        <tr><td>Smiling Jesus</td><td>9</td><td><span class="badge badge-yellow">42%</span></td></tr>
+        <tr><td>Limited Edition</td><td>9</td><td><span class="badge badge-green">82%</span></td></tr>
+        <tr><td>Heart Paintings</td><td>7</td><td><span class="badge badge-yellow">45%</span></td></tr>
+        <tr><td>Pet Paradise</td><td>5</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECCION 4: PRODUCTOS Y ENGAGEMENT -->
+<div class="section-title">4. Productos por Engagement</div>
+<div class="card">
+  <h3>Top Productos — Vistas × Tiempo × Scroll</h3>
+  <table>
+    <thead><tr><th>Producto</th><th>Vistas</th><th>Tiempo Prom.</th><th>Scroll</th><th>Dead Clicks</th><th>Engagement</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Guard Your Heart</td><td>3</td><td style="color:var(--green);font-weight:600">1:58</td><td>—</td><td>0</td>
+        <td><span class="badge badge-green">Alto</span></td>
+      </tr>
+      <tr>
+        <td>Angel of Protection</td><td>3</td><td style="color:var(--green);font-weight:600">1:16</td><td>—</td><td>0</td>
+        <td><span class="badge badge-green">Alto</span></td>
+      </tr>
+      <tr>
+        <td>Chosen</td><td>3</td><td style="color:var(--green);font-weight:600">1:15</td><td>—</td><td>0</td>
+        <td><span class="badge badge-green">Alto</span></td>
+      </tr>
+      <tr>
+        <td>A Story of Stars and Night Winds</td><td>6</td><td>0:57</td><td>—</td><td>0</td>
+        <td><span class="badge badge-green">Alto</span></td>
+      </tr>
+      <tr>
+        <td>Today I Choose Joy</td><td>3</td><td>0:51</td><td>—</td><td>0</td>
+        <td><span class="badge badge-blue">Medio</span></td>
+      </tr>
+      <tr>
+        <td>Family is Love</td><td>5</td><td>0:43</td><td>—</td><td>0</td>
+        <td><span class="badge badge-blue">Medio</span></td>
+      </tr>
+      <tr>
+        <td>My Heart Belongs to You</td><td>3</td><td>0:31</td><td>—</td><td>0</td>
+        <td><span class="badge badge-blue">Medio</span></td>
+      </tr>
+      <tr>
+        <td>Tree of Life</td><td>7</td><td>0:16</td><td>—</td><td style="color:var(--red)">3</td>
+        <td><span class="badge badge-orange">⚠️ Revisar</span></td>
+      </tr>
+      <tr>
+        <td>Today I Choose Hope</td><td>8</td><td>0:13</td><td><span class="badge badge-red">25%</span></td><td style="color:var(--red)">3</td>
+        <td><span class="badge badge-red">Bajo</span></td>
+      </tr>
+      <tr>
+        <td>Traditional Stretched Canvas</td><td>3</td><td>0:19</td><td>—</td><td>0</td>
+        <td><span class="badge badge-orange">Bajo</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="padding:12px 16px;background:var(--orange-bg);border-radius:8px;margin-top:14px;font-size:0.82rem;color:var(--orange)">
+    ⚠️ <strong>Alerta:</strong> "Today I Choose Hope" es el producto más visto (8 vistas) pero tiene el engagement más bajo (13s, 25% scroll, 3 dead clicks). Los usuarios llegan pero no conectan — posible problema de presentación o contenido.
+  </div>
+</div>
+
+<!-- SECCION 5: UX Y RENDIMIENTO -->
+<div class="section-title">5. UX y Rendimiento</div>
+
+<div class="grid-3">
+  <div class="card" style="text-align:center">
+    <h3>Rage Clicks</h3>
+    <div style="font-size:2.2rem;font-weight:700;color:var(--green)">0</div>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px">Sin frustración extrema</div>
+  </div>
+  <div class="card" style="text-align:center">
+    <h3>Dead Clicks</h3>
+    <div style="font-size:2.2rem;font-weight:700;color:var(--yellow)">23</div>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px">Elementos no clicables</div>
+  </div>
+  <div class="card" style="text-align:center">
+    <h3>Quick Backs</h3>
+    <div style="font-size:2.2rem;font-weight:700;color:var(--orange)">56</div>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:4px">37% de sesiones</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h3>Core Web Vitals</h3>
+    <table>
+      <thead><tr><th>Métrica</th><th>Promedio</th><th>P75</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>LCP</strong> <span style="font-size:0.7rem;color:var(--text-muted)">(Largest Contentful Paint)</span></td>
+          <td>3,897ms</td><td>1,956ms</td>
+          <td><span class="semaforo"><span class="dot dot-red"></span><span style="font-size:0.8rem;color:var(--red)">Necesita mejora</span></span></td>
+        </tr>
+        <tr>
+          <td><strong>FID</strong> <span style="font-size:0.7rem;color:var(--text-muted)">(First Input Delay)</span></td>
+          <td>63ms</td><td>103ms</td>
+          <td><span class="semaforo"><span class="dot dot-yellow"></span><span style="font-size:0.8rem;color:var(--yellow)">Aceptable</span></span></td>
+        </tr>
+        <tr>
+          <td><strong>CLS</strong> <span style="font-size:0.7rem;color:var(--text-muted)">(Cumulative Layout Shift)</span></td>
+          <td>0.037</td><td>0.046</td>
+          <td><span class="semaforo"><span class="dot dot-green"></span><span style="font-size:0.8rem;color:var(--green)">Bueno</span></span></td>
+        </tr>
+        <tr>
+          <td><strong>INP</strong> <span style="font-size:0.7rem;color:var(--text-muted)">(Interaction to Next Paint)</span></td>
+          <td>194ms</td><td>232ms</td>
+          <td><span class="semaforo"><span class="dot dot-yellow"></span><span style="font-size:0.8rem;color:var(--yellow)">Aceptable</span></span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="padding:12px 16px;background:var(--red-bg);border-radius:8px;margin-top:14px;font-size:0.82rem;color:var(--red)">
+      🔴 <strong>LCP promedio 3.9s</strong> excede el límite de 2.5s. Las imágenes grandes de arte pueden ser la causa. Considera lazy loading y formatos WebP/AVIF.
+    </div>
+  </div>
+  <div class="card">
+    <h3>Páginas con Más Problemas UX</h3>
+    <table>
+      <thead><tr><th>Página</th><th>Dead</th><th>Quick</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Interactive Premium Canvas</td><td>0</td><td style="color:var(--orange)">9</td><td><strong>9</strong></td></tr>
+        <tr><td>New Art</td><td style="color:var(--yellow)">2</td><td style="color:var(--orange)">7</td><td><strong>9</strong></td></tr>
+        <tr><td>Home</td><td>0</td><td style="color:var(--orange)">8</td><td><strong>8</strong></td></tr>
+        <tr><td>Limited Edition</td><td>0</td><td style="color:var(--orange)">6</td><td><strong>6</strong></td></tr>
+        <tr><td>Tree of Life</td><td style="color:var(--yellow)">3</td><td>1</td><td><strong>4</strong></td></tr>
+        <tr><td>Garden of Companionship</td><td style="color:var(--red)">4</td><td>0</td><td><strong>4</strong></td></tr>
+        <tr><td>All Originals</td><td>0</td><td style="color:var(--yellow)">4</td><td><strong>4</strong></td></tr>
+        <tr><td>Mother's Day 2026</td><td>1</td><td style="color:var(--yellow)">3</td><td><strong>4</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Errores de JavaScript</h3>
+  <table>
+    <thead><tr><th>Error</th><th>Ocurrencias</th><th>Severidad</th></tr></thead>
+    <tbody>
+      <tr><td><code>Script error.</code></td><td>8</td><td><span class="badge badge-yellow">Media</span></td></tr>
+      <tr><td><code>NetworkError: Load failed</code></td><td>5</td><td><span class="badge badge-orange">Alta</span></td></tr>
+      <tr><td><code>Maximum call stack size exceeded</code></td><td>5</td><td><span class="badge badge-red">Crítica</span></td></tr>
+      <tr><td><code>ResizeObserver loop completed</code></td><td>2</td><td><span class="badge badge-blue">Baja</span></td></tr>
+      <tr><td><code>Cannot read properties of null (reading 'style')</code></td><td>1</td><td><span class="badge badge-yellow">Media</span></td></tr>
+    </tbody>
+  </table>
+  <div style="padding:12px 16px;background:var(--red-bg);border-radius:8px;margin-top:14px;font-size:0.82rem;color:var(--red)">
+    🔴 <strong>"Maximum call stack size exceeded" (5 ocurrencias)</strong> indica recursión infinita en algún script. "NetworkError: Load failed" (5) sugiere recursos que no se cargan correctamente. Ambos pueden impactar la experiencia de compra.
+  </div>
+</div>
+
+<!-- SECCION 6: SESIONES PROBLEMATICAS -->
+<div class="section-title">6. Sesiones Problemáticas</div>
+<div class="card">
+  <h3>Top 5 Sesiones con Más Fricciones</h3>
+  <table>
+    <thead><tr><th>Session ID</th><th>Dead Clicks</th><th>Quick Backs</th><th>Total Issues</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><code>1650558049</code></td><td>4</td><td>6</td><td><strong style="color:var(--red)">10</strong></td><td><a href="https://clarity.microsoft.com/projects/view/session/1650558049" target="_blank" style="color:var(--accent-light);text-decoration:none;font-size:0.8rem">Ver grabación →</a></td></tr>
+      <tr><td><code>2504608046</code></td><td>0</td><td>6</td><td><strong style="color:var(--orange)">6</strong></td><td><a href="https://clarity.microsoft.com/projects/view/session/2504608046" target="_blank" style="color:var(--accent-light);text-decoration:none;font-size:0.8rem">Ver grabación →</a></td></tr>
+      <tr><td><code>3384925477</code></td><td>1</td><td>5</td><td><strong style="color:var(--orange)">6</strong></td><td><a href="https://clarity.microsoft.com/projects/view/session/3384925477" target="_blank" style="color:var(--accent-light);text-decoration:none;font-size:0.8rem">Ver grabación →</a></td></tr>
+      <tr><td><code>2701102172</code></td><td>0</td><td>5</td><td><strong style="color:var(--yellow)">5</strong></td><td><a href="https://clarity.microsoft.com/projects/view/session/2701102172" target="_blank" style="color:var(--accent-light);text-decoration:none;font-size:0.8rem">Ver grabación →</a></td></tr>
+      <tr><td><code>3829168358</code></td><td>0</td><td>5</td><td><strong style="color:var(--yellow)">5</strong></td><td><a href="https://clarity.microsoft.com/projects/view/session/3829168358" target="_blank" style="color:var(--accent-light);text-decoration:none;font-size:0.8rem">Ver grabación →</a></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SECCION 7: INSIGHTS Y RECOMENDACIONES -->
+<div class="section-title">7. Insights y Recomendaciones de la Semana</div>
+
+<div class="insight-card">
+  <div class="insight-title">🎯 El tráfico es casi 100% nuevo — no hay retención</div>
+  <div class="insight-text">99.2% de los usuarios son nuevos, solo 3 recurrentes de 131. Para arte online, las compras requieren múltiples visitas. <strong>Acción:</strong> Implementar email capture (popup con descuento o acceso a colección exclusiva) y retargeting para traer visitantes de vuelta.</div>
+</div>
+
+<div class="insight-card">
+  <div class="insight-title">📱 Mobile descubre, Desktop decide — patrón confirmado</div>
+  <div class="insight-text">Mobile y desktop empatan en sesiones (73 vs 73) pero desktop retiene 3.7× más tiempo (3:18 vs 0:53). Mismas páginas/sesión (2.08). <strong>Acción:</strong> Asegurar que la experiencia mobile sea rápida y fácil de guardar/compartir para facilitar la revisita en desktop.</div>
+</div>
+
+<div class="insight-card">
+  <div class="insight-title">⚠️ "Today I Choose Hope" tiene alto tráfico pero bajo engagement</div>
+  <div class="insight-text">Es el producto más visto (8 vistas) pero con solo 13s de tiempo promedio, 25% scroll, y 3 dead clicks. Los usuarios llegan pero no conectan. <strong>Acción:</strong> Revisar la página del producto — fotos, descripción, precio visible, CTA claro. Comparar con "Guard Your Heart" que retiene 1:58.</div>
+</div>
+
+<div class="insight-card">
+  <div class="insight-title">🔴 LCP de 3.9s está afectando la experiencia</div>
+  <div class="insight-text">El Largest Contentful Paint promedio (3.9s) excede significativamente el límite recomendado de 2.5s. Para un sitio de arte con imágenes grandes, esto es crítico. <strong>Acción:</strong> Optimizar imágenes (WebP/AVIF), implementar lazy loading, revisar el theme de Shopify para assets pesados.</div>
+</div>
+
+<div class="insight-card">
+  <div class="insight-title">🔥 Mother's Day 2026 y Christian Wall Art son las colecciones estrella</div>
+  <div class="insight-text">Mother's Day tiene 62% scroll (buen engagement) y Christian Wall Art alcanza 97% scroll — los usuarios la exploran completa. Interactive Premium Canvas es la más visitada (38 vistas) pero con solo 46% scroll. <strong>Acción:</strong> Promover más Christian Wall Art y Mother's Day. Para Interactive Premium, revisar si hay demasiados productos o falta un orden que enganche.</div>
+</div>
+
+<div class="insight-card">
+  <div class="insight-title">🐛 Errores JS críticos pueden estar perdiendo ventas</div>
+  <div class="insight-text">"Maximum call stack size exceeded" (5 veces) y "NetworkError: Load failed" (5 veces) son errores serios. El primero indica recursión infinita, el segundo recursos rotos. <strong>Acción:</strong> Revisar la consola del navegador en las páginas problemáticas. Desactivar apps de Shopify una por una para identificar la fuente.</div>
+</div>
+
+<div class="footer">
+  Generado automáticamente desde Microsoft Clarity · Ivan Guaderrama Art Gallery<br>
+  Reporte del 29 abril al 5 mayo 2026 · Powered by Claude
+</div>
+
+<script>
+// Canal chart
+new Chart(document.getElementById('channelChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Direct (49)', 'Organic Search (13)', 'Referral (20)', 'Social (3)', 'Otros (66)'],
+    datasets: [{
+      data: [49, 13, 20, 3, 66],
+      backgroundColor: ['#6366f1', '#22c55e', '#f97316', '#eab308', '#4b5563'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { color: '#9ca3af', font: { size: 11 }, padding: 10 } }
+    }
+  }
+});
+
+// Daily trend
+new Chart(document.getElementById('dailyChart'), {
+  type: 'line',
+  data: {
+    labels: ['3 May', '4 May', '5 May'],
+    datasets: [{
+      label: 'Sesiones',
+      data: [15, 53, 83],
+      borderColor: '#6366f1',
+      backgroundColor: 'rgba(99,102,241,0.1)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#6366f1',
+      pointRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+      x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+    }
+  }
+});
+
+// Scroll depth
+new Chart(document.getElementById('scrollChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Home', 'Interactive\nCanvas', "Mother's\nDay", 'New Art', 'Christian\nWall Art', 'All\nOriginals', 'Limited\nEdition', 'Smiling\nJesus', 'Heart\nPaintings'],
+    datasets: [{
+      label: 'Scroll Depth %',
+      data: [17, 46, 62, 69, 97, 62, 82, 42, 45],
+      backgroundColor: function(ctx) {
+        var v = ctx.raw;
+        if (v >= 70) return '#22c55e';
+        if (v >= 50) return '#eab308';
+        return '#ef4444';
+      },
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af', callback: v => v + '%' } },
+      y: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 10 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
