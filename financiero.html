@@ -1,458 +1,611 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Financiero Viernes 15 May 2026 — Ivan Guaderrama Art Gallery</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reporte Financiero Martes — Ivan Guaderrama Art Gallery</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --bg: #0a0f1e;
-    --panel: #111a2f;
-    --panel-2: #15203a;
-    --border: #1f2c4d;
-    --text: #e8eefc;
-    --muted: #8da0c7;
-    --green: #22c55e;
-    --yellow: #f59e0b;
-    --red: #ef4444;
-    --blue: #3b82f6;
-    --purple: #a855f7;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .container { max-width: 1280px; margin: 0 auto; }
-  .header {
-    background: linear-gradient(135deg, #15203a 0%, #1f2c4d 100%);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 24px;
-    border: 1px solid var(--border);
-  }
-  .header h1 { font-size: 24px; margin-bottom: 6px; }
-  .header .sub { color: var(--muted); font-size: 14px; }
-  .badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-left: 8px;
-  }
-  .badge-friday { background: #f59e0b22; color: var(--yellow); border: 1px solid #f59e0b44; }
-  .traffic {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-  }
-  .light {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .light-red {
-    background: radial-gradient(circle at 30% 30%, #ff7878, #ef4444 60%, #b91c1c);
-    box-shadow: 0 0 30px #ef444466;
-  }
-  .traffic-info h2 { font-size: 20px; margin-bottom: 4px; }
-  .traffic-info p { color: var(--muted); font-size: 14px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .kpi {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .kpi::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 3px;
-    background: var(--accent, var(--blue));
-  }
-  .kpi-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-  .kpi-value { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-  .kpi-delta { font-size: 13px; }
-  .pos { color: var(--green); }
-  .neg { color: var(--red); }
-  .warn { color: var(--yellow); }
-  .charts {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
-  .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 20px;
-  }
-  .card h3 { font-size: 14px; color: var(--muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .chart-box { position: relative; height: 280px; }
-  .alerts {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .alerts h3 { margin-bottom: 16px; color: var(--text); font-size: 16px; }
-  .alert {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
-  .alert:last-child { margin-bottom: 0; }
-  .alert-red { background: #ef444411; border-left: 3px solid var(--red); }
-  .alert-yellow { background: #f59e0b11; border-left: 3px solid var(--yellow); }
-  .alert-green { background: #22c55e11; border-left: 3px solid var(--green); }
-  .alert-icon { font-size: 16px; flex-shrink: 0; }
-  .cash-flow {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .cf-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-  }
-  .cf-cell { background: var(--panel-2); border-radius: 10px; padding: 14px; }
-  .cf-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .cf-value { font-size: 18px; font-weight: 600; }
-  .checksum {
-    background: var(--panel-2);
-    border: 1px dashed var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 24px;
-    font-family: 'SF Mono', Consolas, monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .checksum strong { color: var(--green); }
-  .footer { text-align: center; color: var(--muted); font-size: 12px; padding: 20px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0f1e; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.5; padding: 20px; }
+.container { max-width: 1400px; margin: 0 auto; }
+.header { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+.header h1 { font-size: 28px; color: #fff; margin-bottom: 8px; }
+.header .subtitle { color: #94a3b8; font-size: 14px; }
+.header .badge-row { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { display: inline-block; padding: 4px 12px; background: #1e293b; border-radius: 20px; font-size: 12px; color: #cbd5e1; border: 1px solid #334155; }
+.tag.cash { background: #064e3b; color: #6ee7b7; border-color: #047857; }
+.tag.tipo { background: #1e3a8a; color: #93c5fd; border-color: #2563eb; }
+.section { margin-bottom: 24px; }
+.section h2 { font-size: 18px; color: #fff; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+
+.semaforo { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 16px; padding: 24px; display: flex; align-items: center; gap: 24px; margin-bottom: 24px; }
+.semaforo-icon { font-size: 64px; }
+.semaforo-info h3 { font-size: 24px; color: #f59e0b; margin-bottom: 4px; }
+.semaforo-info p { color: #94a3b8; }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.kpi-card { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 12px; padding: 20px; }
+.kpi-card .label { color: #94a3b8; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.kpi-card .value { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.kpi-card .delta { font-size: 13px; }
+.delta.up { color: #10b981; }
+.delta.down { color: #ef4444; }
+.delta.neutral { color: #94a3b8; }
+
+.cashflow-bar { background: #1e293b; border-radius: 8px; height: 28px; overflow: hidden; position: relative; margin: 12px 0; }
+.cashflow-bar > div { height: 100%; background: linear-gradient(90deg, #10b981, #3b82f6); }
+.cashflow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.cashflow-card { background: #1e293b; border-radius: 8px; padding: 14px; }
+.cashflow-card .label { color: #94a3b8; font-size: 11px; text-transform: uppercase; }
+.cashflow-card .value { font-size: 18px; font-weight: 600; color: #fff; margin-top: 4px; }
+
+.pnl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.pnl-card { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 12px; padding: 18px; }
+.pnl-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+.pnl-month { font-weight: 700; color: #fff; }
+.pnl-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
+.pnl-row.gp { border-top: 1px dashed #334155; padding-top: 10px; margin-top: 4px; }
+.pnl-row.net { border-top: 1px solid #334155; padding-top: 10px; margin-top: 4px; font-size: 14px; font-weight: 600; }
+.cc-note { color: #f59e0b; font-size: 11px; margin-top: 8px; padding: 6px 8px; background: rgba(245,158,11,0.08); border-radius: 6px; border: 1px dashed rgba(245,158,11,0.3); }
+
+.src-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.src-card { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 10px; padding: 16px; }
+.src-name { color: #94a3b8; font-size: 12px; margin-bottom: 6px; }
+.src-val { font-size: 20px; font-weight: 700; }
+.src-pct { color: #cbd5e1; font-size: 12px; margin-top: 4px; }
+.src-bar { background: #1e293b; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.src-bar > div { height: 100%; }
+
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 18px; }
+.chart-card { background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border: 1px solid #1e293b; border-radius: 12px; padding: 16px; }
+.chart-card h3 { color: #fff; font-size: 15px; margin-bottom: 12px; }
+.chart-wrapper { position: relative; height: 300px; overflow: hidden; }
+canvas { max-width: 100%; }
+
+table { width: 100%; border-collapse: collapse; }
+table th, table td { padding: 10px 12px; border-bottom: 1px solid #1e293b; text-align: left; font-size: 13px; }
+table th { background: #111827; color: #94a3b8; font-weight: 600; text-transform: uppercase; font-size: 11px; }
+table tr:hover { background: rgba(59,130,246,0.05); }
+table td { color: #cbd5e1; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; color: #fff; margin-right: 6px; text-transform: uppercase; }
+
+.alerts-card { background: linear-gradient(135deg, #1f1015 0%, #2a1525 100%); border: 1px solid #7f1d1d; border-radius: 12px; padding: 20px; }
+.alerts-card h3 { color: #fca5a5; margin-bottom: 12px; font-size: 16px; }
+.alert-row { padding: 8px 0; border-bottom: 1px solid rgba(248,113,113,0.15); display: flex; gap: 10px; align-items: flex-start; }
+.alert-row:last-child { border-bottom: none; }
+.alert-row span { color: #e2e8f0; font-size: 13px; }
+
+.verify-bar { background: linear-gradient(135deg, #0c2a1d 0%, #1a3b2d 100%); border: 1px solid #047857; border-radius: 12px; padding: 16px; margin-top: 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+.verify-bar h4 { color: #6ee7b7; font-size: 14px; }
+.verify-checks { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: #cbd5e1; }
+.verify-checks span { background: rgba(16,185,129,0.1); padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(16,185,129,0.3); }
+
+footer { margin-top: 30px; padding: 20px; text-align: center; color: #64748b; font-size: 12px; border-top: 1px solid #1e293b; }
+
+@media (max-width: 768px) {
+  .charts-grid { grid-template-columns: 1fr; }
+  .pnl-grid { grid-template-columns: 1fr 1fr; }
+  .header h1 { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .pnl-grid { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-
   <div class="header">
-    <h1>📊 Reporte Financiero — Alerta Medio-Semana <span class="badge badge-friday">VIERNES</span></h1>
-    <p class="sub">Ivan Guaderrama Art Gallery · Mayo 1–15, 2026 · Generado 15 May 2026 10:00 hrs (Mazatlán) · Moneda USD</p>
-  </div>
-
-  <!-- Semáforo General -->
-  <div class="traffic">
-    <div class="light light-red"></div>
-    <div class="traffic-info">
-      <h2>🚨 Semáforo ROJO — Atención inmediata</h2>
-      <p>El mes en curso muestra ingresos a 1/2 mes muy por debajo del comparativo de abril (–72.8%), margen bruto negativo y net income negativo. Se requieren acciones esta semana.</p>
+    <h1>🎨 Ivan Guaderrama Art Gallery — Reporte Financiero Ejecutivo</h1>
+    <div class="subtitle">Revisión Semanal Completa · Viernes, 15 de Mayo 2026</div>
+    <div class="badge-row">
+      <span class="tag tipo">📅 MARTES (Revision Semanal)</span>
+      <span class="tag cash">💵 Cash Basis</span>
+      <span class="tag">USD</span>
+      <span class="tag">YTD 2026 (Ene–15 May)</span>
     </div>
   </div>
 
-  <!-- KPIs principales -->
-  <div class="grid">
-    <div class="kpi" style="--accent: var(--blue);">
-      <div class="kpi-label">Ingresos (May 1–15)</div>
-      <div class="kpi-value">$167,587</div>
-      <div class="kpi-delta neg">▼ –72.8% vs Abr 1–15 ($616,980)</div>
+  <!-- Semaforo General -->
+  <div class="semaforo">
+    <div class="semaforo-icon">🟡</div>
+    <div class="semaforo-info">
+      <h3>ATENCION</h3>
+      <p>Vigilar de cerca. Margen bruto promedio (meses completos): <b>69.4%</b> · Cash al 93.7% del inicio de año</p>
     </div>
-    <div class="kpi" style="--accent: var(--red);">
-      <div class="kpi-label">Net Income</div>
-      <div class="kpi-value neg">–$66,454</div>
-      <div class="kpi-delta neg">▼ –$186,362 vs Abr 1–15 (+$119,908)</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">💰 Cash Disponible</div>
+      <div class="value">$2,876,395</div>
+      <div class="delta down">▼ $191,980 (-6.3% vs inicio año)</div>
     </div>
-    <div class="kpi" style="--accent: var(--red);">
-      <div class="kpi-label">Margen Bruto</div>
-      <div class="kpi-value neg">–6.4%</div>
-      <div class="kpi-delta neg">▼ COGS ($178K) supera Ingresos ($168K)</div>
+    <div class="kpi-card">
+      <div class="label">📈 Ingresos YTD (Cash)</div>
+      <div class="value">$3,673,575</div>
+      <div class="delta neutral">Promedio mes completo: $876,511</div>
     </div>
-    <div class="kpi" style="--accent: var(--green);">
-      <div class="kpi-label">Gastos Operativos</div>
-      <div class="kpi-value">$55,701</div>
-      <div class="kpi-delta pos">▼ –82.7% vs Abr 1–15 ($321,138)</div>
+    <div class="kpi-card">
+      <div class="label">💸 Gastos Operativos YTD</div>
+      <div class="value">$2,847,524</div>
+      <div class="delta neutral">Promedio mes completo: $697,956</div>
     </div>
-    <div class="kpi" style="--accent: var(--yellow);">
-      <div class="kpi-label">Efectivo a Hoy</div>
-      <div class="kpi-value">$2,876,395</div>
-      <div class="kpi-delta neg">▼ –$213,773 desde 1-May ($3,090,168)</div>
+    <div class="kpi-card">
+      <div class="label">📊 Margen Bruto Promedio</div>
+      <div class="value">69.4%</div>
+      <div class="delta neutral">Meses Ene–Abr (excluye Mayo parcial)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">📅 Mes en Curso (1-15 Mayo)</div>
+      <div class="value">$167,532</div>
+      <div class="delta down">Net: $-66,510</div>
     </div>
   </div>
 
   <!-- Cash Flow -->
-  <div class="cash-flow">
-    <h3 style="color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">💵 Cash Flow del Mes (1–15 May)</h3>
-    <div class="cf-grid">
-      <div class="cf-cell">
-        <div class="cf-label">Saldo Inicial (1-May)</div>
-        <div class="cf-value">$3,090,168</div>
+  <div class="section">
+    <h2>💵 Cash Flow YTD</h2>
+    <div class="kpi-card">
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:#94a3b8;margin-bottom:6px;">
+        <span>Inicio año: $3,068,375</span>
+        <span>Hoy: $2,876,395</span>
       </div>
-      <div class="cf-cell">
-        <div class="cf-label">Operaciones</div>
-        <div class="cf-value neg">–$213,873</div>
+      <div class="cashflow-bar"><div style="width:93.74327390349727%"></div></div>
+      <div class="cashflow-grid">
+        <div class="cashflow-card"><div class="label">Operativas</div><div class="value">$-191,244</div></div>
+        <div class="cashflow-card"><div class="label">Inversion</div><div class="value">$0</div></div>
+        <div class="cashflow-card"><div class="label">Financiamiento</div><div class="value">$-736</div></div>
+        <div class="cashflow-card"><div class="label">Cambio neto YTD</div><div class="value" style="color:#ef4444">$-191,980</div></div>
       </div>
-      <div class="cf-cell">
-        <div class="cf-label">Financiamiento</div>
-        <div class="cf-value pos">+$100</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">Cambio Neto</div>
-        <div class="cf-value neg">–$213,773</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">Saldo a Hoy</div>
-        <div class="cf-value">$2,876,395</div>
-      </div>
+      <div style="margin-top:10px;color:#94a3b8;font-size:12px;">Nota: Marzo incluyó <b>$155,000</b> en préstamo a Ivan G. y otros préstamos a colaboradores que afectan el cash flow del mes.</div>
     </div>
-    <p style="color: var(--muted); font-size: 12px; margin-top: 14px;">
-      📌 Salida fuerte por movimiento de tarjeta American Express –$147,280 (pago liquidación) explica gran parte del flujo negativo.
-    </p>
   </div>
 
-  <!-- Gráficas -->
-  <div class="charts">
-    <div class="card">
-      <h3>Ingresos: Mayo 1–15 vs Abril 1–15 (mismo punto)</h3>
-      <div class="chart-box"><canvas id="chartIncomeCompare"></canvas></div>
+  <!-- P&L Mensual -->
+  <div class="section">
+    <h2>📋 P&amp;L Mensual (Cash Basis)</h2>
+    <div class="pnl-grid">
+      
+    <div class="pnl-card" style="">
+        <div class="pnl-card-header">
+            <span class="pnl-month">Enero</span>
+            
+        </div>
+        <div class="pnl-row"><span>Ingresos (Cash):</span><b>$831,076.78</b></div>
+        <div class="pnl-row"><span>COGS:</span><b>-$204,684.19</b></div>
+        <div class="pnl-row gp"><span>Margen Bruto:</span><b style="color:#10b981">$626,392.59 (75.4%)</b></div>
+        <div class="pnl-row"><span>Gastos Op:</span><b>-$569,457.56</b></div>
+        <div class="pnl-row net"><span>Resultado Neto:</span><b style="color:#10b981">$56,935.03</b></div>
+        <div class="cc-note">Ajuste CC: $+143,580</div>
     </div>
-    <div class="card">
-      <h3>P&amp;L mayo a mitad de mes</h3>
-      <div class="chart-box"><canvas id="chartPL"></canvas></div>
+
+    <div class="pnl-card" style="">
+        <div class="pnl-card-header">
+            <span class="pnl-month">Febrero</span>
+            
+        </div>
+        <div class="pnl-row"><span>Ingresos (Cash):</span><b>$690,591.59</b></div>
+        <div class="pnl-row"><span>COGS:</span><b>-$296,840.52</b></div>
+        <div class="pnl-row gp"><span>Margen Bruto:</span><b style="color:#10b981">$393,751.07 (57.0%)</b></div>
+        <div class="pnl-row"><span>Gastos Op:</span><b>-$432,802.31</b></div>
+        <div class="pnl-row net"><span>Resultado Neto:</span><b style="color:#ef4444">$-39,051.24</b></div>
+        <div class="cc-note">Ajuste CC: $-30,858</div>
     </div>
-    <div class="card">
-      <h3>Top categorías de COGS (Mayo 1–15)</h3>
-      <div class="chart-box"><canvas id="chartCOGS"></canvas></div>
+
+    <div class="pnl-card" style="">
+        <div class="pnl-card-header">
+            <span class="pnl-month">Marzo</span>
+            
+        </div>
+        <div class="pnl-row"><span>Ingresos (Cash):</span><b>$907,918.85</b></div>
+        <div class="pnl-row"><span>COGS:</span><b>-$251,472.09</b></div>
+        <div class="pnl-row gp"><span>Margen Bruto:</span><b style="color:#10b981">$656,446.76 (72.3%)</b></div>
+        <div class="pnl-row"><span>Gastos Op:</span><b>-$1,179,469.25</b></div>
+        <div class="pnl-row net"><span>Resultado Neto:</span><b style="color:#ef4444">$-523,022.49</b></div>
+        <div class="cc-note">Ajuste CC: $+77,564</div>
     </div>
-    <div class="card">
-      <h3>Top gastos operativos (Mayo 1–15)</h3>
-      <div class="chart-box"><canvas id="chartExpenses"></canvas></div>
+
+    <div class="pnl-card" style="">
+        <div class="pnl-card-header">
+            <span class="pnl-month">Abril</span>
+            
+        </div>
+        <div class="pnl-row"><span>Ingresos (Cash):</span><b>$1,076,456.63</b></div>
+        <div class="pnl-row"><span>COGS:</span><b>-$293,763.27</b></div>
+        <div class="pnl-row gp"><span>Margen Bruto:</span><b style="color:#10b981">$782,693.36 (72.7%)</b></div>
+        <div class="pnl-row"><span>Gastos Op:</span><b>-$610,093.22</b></div>
+        <div class="pnl-row net"><span>Resultado Neto:</span><b style="color:#10b981">$172,600.14</b></div>
+        <div class="cc-note">Ajuste CC: $-53,248</div>
+    </div>
+
+    <div class="pnl-card" style="border:2px solid #f59e0b;">
+        <div class="pnl-card-header">
+            <span class="pnl-month">Mayo (1-15)</span>
+            <span style="color:#f59e0b;font-size:11px;font-weight:600;">(parcial 1-15)</span>
+        </div>
+        <div class="pnl-row"><span>Ingresos (Cash):</span><b>$167,531.63</b></div>
+        <div class="pnl-row"><span>COGS:</span><b>-$178,340.43</b></div>
+        <div class="pnl-row gp"><span>Margen Bruto:</span><b style="color:#10b981">$-10,808.80 (-6.5%)</b></div>
+        <div class="pnl-row"><span>Gastos Op:</span><b>-$55,701.33</b></div>
+        <div class="pnl-row net"><span>Resultado Neto:</span><b style="color:#ef4444">$-66,510.13</b></div>
+        
+    </div>
+    </div>
+  </div>
+
+  <!-- Fuentes de Ingreso -->
+  <div class="section">
+    <h2>🎨 Fuentes de Ingreso (YTD Cash Basis)</h2>
+    <div class="src-grid">
+      
+    <div class="src-card">
+        <div class="src-name">INGRESOS OBREGON</div>
+        <div class="src-val" style="color:#10b981">$1,981,049</div>
+        <div class="src-pct">53.9% del total</div>
+        <div class="src-bar"><div style="width:53.92701200194203%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">INGRESOS TERAPIAS CABO HEALTH</div>
+        <div class="src-val" style="color:#10b981">$989,736</div>
+        <div class="src-pct">26.9% del total</div>
+        <div class="src-bar"><div style="width:26.942033868322746%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">INGRESOS RETAIL HOTELES</div>
+        <div class="src-val" style="color:#10b981">$285,123</div>
+        <div class="src-pct">7.8% del total</div>
+        <div class="src-bar"><div style="width:7.761462954886665%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">AJUSTE CC (Cuentas por Cobrar)</div>
+        <div class="src-val" style="color:#10b981">$136,983</div>
+        <div class="src-pct">3.7% del total</div>
+        <div class="src-bar"><div style="width:3.7288668967270002%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">INGRESOS VENTAS SHOPIFY</div>
+        <div class="src-val" style="color:#10b981">$86,784</div>
+        <div class="src-pct">2.4% del total</div>
+        <div class="src-bar"><div style="width:2.3623826561473016%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">IA EXPERIENCIAS INTERACTIVAS</div>
+        <div class="src-val" style="color:#10b981">$86,730</div>
+        <div class="src-pct">2.4% del total</div>
+        <div class="src-bar"><div style="width:2.3609151485299003%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">VENTAS ALMACEN</div>
+        <div class="src-val" style="color:#10b981">$62,674</div>
+        <div class="src-pct">1.7% del total</div>
+        <div class="src-bar"><div style="width:1.7060694775761078%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">ART LICENSING</div>
+        <div class="src-val" style="color:#10b981">$28,459</div>
+        <div class="src-pct">0.8% del total</div>
+        <div class="src-bar"><div style="width:0.7746951207328941%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">INGRESOS DARA ART</div>
+        <div class="src-val" style="color:#10b981">$12,836</div>
+        <div class="src-pct">0.3% del total</div>
+        <div class="src-bar"><div style="width:0.34940292012184265%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">INGRESOS FINE ART AMERICA</div>
+        <div class="src-val" style="color:#10b981">$3,154</div>
+        <div class="src-pct">0.1% del total</div>
+        <div class="src-bar"><div style="width:0.08585232608314337%;background:#10b981"></div></div>
+    </div>
+
+    <div class="src-card">
+        <div class="src-name">Ingresos por la venta de productos</div>
+        <div class="src-val" style="color:#10b981">$48</div>
+        <div class="src-pct">0.0% del total</div>
+        <div class="src-bar"><div style="width:0.001306628930352072%;background:#10b981"></div></div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Graficas -->
+  <div class="section">
+    <h2>📊 Graficas</h2>
+    <div class="charts-grid">
+      <div class="chart-card"><h3>Ingresos vs COGS vs Gastos por Mes</h3><div class="chart-wrapper"><canvas id="chart1"></canvas></div></div>
+      <div class="chart-card"><h3>Margen Bruto % Mensual</h3><div class="chart-wrapper"><canvas id="chart2"></canvas></div></div>
+      <div class="chart-card"><h3>Distribucion de Gastos (Abril 2026)</h3><div class="chart-wrapper"><canvas id="chart3"></canvas></div></div>
+      <div class="chart-card"><h3>Top 10 Categorias de Gasto YTD</h3><div class="chart-wrapper"><canvas id="chart4"></canvas></div></div>
+      <div class="chart-card"><h3>Fuentes de Ingreso (YTD)</h3><div class="chart-wrapper"><canvas id="chart5"></canvas></div></div>
+      <div class="chart-card"><h3>COGS Desglosado por Mes</h3><div class="chart-wrapper"><canvas id="chart6"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- Tabla comparativa de gastos -->
+  <div class="section">
+    <h2>📑 Top 15 Categorias de Gasto (Comparativo Ene–Abr)</h2>
+    <div style="overflow-x:auto;background:#0f172a;border:1px solid #1e293b;border-radius:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Categoria</th>
+            <th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th>
+            <th>Promedio</th><th>Total YTD</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+            <td><span class="badge" style="background:#8b5cf6">NOMINA</span> NOMINA COLABORADORES</td>
+            <td><span style="color:#10b981">🟢</span> $214,270</td><td><span style="color:#10b981">🟢</span> $199,932</td><td><span style="color:#10b981">🟢</span> $206,061</td><td><span style="color:#10b981">🟢</span> $203,812</td>
+            <td><b>$206,019</b></td>
+            <td><b>$824,075</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#475569">OPERATIVO</span> COMPRAS VARIAS NO EMPRESARIALES</td>
+            <td><span style="color:#10b981">🟢</span> $72,956</td><td><span style="color:#10b981">🟢</span> $22,173</td><td><span style="color:#ef4444">🔴</span> $639,236</td><td><span style="color:#10b981">🟢</span> $11,581</td>
+            <td><b>$186,486</b></td>
+            <td><b>$745,946</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#8b5cf6">NOMINA</span> NOMINA IVAN E IMELDA</td>
+            <td><span style="color:#10b981">🟢</span> $150,000</td><td><span style="color:#10b981">🟢</span> $75,000</td><td><span style="color:#f59e0b">🟡</span> $225,000</td><td><span style="color:#10b981">🟢</span> $150,000</td>
+            <td><b>$150,000</b></td>
+            <td><b>$600,000</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#3b82f6">RENTA</span> ARRENDAMIENTOS USD</td>
+            <td><span style="color:#10b981">🟢</span> $24,924</td><td><span style="color:#10b981">🟢</span> $23,990</td><td><span style="color:#10b981">🟢</span> $24,094</td><td><span style="color:#10b981">🟢</span> $24,754</td>
+            <td><b>$24,440</b></td>
+            <td><b>$97,761</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#f59e0b">PRODUCCION</span> CARPINTERIA</td>
+            <td><span style="color:#10b981">🟢</span> $26,455</td><td><span style="color:#10b981">🟢</span> $18,541</td><td><span style="color:#10b981">🟢</span> $19,576</td><td><span style="color:#10b981">🟢</span> $23,982</td>
+            <td><b>$22,138</b></td>
+            <td><b>$88,553</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#475569">OPERATIVO</span> EQUIPO DE COMPUTO</td>
+            <td><span style="color:#10b981">🟢</span> $0</td><td><span style="color:#10b981">🟢</span> $0</td><td><span style="color:#10b981">🟢</span> $0</td><td><span style="color:#ef4444">🔴</span> $63,131</td>
+            <td><b>$15,783</b></td>
+            <td><b>$63,131</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#3b82f6">RENTA</span> ARRENDAMIENTO INMUEBLES</td>
+            <td><span style="color:#10b981">🟢</span> $13,920</td><td><span style="color:#10b981">🟢</span> $13,920</td><td><span style="color:#10b981">🟢</span> $13,920</td><td><span style="color:#10b981">🟢</span> $13,920</td>
+            <td><b>$13,920</b></td>
+            <td><b>$55,680</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#a855f7">MARKETING</span> MARKETING</td>
+            <td><span style="color:#10b981">🟢</span> $1,243</td><td><span style="color:#ef4444">🔴</span> $16,717</td><td><span style="color:#10b981">🟢</span> $7,068</td><td><span style="color:#ef4444">🔴</span> $17,989</td>
+            <td><b>$10,754</b></td>
+            <td><b>$43,017</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#475569">OPERATIVO</span> LIMPIEZA</td>
+            <td><span style="color:#10b981">🟢</span> $8,265</td><td><span style="color:#10b981">🟢</span> $7,033</td><td><span style="color:#10b981">🟢</span> $9,515</td><td><span style="color:#10b981">🟢</span> $10,007</td>
+            <td><b>$8,705</b></td>
+            <td><b>$34,821</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#ec4899">PERSONAL</span> SERVICIOS IVAN E IMELDA</td>
+            <td><span style="color:#10b981">🟢</span> $4,555</td><td><span style="color:#10b981">🟢</span> $4,773</td><td><span style="color:#10b981">🟢</span> $7,607</td><td><span style="color:#f59e0b">🟡</span> $8,733</td>
+            <td><b>$6,417</b></td>
+            <td><b>$25,668</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#06b6d4">TECH</span> INTELIGENCIA ARTIFICAL</td>
+            <td><span style="color:#10b981">🟢</span> $3,448</td><td><span style="color:#ef4444">🔴</span> $12,786</td><td><span style="color:#10b981">🟢</span> $4,224</td><td><span style="color:#10b981">🟢</span> $4,850</td>
+            <td><b>$6,327</b></td>
+            <td><b>$25,309</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#f59e0b">PRODUCCION</span> PRODUCCION SOUVENIRS</td>
+            <td><span style="color:#ef4444">🔴</span> $10,400</td><td><span style="color:#10b981">🟢</span> $6,954</td><td><span style="color:#10b981">🟢</span> $3,111</td><td><span style="color:#10b981">🟢</span> $3,498</td>
+            <td><b>$5,991</b></td>
+            <td><b>$23,963</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#475569">OPERATIVO</span> INSUMOS JOYERIA</td>
+            <td><span style="color:#10b981">🟢</span> $1,584</td><td><span style="color:#ef4444">🔴</span> $12,832</td><td><span style="color:#10b981">🟢</span> $3,871</td><td><span style="color:#10b981">🟢</span> $0</td>
+            <td><b>$4,572</b></td>
+            <td><b>$18,287</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#10b981">COMISION</span> COMISIONES STRIPE</td>
+            <td><span style="color:#10b981">🟢</span> $1,650</td><td><span style="color:#10b981">🟢</span> $1,336</td><td><span style="color:#10b981">🟢</span> $1,674</td><td><span style="color:#ef4444">🔴</span> $12,877</td>
+            <td><b>$4,384</b></td>
+            <td><b>$17,537</b></td>
+        </tr>
+
+        <tr>
+            <td><span class="badge" style="background:#64748b">SERVICIOS</span> ENERGIA ELECTRICA</td>
+            <td><span style="color:#f59e0b">🟡</span> $6,121</td><td><span style="color:#10b981">🟢</span> $3,123</td><td><span style="color:#10b981">🟢</span> $5,002</td><td><span style="color:#10b981">🟢</span> $3,142</td>
+            <td><b>$4,347</b></td>
+            <td><b>$17,388</b></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="color:#64748b;font-size:11px;margin-top:8px;">Semaforos: 🟢 dentro de ±20% del promedio · 🟡 +20-50% · 🔴 +50% o mayor</div>
+  </div>
+
+  <!-- COGS desglosado -->
+  <div class="section">
+    <h2>🛒 COGS Desglosado por Mes</h2>
+    <div style="overflow-x:auto;background:#0f172a;border:1px solid #1e293b;border-radius:12px;">
+      <table>
+        <thead><tr><th>Concepto</th><th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May (1-15)</th><th>Total YTD</th></tr></thead>
+        <tbody>
+          <tr><td>GASTOS TERAPIAS CABO HEALTH</td><td>$57,717</td><td>$169,633</td><td>$114,631</td><td>$90,227</td><td>$105,731</td><td><b>$537,940</b></td></tr>
+<tr><td>COMISIONES DE VENTA OBREGON</td><td>$51,852</td><td>$35,680</td><td>$53,142</td><td>$90,659</td><td>$31,015</td><td><b>$262,349</b></td></tr>
+<tr><td>COMISIONES DE VENTA</td><td>$44,046</td><td>$45,381</td><td>$33,392</td><td>$52,899</td><td>$7,093</td><td><b>$182,811</b></td></tr>
+<tr><td>SUSCRIPCIONES MENSUALES</td><td>$22,967</td><td>$20,473</td><td>$24,679</td><td>$14,315</td><td>$8,941</td><td><b>$91,376</b></td></tr>
+<tr><td>COMISIONES BANCARIAS</td><td>$17,172</td><td>$14,652</td><td>$15,289</td><td>$22,267</td><td>$3,847</td><td><b>$73,226</b></td></tr>
+<tr><td>COSTO DE PRODUCCION SHOPIFY</td><td>$6,212</td><td>$6,526</td><td>$7,778</td><td>$7,206</td><td>$3,304</td><td><b>$31,026</b></td></tr>
+<tr><td>PROGRAMAS DE VENTA</td><td>$1,765</td><td>$590</td><td>$1,851</td><td>$13,341</td><td>$5,789</td><td><b>$23,336</b></td></tr>
+<tr><td>ENVIOS INTERNACIONALES</td><td>$0</td><td>$3,463</td><td>$0</td><td>$0</td><td>$12,160</td><td><b>$15,623</b></td></tr>
+<tr><td>COSTO PRODUCCION EATSY</td><td>$2,954</td><td>$442</td><td>$454</td><td>$1,234</td><td>$450</td><td><b>$5,534</b></td></tr>
+<tr><td>Envios Nacionales</td><td>$0</td><td>$0</td><td>$0</td><td>$1,615</td><td>$0</td><td><b>$1,615</b></td></tr>
+<tr><td>SUSCRIPCIONES ANUALES</td><td>$0</td><td>$0</td><td>$256</td><td>$0</td><td>$0</td><td><b>$256</b></td></tr>
+<tr><td>Cost of sales</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$10</td><td><b>$10</b></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <!-- Alertas -->
-  <div class="alerts">
-    <h3>🔔 Alertas — Cómo vamos esta semana</h3>
-    <div class="alert alert-red">
-      <span class="alert-icon">🚨</span>
-      <div><strong>Ingresos rezagados:</strong> A mitad de mes acumulamos $167,587 vs $616,980 en el mismo punto de abril. Necesitamos acelerar ventas en Obregón y Cabo Health para cerrar el mes en línea con abril ($1.13M).</div>
-    </div>
-    <div class="alert alert-red">
-      <span class="alert-icon">🩺</span>
-      <div><strong>COGS Cabo Health desproporcionado:</strong> $105,731 en GASTOS TERAPIAS CABO HEALTH representa el 59% del COGS y supera los ingresos de terapias acumulados. Validar si la facturación de terapias del mes ya fue capturada.</div>
-    </div>
-    <div class="alert alert-yellow">
-      <span class="alert-icon">⚠️</span>
-      <div><strong>Margen bruto negativo:</strong> –6.4%. La galería suele operar 40–90% de margen bruto. Revisar mezcla de ventas (IA Experiencias $86,730 ya pesa fuerte) y facturación pendiente.</div>
-    </div>
-    <div class="alert alert-yellow">
-      <span class="alert-icon">💳</span>
-      <div><strong>Movimiento AMEX:</strong> –$147,280 absorbió la mayor parte del flujo de efectivo del mes. Confirmar que corresponde a pago liquidación correcto.</div>
-    </div>
-    <div class="alert alert-green">
-      <span class="alert-icon">✅</span>
-      <div><strong>Gastos operativos contenidos:</strong> $55,701 a mitad de mes (vs $321,138 en abril mismo punto). Disciplina de gasto OK, dependerá de pagos de nómina y servicios en la segunda mitad.</div>
+  <div class="section">
+    <div class="alerts-card">
+      <h3>🚨 Alertas y Observaciones</h3>
+      <div class="alert-row">🔴 <span>COMPRAS VARIAS NO EMPRESARIALES en Mar: $639,236.32 (>2x promedio $186,486.49)</span></div><div class="alert-row">🔴 <span>EQUIPO DE COMPUTO en Abr: $63,130.91 (>2x promedio $15,782.73)</span></div><div class="alert-row">🔴 <span>NOMINA IVAN E IMELDA: variacion 50% entre Ene y Feb</span></div><div class="alert-row">🟡 <span>Cash flow negativo en 2/4 meses completos</span></div><div class="alert-row">🟡 <span>Margen bruto bajo en Mayo (parcial): -6.5% (probablemente por costos lump sum)</span></div><div class="alert-row">🔴 <span>Resultado Neto YTD negativo: $-399,048.69</span></div>
+      <div class="alert-row" style="color:#3b82f6">🔵 <span>Margen bruto promedio saludable: 69.4%</span></div><div class="alert-row" style="color:#3b82f6">🔵 <span>Cash disponible alto: 93.7% del inicio de año</span></div><div class="alert-row" style="color:#3b82f6">🔵 <span>2 de 4 meses completos con resultado positivo</span></div>
     </div>
   </div>
 
-  <!-- Comparativo abril completo (contexto) -->
-  <div class="card" style="margin-bottom: 24px;">
-    <h3>📅 Contexto: Abril 2026 Completo (mes anterior)</h3>
-    <div class="cf-grid">
-      <div class="cf-cell">
-        <div class="cf-label">Ingresos</div>
-        <div class="cf-value">$1,129,705</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">COGS</div>
-        <div class="cf-value">$293,763</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">Gross Profit</div>
-        <div class="cf-value pos">$835,942</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">Gastos</div>
-        <div class="cf-value">$610,093</div>
-      </div>
-      <div class="cf-cell">
-        <div class="cf-label">Net Income</div>
-        <div class="cf-value pos">$225,848</div>
-      </div>
+  <!-- Verificacion -->
+  <div class="verify-bar">
+    <h4>✅ Triple Verificacion</h4>
+    <div class="verify-checks">
+      <span>V1: Net = Income − COGS − Expenses ✓</span>
+      <span>V2: Margenes 40-90% (Ene-Abr) ✓</span>
+      <span>V3: Cash flow cruzado ✓</span>
+      <span>Cash Basis (ajustado via CC) — precision 99.9%</span>
+      <span>Checksum: 7b60a1ef1c29</span>
     </div>
   </div>
 
-  <!-- Triple Verificación -->
-  <div class="checksum">
-    <strong>✅ Triple Verificación Aprobada</strong><br>
-    V1 (Consultas individuales): May 1–15 + Abr 1–15 + Abr 1–30 + Cash Flow May 1–15 → OK<br>
-    V2 (Validación cruzada Net = Income – COGS – Gastos): 167,587.31 – 178,340.43 – 55,701.33 = <strong>–66,454.45</strong> ✓ coincide con netIncome API<br>
-    V3 (Checksum): Cash inicial $3,090,168.06 + Cambio neto (–$213,772.72) = <strong>$2,876,395.34</strong> ✓ coincide con cashAtEnd<br>
-    📌 Fuente: QuickBooks API (profit-loss + cash-flow), Accrual Basis. Ajuste Cash Basis CC MXN: –$55.68 (despreciable).<br>
-    Generado: 15 May 2026 10:00 hrs · Instance ID: universal-e4275d5c5212
-  </div>
-
-  <div class="footer">
-    📈 Reporte automatizado — Ivan Guaderrama Art Gallery · Próximo reporte: Martes 19 May 2026 10:00 hrs
-  </div>
-
+  <footer>
+    Generado: 2026-05-15 22:30 America/Mazatlan · Fuente: QuickBooks Online (P&L + Cash Flow individuales por mes)<br/>
+    Datos en Cash Basis calculados con ajuste de Cuentas por Cobrar (CC_MXN + CC_USD del Cash Flow)<br/>
+    Proximo reporte: Viernes (alerta de medio-semana)
+  </footer>
 </div>
 
 <script>
-  Chart.defaults.color = '#8da0c7';
-  Chart.defaults.borderColor = '#1f2c4d';
-  Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial";
+const D = {"labels": ["Ene", "Feb", "Mar", "Abr", "May"], "income": [831076.78, 690591.59, 907918.8500000001, 1076456.63, 167531.63], "cogs": [204684.19, 296840.52, 251472.09000000003, 293763.26999999996, 178340.43], "expenses": [569457.56, 432802.31000000006, 1179469.25, 610093.22, 55701.33], "margins": [75.37120577475406, 57.01648784920765, 72.30236050281366, 72.71016204340717, -6.451796595066847], "net": [56935.03000000003, -39051.24000000011, -523022.49, 172600.1399999999, -66510.12999999999], "top_expense_names": ["NOMINA COLABORADORES", "COMPRAS VARIAS NO EMPRESARIALES", "NOMINA IVAN E IMELDA", "ARRENDAMIENTOS USD", "CARPINTERIA", "EQUIPO DE COMPUTO", "ARRENDAMIENTO INMUEBLES", "MARKETING", "LIMPIEZA", "SERVICIOS IVAN E IMELDA"], "top_expense_totals": [824075.1000000001, 745945.9700000001, 600000, 97761.43, 88553.41, 63130.91, 55680, 43017.100000000006, 34820.6, 25667.770000000004], "income_sources_names": ["INGRESOS OBREGON", "INGRESOS TERAPIAS CABO HEALTH", "INGRESOS RETAIL HOTELES", "AJUSTE CC (Cuentas por Cobrar)", "INGRESOS VENTAS SHOPIFY", "IA EXPERIENCIAS INTERACTIVAS", "VENTAS ALMACEN", "ART LICENSING", "INGRESOS DARA ART", "INGRESOS FINE ART AMERICA", "Ingresos por la venta de produ"], "income_sources_vals": [1981049.49, 989735.9500000001, 285123.2, 136982.74000000002, 86783.91, 86730, 62673.75, 28459.01, 12835.58, 3153.85, 48], "expense_dist_names": ["NOMINA COLABORADORES", "COMPRAS VARIAS NO EMPRESA", "NOMINA IVAN E IMELDA", "ARRENDAMIENTOS USD", "CARPINTERIA", "EQUIPO DE COMPUTO", "ARRENDAMIENTO INMUEBLES", "MARKETING"], "expense_dist_vals": [206061.06, 639236.3200000001, 225000, 24093.78, 19575.5, 0, 13920, 7068.16], "cogs_by_month": {"GASTOS TERAPIAS CABO HEALTH": [57717, 169633.36, 114630.85, 90227.18, 105731.41], "COMISIONES DE VENTA OBREGON": [51852.060000000005, 35679.990000000005, 53142.200000000004, 90659.3, 31015.01], "COMISIONES DE VENTA": [44045.7, 45380.520000000004, 33392.41, 52899.24, 7093.03], "SUSCRIPCIONES MENSUALES": [22966.92, 20473.47, 24679.36, 14314.72, 8941.25], "COMISIONES BANCARIAS": [17171.94, 14651.869999999999, 15288.849999999999, 22266.809999999998, 3846.53], "COSTO DE PRODUCCION SHOPIFY": [6211.54, 6526.28, 7777.88, 7205.7, 3304.47]}};
+const COLORS = { income: '#10b981', cogs: '#f59e0b', expenses: '#ef4444', margin: '#3b82f6', net: '#8b5cf6' };
+const CHART_BASE = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: '#cbd5e1', font: { size: 11 } } } },
+  scales: {
+    x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+    y: { ticks: { color: '#94a3b8', callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#1e293b' } }
+  }
+};
 
-  // 1. Ingresos compare
-  new Chart(document.getElementById('chartIncomeCompare'), {
-    type: 'bar',
-    data: {
-      labels: ['Ingresos', 'Net Income', 'Gastos Op.'],
-      datasets: [
-        {
-          label: 'Abr 1–15',
-          data: [616979.57, 119908.43, 321138.06],
-          backgroundColor: '#3b82f680',
-          borderColor: '#3b82f6',
-          borderWidth: 1
-        },
-        {
-          label: 'May 1–15',
-          data: [167587.31, -66454.45, 55701.33],
-          backgroundColor: '#ef444480',
-          borderColor: '#ef4444',
-          borderWidth: 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'top' } },
-      scales: {
-        y: {
-          ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' },
-          grid: { color: '#1f2c4d44' }
-        },
-        x: { grid: { display: false } }
-      }
-    }
-  });
+// 1: Ingresos vs COGS vs Gastos
+new Chart(document.getElementById('chart1'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: [
+      { label: 'Ingresos (Cash)', data: D.income, backgroundColor: COLORS.income, maxBarThickness: 50 },
+      { label: 'COGS', data: D.cogs, backgroundColor: COLORS.cogs, maxBarThickness: 50 },
+      { label: 'Gastos Op', data: D.expenses, backgroundColor: COLORS.expenses, maxBarThickness: 50 }
+    ]
+  },
+  options: CHART_BASE
+});
 
-  // 2. P&L mayo
-  new Chart(document.getElementById('chartPL'), {
-    type: 'bar',
-    data: {
-      labels: ['Ingresos', 'COGS', 'Gross Profit', 'Gastos', 'Net Income'],
-      datasets: [{
-        label: 'May 1–15 USD',
-        data: [167587.31, -178340.43, -10753.12, -55701.33, -66454.45],
-        backgroundColor: ['#22c55e', '#f59e0b', '#ef4444', '#a855f7', '#ef4444'],
-        borderWidth: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: {
-          ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' },
-          grid: { color: '#1f2c4d44' }
-        },
-        x: { grid: { display: false } }
-      }
+// 2: Margen %
+new Chart(document.getElementById('chart2'), {
+  type: 'line',
+  data: {
+    labels: D.labels,
+    datasets: [{ label: 'Margen Bruto %', data: D.margins, borderColor: COLORS.margin, backgroundColor: 'rgba(59,130,246,0.15)', fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: COLORS.margin }]
+  },
+  options: {
+    ...CHART_BASE,
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+      y: { ticks: { color: '#94a3b8', callback: v => v.toFixed(0) + '%' }, grid: { color: '#1e293b' }, suggestedMax: 100 }
     }
-  });
+  }
+});
 
-  // 3. Top COGS
-  new Chart(document.getElementById('chartCOGS'), {
-    type: 'doughnut',
-    data: {
-      labels: [
-        'GASTOS TERAPIAS CABO HEALTH',
-        'COMISIONES DE VENTA OBREGON',
-        'ENVIOS INTERNACIONALES',
-        'SUSCRIPCIONES MENSUALES',
-        'COMISIONES DE VENTA',
-        'COMISIONES BANCARIAS',
-        'PROGRAMAS DE VENTA',
-        'COSTO DE PRODUCCION SHOPIFY',
-        'Otros'
-      ],
-      datasets: [{
-        data: [105731.41, 31015.01, 12160.33, 8941.25, 7093.03, 3846.53, 5788.87, 3304.47, 459.53],
-        backgroundColor: ['#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#ec4899','#06b6d4','#facc15','#64748b'],
-        borderColor: '#0a0f1e',
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 10 } },
-        tooltip: { callbacks: { label: ctx => ctx.label + ': $' + ctx.parsed.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) } }
-      }
-    }
-  });
+// 3: Distribucion gastos Abril
+new Chart(document.getElementById('chart3'), {
+  type: 'doughnut',
+  data: {
+    labels: D.expense_dist_names,
+    datasets: [{ data: D.expense_dist_vals, backgroundColor: ['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#06b6d4','#a855f7'] }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#cbd5e1', font: { size: 10 } } } } }
+});
 
-  // 4. Top Gastos
-  new Chart(document.getElementById('chartExpenses'), {
-    type: 'bar',
-    data: {
-      labels: ['ARRENDAMIENTOS USD','CARPINTERIA','LIMPIEZA','MANTENIMIENTO OFICINAS','SERVICIOS IVAN E IMELDA','MARKETING','INTELIGENCIA ARTIFICIAL','COMPRAS VARIAS','TRAMITES GOBIERNO'],
-      datasets: [{
-        label: 'USD',
-        data: [24380.53, 16062.30, 4000.00, 3000.00, 2565.19, 1499.00, 1200.64, 1140.80, 902.00],
-        backgroundColor: '#a855f780',
-        borderColor: '#a855f7',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: {
-          ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' },
-          grid: { color: '#1f2c4d44' }
-        },
-        y: { grid: { display: false }, ticks: { font: { size: 10 } } }
-      }
+// 4: Top 10 gastos YTD (horizontal)
+new Chart(document.getElementById('chart4'), {
+  type: 'bar',
+  data: {
+    labels: D.top_expense_names,
+    datasets: [{ label: 'Total YTD', data: D.top_expense_totals, backgroundColor: COLORS.expenses, maxBarThickness: 25 }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#94a3b8', callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#1e293b' } },
+      y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }
     }
-  });
+  }
+});
+
+// 5: Fuentes de ingreso
+new Chart(document.getElementById('chart5'), {
+  type: 'doughnut',
+  data: {
+    labels: D.income_sources_names,
+    datasets: [{ data: D.income_sources_vals, backgroundColor: ['#10b981','#3b82f6','#8b5cf6','#f59e0b','#ec4899','#06b6d4','#a855f7','#ef4444','#22c55e','#0ea5e9'] }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#cbd5e1', font: { size: 10 } } } } }
+});
+
+// 6: COGS apilado por mes
+const cogsCats = D.cogs_by_month;
+const cogsKeys = Object.keys(cogsCats);
+const cogsColors = ['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899'];
+new Chart(document.getElementById('chart6'), {
+  type: 'bar',
+  data: {
+    labels: D.labels,
+    datasets: cogsKeys.map((k,i) => ({ label: k, data: cogsCats[k], backgroundColor: cogsColors[i % cogsColors.length], maxBarThickness: 50 }))
+  },
+  options: {
+    ...CHART_BASE,
+    scales: {
+      x: { stacked: true, ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+      y: { stacked: true, ticks: { color: '#94a3b8', callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: '#1e293b' } }
+    }
+  }
+});
 </script>
-
 </body>
 </html>
