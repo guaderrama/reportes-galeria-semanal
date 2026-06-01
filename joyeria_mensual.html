@@ -2,393 +2,556 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Reporte Mensual de Joyería — Abril 2026</title>
+<title>Reporte Mensual Joyeria - Mayo 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --morado: #6B21A8;
-    --pink: #EC4899;
-    --bg: #faf5ff;
-    --card: #fff;
-    --txt: #1f2937;
-    --muted: #6b7280;
-    --border: #e5e7eb;
-    --warning: #f59e0b;
-    --warning-bg: #fef3c7;
-    --green: #10b981;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--txt); }
-  header { background: linear-gradient(135deg, var(--morado), var(--pink)); color: white; padding: 24px 32px; }
-  header h1 { margin: 0; font-size: 26px; }
-  header .sub { opacity: .85; font-size: 14px; margin-top: 4px; }
-  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
-  .tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--border); margin-bottom: 24px; flex-wrap: wrap; }
-  .tab { padding: 12px 20px; cursor: pointer; border: none; background: none; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; }
-  .tab.active { color: var(--morado); border-color: var(--morado); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 24px; }
-  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .kpi .label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
-  .kpi .value { font-size: 22px; font-weight: 700; margin-top: 6px; color: var(--morado); }
-  .kpi .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .kpi.ls .value { color: var(--morado); }
-  .kpi.ls { background: linear-gradient(135deg, #f3e8ff, #fce7f3); border-color: #d8b4fe; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-  .card h3 { margin: 0 0 16px; color: var(--morado); font-size: 16px; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
-  th { background: #f9fafb; font-weight: 600; color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: .3px; }
-  td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  th.num { text-align: right; }
-  th.ls-col { background: #faf5ff; color: var(--morado); }
-  td.ls-col { color: var(--morado); }
-  tr.excluded-row { background: var(--warning-bg) !important; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .badge.mia { background: #fce7f3; color: var(--pink); }
-  .badge.ig { background: #ede9fe; color: var(--morado); }
-  .badge.courtesy { background: #fef3c7; color: #92400e; }
-  .badge.excluded { background: #fed7aa; color: #9a3412; }
-  .selector { padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: white; margin-bottom: 16px; }
-  .exclusion-note { background: #fff7ed; border: 1px solid var(--warning); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; color: #9a3412; font-size: 13px; }
-  .chart-wrap { position: relative; height: 320px; }
-  .medal { font-size: 18px; }
-  .ts { color: var(--muted); font-size: 12px; }
-  footer { text-align: center; padding: 16px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 32px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#f8fafc; color:#1f2937; }
+.header { background:linear-gradient(135deg,#6B21A8 0%, #EC4899 100%); color:white; padding:32px 24px; text-align:center; }
+.header h1 { font-size:28px; margin-bottom:6px; }
+.header p { opacity:.92; }
+.container { max-width:1200px; margin: 24px auto; padding: 0 16px; }
+.tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; border-bottom:2px solid #e5e7eb; }
+.tab { padding:10px 16px; cursor:pointer; border:none; background:none; font-weight:600; color:#6b7280; border-bottom:3px solid transparent; }
+.tab.active { color:#6B21A8; border-bottom-color:#EC4899; }
+.panel { display:none; background:white; padding:24px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+.panel.active { display:block; }
+.kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:14px; margin-bottom:24px; }
+.kpi { background:#fff; border:1px solid #e5e7eb; padding:16px; border-radius:10px; }
+.kpi-label { font-size:12px; color:#6b7280; text-transform:uppercase; letter-spacing:.04em; }
+.kpi-value { font-size:22px; font-weight:700; color:#111827; margin-top:6px; }
+.kpi.ls { background: linear-gradient(135deg,#6B21A8 0%, #7c3aed 100%); color:white; border:none; }
+.kpi.ls .kpi-label { color:#fde68a; }
+.kpi.ls .kpi-value { color:white; }
+.kpi.accent { border-left:4px solid #EC4899; }
+h2 { color:#6B21A8; margin: 16px 0 12px; }
+h3 { color:#374151; margin-top:18px; margin-bottom:8px; font-size:16px; }
+table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+th, td { padding:8px 10px; text-align:left; border-bottom:1px solid #e5e7eb; }
+th { background:#f3f4f6; color:#374151; font-size:12px; text-transform:uppercase; }
+tr.excl { background:#fef3c7; }
+.exclusion-note { background:#fff7ed; border-left:4px solid #f97316; padding:12px 16px; margin: 14px 0; border-radius:6px; color:#7c2d12; }
+.chart-wrap { position:relative; height:340px; margin: 18px 0; }
+.row { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.muted { color:#6b7280; font-size:12px; }
+.section-title { background:#faf5ff; padding:10px 14px; border-radius:8px; color:#6B21A8; font-weight:700; margin-top:18px; }
+@media (max-width:760px) { .row { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
-<header>
-  <h1>💎 Reporte Mensual de Joyería — Abril 2026</h1>
-  <div class="sub">Ivan Guaderrama Gallery · IG Alvaro Obregón · MIA Jewelry + IG Jewelry · Acumulado YTD 2026</div>
-</header>
+<div class="header">
+  <h1>Reporte Mensual de Joyeria</h1>
+  <p>Mayo 2026 - Ivan Guaderrama Gallery (IG Alvaro Obregon)</p>
+  <p class="muted" style="color:#fde68a; margin-top:6px;">Generado: 2026-06-01 17:15</p>
+</div>
 <div class="container">
   <div class="tabs">
-    <button class="tab active" data-tab="mensual">📅 Mensual</button>
-    <button class="tab" data-tab="ytd">📊 Acumulado YTD</button>
-    <button class="tab" data-tab="top">🏆 Top Productos</button>
-    <button class="tab" data-tab="clientes">👥 Clientes</button>
-    <button class="tab" data-tab="detalle">📋 Detalle</button>
+    <button class="tab active" onclick="showTab(0)">Mes (Mayo 2026)</button>
+    <button class="tab" onclick="showTab(1)">Acumulado YTD</button>
+    <button class="tab" onclick="showTab(2)">Top Productos</button>
+    <button class="tab" onclick="showTab(3)">Clientes</button>
+    <button class="tab" onclick="showTab(4)">Detalle</button>
   </div>
 
-  <!-- TAB MENSUAL -->
-  <div id="tab-mensual" class="tab-content active">
-    <label style="font-weight:600; margin-right:8px;">Mes:</label>
-    <select id="month-select" class="selector"></select>
-    <div id="month-exclusion-note"></div>
-    <div id="month-kpis" class="grid"></div>
-    <div id="month-ls-kpis" class="grid"></div>
-    <div class="card">
-      <h3>Ingresos por colección — Mes seleccionado</h3>
-      <div class="chart-wrap"><canvas id="chart-collection"></canvas></div>
+  <!-- TAB 0: Mes -->
+  <div class="panel active">
+    
+    <h2>Mayo 2026 - Mis Metricas</h2>
+    <div class="kpis">
+      <div class="kpi accent"><div class="kpi-label">Ingreso bruto</div><div class="kpi-value">$3,058.50</div></div>
+      <div class="kpi accent"><div class="kpi-label">Costo produccion</div><div class="kpi-value">$540.50</div></div>
+      <div class="kpi accent"><div class="kpi-label">Ingreso neto</div><div class="kpi-value">$2,518.00</div></div>
+      <div class="kpi accent"><div class="kpi-label">Bruto sin IVA</div><div class="kpi-value">$2,636.64</div></div>
+      <div class="kpi accent"><div class="kpi-label">Comision Imelda 30%</div><div class="kpi-value">$790.99</div></div>
+      <div class="kpi accent"><div class="kpi-label">Piezas vendidas</div><div class="kpi-value">22 <span class="muted">+14 cort.</span></div></div>
+      <div class="kpi accent"><div class="kpi-label">Tickets con joyeria</div><div class="kpi-value">15 <span class="muted">+1 cort.</span></div></div>
+      <div class="kpi accent"><div class="kpi-label">Costo cortesias</div><div class="kpi-value">$70.00</div></div>
     </div>
-    <div class="card">
-      <h3>Top productos del mes</h3>
-      <div id="month-top-products"></div>
-    </div>
-  </div>
 
-  <!-- TAB YTD -->
-  <div id="tab-ytd" class="tab-content">
-    <div id="ytd-kpis" class="grid"></div>
-    <div id="ytd-ls-kpis" class="grid"></div>
-    <div class="card">
-      <h3>Evolución mensual — Ingreso bruto, neto y comisión</h3>
-      <div class="chart-wrap"><canvas id="chart-evolution"></canvas></div>
+    <h2>Vista Lightspeed POS</h2>
+    <div class="kpis">
+      <div class="kpi ls"><div class="kpi-label">Revenue LS</div><div class="kpi-value">$3,058.50</div></div>
+      <div class="kpi ls"><div class="kpi-label">COGS LS</div><div class="kpi-value">$610.50</div></div>
+      <div class="kpi ls"><div class="kpi-label">Sale count</div><div class="kpi-value">16</div></div>
+      <div class="kpi ls"><div class="kpi-label">Total piezas</div><div class="kpi-value">36</div></div>
     </div>
-    <div class="card">
-      <h3>Piezas vendidas por mes</h3>
-      <div class="chart-wrap"><canvas id="chart-pieces"></canvas></div>
-    </div>
-    <div class="card">
-      <h3>Tabla mes a mes — Comparativa mías vs Lightspeed POS</h3>
-      <div style="overflow-x:auto"><table id="ytd-table"></table></div>
-    </div>
-    <div id="excluded-section"></div>
-  </div>
 
-  <!-- TAB TOP -->
-  <div id="tab-top" class="tab-content">
-    <div class="card">
-      <h3>Top 10 productos YTD por ingreso</h3>
-      <div id="top-10"></div>
-    </div>
-    <div class="card">
-      <h3>Top 50 productos YTD</h3>
-      <div style="overflow-x:auto"><table id="top-table"></table></div>
+    <div class="row">
+      <div>
+        <h3>Tendencia mensual (bruto vs neto)</h3>
+        <div class="chart-wrap"><canvas id="chartTendencia"></canvas></div>
+      </div>
+      <div>
+        <h3>Bruto por categoria - Mayo 2026</h3>
+        <div class="chart-wrap"><canvas id="chartCategoria"></canvas></div>
+      </div>
     </div>
   </div>
 
-  <!-- TAB CLIENTES -->
-  <div id="tab-clientes" class="tab-content">
-    <div class="card">
-      <h3>Matriz cliente × mes (ingreso USD) — ordenada por total YTD</h3>
-      <div style="overflow-x:auto"><table id="customer-table"></table></div>
+  <!-- TAB 1: Acumulado -->
+  <div class="panel">
+    <h2>Acumulado YTD - 2026</h2>
+    <div class="kpis">
+      <div class="kpi accent"><div class="kpi-label">Bruto YTD</div><div class="kpi-value">$12,583.00</div></div>
+      <div class="kpi accent"><div class="kpi-label">Neto YTD</div><div class="kpi-value">$10,422.91</div></div>
+      <div class="kpi accent"><div class="kpi-label">Comision Imelda YTD</div><div class="kpi-value">$3,254.22</div></div>
+      <div class="kpi accent"><div class="kpi-label">Piezas YTD</div><div class="kpi-value">93 <span class="muted">+44 cort.</span></div></div>
+      <div class="kpi ls"><div class="kpi-label">LS Revenue YTD</div><div class="kpi-value">$12,678.00</div></div>
+      <div class="kpi ls"><div class="kpi-label">LS Tickets YTD</div><div class="kpi-value">79</div></div>
     </div>
+
+    <h3>Tabla mensual acumulada</h3>
+    <table>
+      <thead><tr>
+        <th>Mes</th><th>Bruto</th><th>Costo</th><th>Neto</th><th>Comision</th><th>Piezas</th><th>Tickets</th>
+        <th>LS Rev</th><th>LS COGS</th><th>LS Count</th><th>LS Piezas</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td>Enero</td>
+          <td>$1,846.00</td>
+          <td>$373.65</td>
+          <td>$1,472.35</td>
+          <td>$477.41</td>
+          <td>15 +7c</td>
+          <td>13 +2c</td>
+          <td>$1,846.00</td>
+          <td>$408.65</td>
+          <td>15</td>
+          <td>22</td>
+        </tr>
+        <tr class='excl'>
+          <td>Febrero</td>
+          <td>$1,735.00</td>
+          <td>$279.42</td>
+          <td>$1,455.58</td>
+          <td>$448.71</td>
+          <td>13 +6c</td>
+          <td>12 +0c</td>
+          <td>$1,830.00</td>
+          <td>$328.42</td>
+          <td>13</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>Marzo</td>
+          <td>$4,361.50</td>
+          <td>$716.02</td>
+          <td>$3,645.48</td>
+          <td>$1,127.97</td>
+          <td>31 +10c</td>
+          <td>23 +1c</td>
+          <td>$4,361.50</td>
+          <td>$766.02</td>
+          <td>24</td>
+          <td>41</td>
+        </tr>
+        <tr>
+          <td>Abril</td>
+          <td>$1,582.00</td>
+          <td>$250.50</td>
+          <td>$1,331.50</td>
+          <td>$409.14</td>
+          <td>12 +7c</td>
+          <td>9 +2c</td>
+          <td>$1,582.00</td>
+          <td>$285.50</td>
+          <td>11</td>
+          <td>19</td>
+        </tr>
+        <tr>
+          <td>Mayo</td>
+          <td>$3,058.50</td>
+          <td>$540.50</td>
+          <td>$2,518.00</td>
+          <td>$790.99</td>
+          <td>22 +14c</td>
+          <td>15 +1c</td>
+          <td>$3,058.50</td>
+          <td>$610.50</td>
+          <td>16</td>
+          <td>36</td>
+        </tr>
+        <tr style="font-weight:700; background:#faf5ff;">
+          <td>YTD</td>
+          <td>$12,583.00</td>
+          <td>$2,160.09</td>
+          <td>$10,422.91</td>
+          <td>$3,254.22</td>
+          <td>93 +44c</td>
+          <td>72 +6c</td>
+          <td>$12,678.00</td>
+          <td>$2,399.09</td>
+          <td>79</td>
+          <td>138</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="chart-wrap" style="height:380px; margin-top:18px;"><canvas id="chartYTD"></canvas></div>
+    <div class="section-title">Ventas Excluidas (no cuentan para comision, si para POS)</div>
+    <table>
+      <thead><tr><th>Fecha</th><th>Invoice</th><th>Cliente</th><th>Producto</th><th>Qty</th><th>Precio</th><th>Costo</th></tr></thead>
+      <tbody>
+        <tr class='excl'>
+          <td>2026-02-28 14:15:42</td>
+          <td>OBR13789</td>
+          <td>ANDREA PHILIPS</td>
+          <td>MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio</td>
+          <td>1</td>
+          <td>$95.00</td>
+          <td>$19.00</td>
+        </tr>
+      </tbody></table>
   </div>
 
-  <!-- TAB DETALLE -->
-  <div id="tab-detalle" class="tab-content">
-    <div class="card">
-      <h3>Detalle YTD — todas las líneas de joyería</h3>
-      <div style="overflow-x:auto"><table id="detail-table"></table></div>
+  <!-- TAB 2: Top Productos -->
+  <div class="panel">
+    <h2>Top productos YTD</h2>
+    <div class="row">
+      <div>
+        <h3>Top 15 por piezas</h3>
+        <table><thead><tr><th>Producto</th><th>Cat</th><th>Qty</th><th>Ingreso</th></tr></thead><tbody>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td>MIA Jewelry</td><td>8</td><td>$1,224.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF</td><td>MIA Jewelry</td><td>4</td><td>$371.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas</td><td>MIA Jewelry</td><td>4</td><td>$262.50</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big</td><td>MIA Jewelry</td><td>4</td><td>$704.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Earrings / Loved</td><td>MIA Jewelry</td><td>4</td><td>$732.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz</td><td>MIA Jewelry</td><td>4</td><td>$444.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Chosen / Collar / Corazón Lizo-Martillado</td><td>MIA Jewelry</td><td>3</td><td>$360.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla</td><td>MIA Jewelry</td><td>3</td><td>$285.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun</td><td>MIA Jewelry</td><td>3</td><td>$345.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh</td><td>MIA Jewelry</td><td>3</td><td>$348.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Bags / Bags / Diseños Unicos</td><td>MIA Jewelry</td><td>3</td><td>$885.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Necklace / Love Essence Necklace</td><td>MIA Jewelry</td><td>3</td><td>$164.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,</td><td>MIA Jewelry</td><td>2</td><td>$294.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Chosen / Set / Juego Madre Perla</td><td>MIA Jewelry</td><td>2</td><td>$398.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long</td><td>MIA Jewelry</td><td>2</td><td>$330.00</td></tr>
+        </tbody></table>
+      </div>
+      <div>
+        <h3>Top 15 por ingreso</h3>
+        <table><thead><tr><th>Producto</th><th>Cat</th><th>Qty</th><th>Ingreso</th></tr></thead><tbody>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td>MIA Jewelry</td><td>8</td><td>$1,224.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Bags / Bags / Diseños Unicos</td><td>MIA Jewelry</td><td>3</td><td>$885.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Earrings / Loved</td><td>MIA Jewelry</td><td>4</td><td>$732.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big</td><td>MIA Jewelry</td><td>4</td><td>$704.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz</td><td>MIA Jewelry</td><td>4</td><td>$444.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Chosen / Set / Juego Madre Perla</td><td>MIA Jewelry</td><td>2</td><td>$398.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF</td><td>MIA Jewelry</td><td>4</td><td>$371.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Chosen / Collar / Corazón Lizo-Martillado</td><td>MIA Jewelry</td><td>3</td><td>$360.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh</td><td>MIA Jewelry</td><td>3</td><td>$348.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun</td><td>MIA Jewelry</td><td>3</td><td>$345.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird</td><td>MIA Jewelry</td><td>2</td><td>$340.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long</td><td>MIA Jewelry</td><td>2</td><td>$330.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Bags / Bags / Freedom - Libertad</td><td>MIA Jewelry</td><td>1</td><td>$295.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Bags / Bags / Beauty - Belleza</td><td>MIA Jewelry</td><td>1</td><td>$295.00</td></tr>
+          <tr><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,</td><td>MIA Jewelry</td><td>2</td><td>$294.00</td></tr>
+        </tbody></table>
+      </div>
     </div>
+    <div class="chart-wrap" style="margin-top:18px;"><canvas id="chartTopProd"></canvas></div>
   </div>
 
-  <footer>
-    Generado 2026-05-23 22:32 UTC · Datos Vend (API 0.9) · Timezone Mazatlán UTC-7
-  </footer>
+  <!-- TAB 3: Clientes -->
+  <div class="panel">
+    <h2>Matriz cliente x mes (YTD, solo ventas con cobro)</h2>
+    <table>
+      <thead><tr><th>Cliente</th><th>Tickets</th><th>Enero</th><th>Febrero</th><th>Marzo</th><th>Abril</th><th>Mayo</th><th>Total</th></tr></thead><tbody>
+        <tr><td>Walk-in</td><td>6</td><td>-</td><td>$255.00</td><td>$320.00</td><td>$353.00</td><td>-</td><td><strong>$928.00</strong></td></tr>
+        <tr><td>walk inn</td><td>5</td><td>$423.00</td><td>$120.00</td><td>$69.00</td><td>-</td><td>-</td><td><strong>$612.00</strong></td></tr>
+        <tr><td>MARGARET C VAUGHAN</td><td>1</td><td>-</td><td>-</td><td>$590.00</td><td>-</td><td>-</td><td><strong>$590.00</strong></td></tr>
+        <tr><td>MARY SMOLIK</td><td>1</td><td>-</td><td>-</td><td>$590.00</td><td>-</td><td>-</td><td><strong>$590.00</strong></td></tr>
+        <tr><td>ALISA BLACK</td><td>1</td><td>-</td><td>-</td><td>$437.00</td><td>-</td><td>-</td><td><strong>$437.00</strong></td></tr>
+        <tr><td>MARIBETH CARLTON</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$412.00</td><td><strong>$412.00</strong></td></tr>
+        <tr><td>Emma Sterns</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$407.00</td><td><strong>$407.00</strong></td></tr>
+        <tr><td>Trang Bui</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$346.00</td><td><strong>$346.00</strong></td></tr>
+        <tr><td>Renee Cherpin</td><td>1</td><td>-</td><td>-</td><td>$332.00</td><td>-</td><td>-</td><td><strong>$332.00</strong></td></tr>
+        <tr><td>Pamela Spanko</td><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$306.00</td><td><strong>$306.00</strong></td></tr>
+        <tr><td>KATHLEEN STOVER</td><td>1</td><td>-</td><td>-</td><td>$295.00</td><td>-</td><td>-</td><td><strong>$295.00</strong></td></tr>
+        <tr><td>christina Pierre Tyler</td><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$285.00</td><td><strong>$285.00</strong></td></tr>
+        <tr><td>Wendie Storm</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$280.00</td><td><strong>$280.00</strong></td></tr>
+        <tr><td>rosemarie baldwin</td><td>1</td><td>$273.00</td><td>-</td><td>-</td><td>-</td><td>-</td><td><strong>$273.00</strong></td></tr>
+        <tr><td>SARAH BEAR</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$266.00</td><td>-</td><td><strong>$266.00</strong></td></tr>
+        <tr><td>PAUL SKUTA</td><td>1</td><td>-</td><td>$250.00</td><td>-</td><td>-</td><td>-</td><td><strong>$250.00</strong></td></tr>
+        <tr><td>GORDON MCWATT</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$244.00</td><td><strong>$244.00</strong></td></tr>
+        <tr><td>judy coffey</td><td>2</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$235.00</td><td><strong>$235.00</strong></td></tr>
+        <tr><td>JOSE PERELMUT</td><td>1</td><td>-</td><td>-</td><td>$235.00</td><td>-</td><td>-</td><td><strong>$235.00</strong></td></tr>
+        <tr><td>katherin jacob</td><td>1</td><td>$231.00</td><td>-</td><td>-</td><td>-</td><td>-</td><td><strong>$231.00</strong></td></tr>
+        <tr><td>GAIL L RASK</td><td>1</td><td>-</td><td>$227.00</td><td>-</td><td>-</td><td>-</td><td><strong>$227.00</strong></td></tr>
+        <tr><td>SUSAN BLACK</td><td>1</td><td>$199.00</td><td>-</td><td>-</td><td>-</td><td>-</td><td><strong>$199.00</strong></td></tr>
+        <tr><td>LOREANN MERCE</td><td>1</td><td>-</td><td>-</td><td>$190.00</td><td>-</td><td>-</td><td><strong>$190.00</strong></td></tr>
+        <tr><td>CINDY HINCKLEY</td><td>1</td><td>$188.00</td><td>-</td><td>-</td><td>-</td><td>-</td><td><strong>$188.00</strong></td></tr>
+        <tr><td>Kim Louis Horner</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$183.00</td><td>-</td><td><strong>$183.00</strong></td></tr>
+        <tr><td>CANDACE BLUM</td><td>1</td><td>-</td><td>-</td><td>$183.00</td><td>-</td><td>-</td><td><strong>$183.00</strong></td></tr>
+        <tr><td>LORRAINE PAICH</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$177.00</td><td><strong>$177.00</strong></td></tr>
+        <tr><td>ALEXANDER BOATRIGHT</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$176.00</td><td>-</td><td><strong>$176.00</strong></td></tr>
+        <tr><td>PAU</td><td>1</td><td>-</td><td>-</td><td>$176.00</td><td>-</td><td>-</td><td><strong>$176.00</strong></td></tr>
+        <tr><td>MICHAEL C BROWN</td><td>1</td><td>-</td><td>$176.00</td><td>-</td><td>-</td><td>-</td><td><strong>$176.00</strong></td></tr>
+        <tr><td>MICHAEL H MURPHY</td><td>1</td><td>-</td><td>$170.00</td><td>-</td><td>-</td><td>-</td><td><strong>$170.00</strong></td></tr>
+        <tr><td>Esperanza Santos</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$165.00</td><td><strong>$165.00</strong></td></tr>
+        <tr><td>BARBARA BEEGHLEY</td><td>1</td><td>-</td><td>-</td><td>-</td><td>-</td><td>$164.00</td><td><strong>$164.00</strong></td></tr>
+        <tr><td>AMY BAKER CORONADO</td><td>1</td><td>-</td><td>-</td><td>$153.00</td><td>-</td><td>-</td><td><strong>$153.00</strong></td></tr>
+        <tr><td>JESSICA WASSERMAN</td><td>1</td><td>-</td><td>-</td><td>$153.00</td><td>-</td><td>-</td><td><strong>$153.00</strong></td></tr>
+        <tr><td>CHAD COLT</td><td>1</td><td>$153.00</td><td>-</td><td>-</td><td>-</td><td>-</td><td><strong>$153.00</strong></td></tr>
+        <tr><td>COLABORADORES IVANGUADERRAMA</td><td>4</td><td>$41.00</td><td>-</td><td>$70.50</td><td>-</td><td>$37.50</td><td><strong>$149.00</strong></td></tr>
+        <tr><td>walk inn</td><td>2</td><td>$75.00</td><td>-</td><td>$69.00</td><td>-</td><td>-</td><td><strong>$144.00</strong></td></tr>
+        <tr><td>KENDRA</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$135.00</td><td>-</td><td><strong>$135.00</strong></td></tr>
+        <tr><td>JIM WOLFRAME</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$130.00</td><td>-</td><td><strong>$130.00</strong></td></tr>
+        <tr><td>Elisa East</td><td>1</td><td>-</td><td>-</td><td>$128.00</td><td>-</td><td>-</td><td><strong>$128.00</strong></td></tr>
+        <tr><td>SHELLEY ANDERSON</td><td>1</td><td>-</td><td>$128.00</td><td>-</td><td>-</td><td>-</td><td><strong>$128.00</strong></td></tr>
+        <tr><td>MARILU SERRANO</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$120.00</td><td>-</td><td><strong>$120.00</strong></td></tr>
+        <tr><td>laurie mount</td><td>1</td><td>-</td><td>$120.00</td><td>-</td><td>-</td><td>-</td><td><strong>$120.00</strong></td></tr>
+        <tr><td>WALLK INN</td><td>1</td><td>-</td><td>$115.00</td><td>-</td><td>-</td><td>-</td><td><strong>$115.00</strong></td></tr>
+        <tr><td>SUSAN GELPI</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$111.00</td><td>-</td><td><strong>$111.00</strong></td></tr>
+        <tr><td>Tami Pelton</td><td>1</td><td>-</td><td>-</td><td>$110.00</td><td>-</td><td>-</td><td><strong>$110.00</strong></td></tr>
+        <tr><td>Suzetta Alberts</td><td>1</td><td>-</td><td>-</td><td>-</td><td>$108.00</td><td>-</td><td><strong>$108.00</strong></td></tr>
+        <tr><td>REBECCA BROCKMAN</td><td>1</td><td>-</td><td>-</td><td>$108.00</td><td>-</td><td>-</td><td><strong>$108.00</strong></td></tr>
+        <tr><td>John Worthen</td><td>1</td><td>-</td><td>-</td><td>$105.00</td><td>-</td><td>-</td><td><strong>$105.00</strong></td></tr>
+      </tbody></table>
+      <p class='muted' style='margin-top:8px;'>Mostrando top 50 de 56 clientes.</p>
+  </div>
+
+  <!-- TAB 4: Detalle -->
+  <div class="panel">
+    <h2>Detalle de ventas - Mayo 2026</h2>
+    <table>
+      <thead><tr><th>Fecha</th><th>Invoice</th><th>Cliente</th><th>Categoria</th><th>Producto</th><th>SKU</th><th>Qty</th><th>Precio</th><th>Costo</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>2026-05-30 16:41:24</td><td>OBR14122</td><td>judy coffey</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-29 17:07:49</td><td>OBR14119</td><td>judy coffey</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Earrings / A Corazón Abierto</td><td>40401</td>
+          <td>1</td><td>$115.00</td><td>$16.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-29 16:48:38</td><td>OBR14118</td><td>judy coffey</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Chosen / Collar / Corazón Lizo-Martillado</td><td>C5846</td>
+          <td>1</td><td>$120.00</td><td>$27.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 19:55:00</td><td>OBR14115</td><td>Trang Bui</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,</td><td>40231</td>
+          <td>1</td><td>$147.00</td><td>$20.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 19:55:00</td><td>OBR14115</td><td>Trang Bui</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Chosen / Set / Juego Madre Perla</td><td>J1981</td>
+          <td>1</td><td>$199.00</td><td>$70.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 19:01:51</td><td>OBR14110</td><td>Pamela Spanko</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td>34687</td>
+          <td>1</td><td>$153.00</td><td>$28.50</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 19:01:51</td><td>OBR14110</td><td>Pamela Spanko</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Unconditional Love</td><td>40090</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 18:57:01</td><td>OBR14109</td><td>Pamela Spanko</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td>34687</td>
+          <td>1</td><td>$153.00</td><td>$28.50</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 18:57:01</td><td>OBR14109</td><td>Pamela Spanko</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Unconditional Love</td><td>40090</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 18:51:37</td><td>OBR14108</td><td>Esperanza Santos</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Earrings / Protect My Love Earrings</td><td>36373</td>
+          <td>1</td><td>$165.00</td><td>$22.50</td>
+        </tr>
+        <tr>
+          <td>2026-05-28 18:51:37</td><td>OBR14108</td><td>Esperanza Santos</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-23 16:30:48</td><td>OBR14098</td><td>BARBARA BEEGHLEY</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF</td><td>40108</td>
+          <td>1</td><td>$164.00</td><td>$0.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-23 16:30:48</td><td>OBR14098</td><td>BARBARA BEEGHLEY</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Unconditional Love</td><td>40090</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:18:30</td><td>OBR14091</td><td>christina Pierre Tyler</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla</td><td>A7251</td>
+          <td>1</td><td>$95.00</td><td>$27.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:17:40</td><td>OBR14090</td><td>christina Pierre Tyler</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Pureza en Oro</td><td>40250</td>
+          <td>1</td><td>$190.00</td><td>$38.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:17:40</td><td>OBR14090</td><td>christina Pierre Tyler</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:13:43</td><td>OBR14089</td><td>Wendie Storm</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun</td><td>36178</td>
+          <td>1</td><td>$115.00</td><td>$14.55</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:13:43</td><td>OBR14089</td><td>Wendie Storm</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long</td><td>40281</td>
+          <td>1</td><td>$165.00</td><td>$26.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-21 19:13:43</td><td>OBR14089</td><td>Wendie Storm</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-09 14:57:33</td><td>OBR14062</td><td>MARIBETH CARLTON</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird</td><td>39005</td>
+          <td>1</td><td>$170.00</td><td>$15.75</td>
+        </tr>
+        <tr>
+          <td>2026-05-09 14:57:33</td><td>OBR14062</td><td>MARIBETH CARLTON</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Chosen / Anillo / Ballena Ajustable</td><td>An2437</td>
+          <td>1</td><td>$126.00</td><td>$28.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-09 14:57:33</td><td>OBR14062</td><td>MARIBETH CARLTON</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh</td><td>33752</td>
+          <td>1</td><td>$116.00</td><td>$14.70</td>
+        </tr>
+        <tr>
+          <td>2026-05-09 14:57:33</td><td>OBR14062</td><td>MARIBETH CARLTON</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>3</td><td>$0.00</td><td>$15.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-07 19:11:19</td><td>OBR14059</td><td>LORRAINE PAICH</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Colibrí Florido Grande</td><td>40249</td>
+          <td>1</td><td>$177.00</td><td>$15.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-07 19:11:19</td><td>OBR14059</td><td>LORRAINE PAICH</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Unconditional Love</td><td>40090</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-07 18:39:29</td><td>OBR14055</td><td>COLABORADORES IVANGUADERRAMA</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas</td><td>GU3696</td>
+          <td>1</td><td>$37.50</td><td>$16.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-02 10:38:33</td><td>OBR14048</td><td>GORDON MCWATT</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Necklace / Little Big Love Black</td><td>36370</td>
+          <td>1</td><td>$149.00</td><td>$22.50</td>
+        </tr>
+        <tr>
+          <td>2026-05-02 10:38:33</td><td>OBR14048</td><td>GORDON MCWATT</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio</td><td>A4141</td>
+          <td>1</td><td>$95.00</td><td>$19.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-02 10:38:33</td><td>OBR14048</td><td>GORDON MCWATT</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-01 16:39:59</td><td>OBR14044</td><td>Emma Sterns</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td>34687</td>
+          <td>1</td><td>$153.00</td><td>$28.50</td>
+        </tr>
+        <tr>
+          <td>2026-05-01 16:39:59</td><td>OBR14044</td><td>Emma Sterns</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Arbol de Vida</td><td>40282</td>
+          <td>1</td><td>$179.00</td><td>$47.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-01 16:39:59</td><td>OBR14044</td><td>Emma Sterns</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Capilla</td><td>40089</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-01 16:39:59</td><td>OBR14044</td><td>Emma Sterns</td>
+          <td>IG Jewelry</td><td>IG Jewelry / Scarf / Woman / Unconditional Love</td><td>40090</td>
+          <td>1</td><td>$0.00</td><td>$5.00</td>
+        </tr>
+        <tr>
+          <td>2026-05-01 16:39:59</td><td>OBR14044</td><td>Emma Sterns</td>
+          <td>MIA Jewelry</td><td>MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas</td><td>GU3696</td>
+          <td>1</td><td>$75.00</td><td>$16.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>
 
 <script>
-const MONTHS = {"2026-01": {"ingreso_bruto": 1846.0, "costo_produccion": 373.65, "costo_cortesias": 35.0, "ingreso_neto": 1472.35, "bruto_sin_iva": 1591.38, "comision_imelda": 477.41, "piezas_vendidas": 15.0, "cortesias_items": 7.0, "tickets_con_joyeria": 13, "tickets_solo_cortesia": 2, "tickets_excluidos": 0, "piezas_excluidas": 0, "ingreso_excluido": 0.0, "costo_excluido": 0.0, "lightspeed_revenue": 1846.0, "lightspeed_cogs": 408.65, "lightspeed_sale_count": 15, "lightspeed_total_piezas": 22.0}, "2026-02": {"ingreso_bruto": 1735.0, "costo_produccion": 279.42, "costo_cortesias": 30.0, "ingreso_neto": 1455.58, "bruto_sin_iva": 1495.69, "comision_imelda": 448.71, "piezas_vendidas": 13.0, "cortesias_items": 6.0, "tickets_con_joyeria": 12, "tickets_solo_cortesia": 0, "tickets_excluidos": 1, "piezas_excluidas": 1.0, "ingreso_excluido": 95.0, "costo_excluido": 19.0, "lightspeed_revenue": 1830.0, "lightspeed_cogs": 328.42, "lightspeed_sale_count": 13, "lightspeed_total_piezas": 20.0}, "2026-03": {"ingreso_bruto": 4361.5, "costo_produccion": 716.02, "costo_cortesias": 50.0, "ingreso_neto": 3645.48, "bruto_sin_iva": 3759.91, "comision_imelda": 1127.97, "piezas_vendidas": 31.0, "cortesias_items": 10.0, "tickets_con_joyeria": 23, "tickets_solo_cortesia": 1, "tickets_excluidos": 0, "piezas_excluidas": 0, "ingreso_excluido": 0.0, "costo_excluido": 0.0, "lightspeed_revenue": 4361.5, "lightspeed_cogs": 766.02, "lightspeed_sale_count": 24, "lightspeed_total_piezas": 41.0}, "2026-04": {"ingreso_bruto": 1529.05, "costo_produccion": 250.5, "costo_cortesias": 35.0, "ingreso_neto": 1278.55, "bruto_sin_iva": 1318.15, "comision_imelda": 395.44, "piezas_vendidas": 12.0, "cortesias_items": 7.0, "tickets_con_joyeria": 9, "tickets_solo_cortesia": 2, "tickets_excluidos": 0, "piezas_excluidas": 0, "ingreso_excluido": 0.0, "costo_excluido": 0.0, "lightspeed_revenue": 1529.05, "lightspeed_cogs": 285.5, "lightspeed_sale_count": 11, "lightspeed_total_piezas": 19.0}, "2026-05": {"ingreso_bruto": 1842.5, "costo_produccion": 328.0, "costo_cortesias": 45.0, "ingreso_neto": 1514.5, "bruto_sin_iva": 1588.36, "comision_imelda": 476.51, "piezas_vendidas": 14.0, "cortesias_items": 9.0, "tickets_con_joyeria": 8, "tickets_solo_cortesia": 0, "tickets_excluidos": 0, "piezas_excluidas": 0, "ingreso_excluido": 0.0, "costo_excluido": 0.0, "lightspeed_revenue": 1842.5, "lightspeed_cogs": 373.0, "lightspeed_sale_count": 8, "lightspeed_total_piezas": 23.0}};
-const YTD = {"ingreso_bruto": 11314.05, "costo_produccion": 1947.59, "costo_cortesias": 195.0, "ingreso_neto": 9366.46, "bruto_sin_iva": 9753.49, "comision_imelda": 2926.04, "piezas_vendidas": 85.0, "cortesias_items": 39.0, "tickets_con_joyeria": 65, "tickets_solo_cortesia": 5, "tickets_excluidos": 1, "piezas_excluidas": 1.0, "ingreso_excluido": 95.0, "costo_excluido": 19.0, "lightspeed_revenue": 11409.05, "lightspeed_cogs": 2161.59, "lightspeed_sale_count": 71, "lightspeed_total_piezas": 125.0};
-const TOP_PRODUCTS = [{"product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "qty": 6.0, "revenue": 895.05, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "qty": 3.0, "revenue": 885.0, "marca": "MIA", "coleccion": "Bags"}, {"product": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "qty": 4.0, "revenue": 732.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "qty": 4.0, "revenue": 704.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "qty": 4.0, "revenue": 427.35, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "qty": 3.0, "revenue": 348.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "qty": 3.0, "revenue": 345.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird", "qty": 2.0, "revenue": 340.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long", "qty": 2.0, "revenue": 330.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Bags / Bags / Freedom - Libertad", "qty": 1.0, "revenue": 295.0, "marca": "MIA", "coleccion": "Bags"}, {"product": "MIA JEWELRY IG / Bags / Bags / Beauty - Belleza", "qty": 1.0, "revenue": 295.0, "marca": "MIA", "coleccion": "Bags"}, {"product": "MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla", "qty": 3.0, "revenue": 285.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", "qty": 4.0, "revenue": 262.5, "marca": "MIA", "coleccion": "Gafas de Sol"}, {"product": "MIA JEWELRY IG / Chosen / Anillo / Ajustable con Madre Perla", "qty": 1.0, "revenue": 250.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Chosen / Collar / Coraz\u00f3n Lizo-Martillado", "qty": 2.0, "revenue": 240.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Chosen / Collar / Cruz", "qty": 2.0, "revenue": 240.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Chosen / Aretes / Larimar Gota", "qty": 2.0, "revenue": 216.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "qty": 3.0, "revenue": 207.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "qty": 2.0, "revenue": 203.65, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Chosen / Set / Juego Madre Perla", "qty": 1.0, "revenue": 199.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Pureza en Oro", "qty": 1.0, "revenue": 190.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Chosen / Aretes / Alfiler con Perla", "qty": 2.0, "revenue": 190.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Sea Bless / Earrings / Love Signs", "qty": 2.0, "revenue": 188.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Protect My Love Small Necklace", "qty": 1.0, "revenue": 188.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Arbol de Vida", "qty": 1.0, "revenue": 179.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Colibr\u00ed Florido Grande", "qty": 1.0, "revenue": 177.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Love Essence Necklace", "qty": 3.0, "revenue": 164.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Earrings / Love Essence", "qty": 1.0, "revenue": 160.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Little Big Love Black", "qty": 1.0, "revenue": 149.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,", "qty": 1.0, "revenue": 147.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Chosen / Collar / Rasimo de Perlas", "qty": 1.0, "revenue": 140.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Chosen / Pulcera / Corazones Lizos", "qty": 1.0, "revenue": 135.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Chosen / Aretes / Alas de Mariposa", "qty": 1.0, "revenue": 135.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Alas de la Vida : Mujeres Elegidas / Necklace / Martha", "qty": 1.0, "revenue": 130.0, "marca": "MIA", "coleccion": "Alas de la Vida : Mujeres Elegidas"}, {"product": "MIA JEWELRY IG / Alas de la Vida : Mujeres Elegidas / Ring / Rosa", "qty": 1.0, "revenue": 128.0, "marca": "MIA", "coleccion": "Alas de la Vida : Mujeres Elegidas"}, {"product": "MIA JEWELRY IG / Chosen / Anillo / Ballena Ajustable", "qty": 1.0, "revenue": 126.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Coraz\u00f3n Grande", "qty": 1.0, "revenue": 120.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Coraz\u00f3n Chico", "qty": 1.0, "revenue": 115.0, "marca": "MIA", "coleccion": "Masterpieces Of Love"}, {"product": "MIA JEWELRY IG / Chosen / Set / Set Abulon Chico", "qty": 1.0, "revenue": 110.0, "marca": "MIA", "coleccion": "Chosen"}, {"product": "MIA JEWELRY IG / Sea Bless / Bracelet / Generosity Pearl", "qty": 1.0, "revenue": 105.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Free Heart", "qty": 1.0, "revenue": 105.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Sea Bless / Necklace / Mother Pearl", "qty": 1.0, "revenue": 96.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio", "qty": 1.0, "revenue": 95.0, "marca": "MIA", "coleccion": "Miyuki"}, {"product": "MIA JEWELRY IG / Miyuki / Necklace / Love Strings", "qty": 1.0, "revenue": 93.0, "marca": "MIA", "coleccion": "Miyuki"}, {"product": "MIA JEWELRY IG / Sea Bless / Bracelet / Pearl Hummingbird", "qty": 1.0, "revenue": 89.0, "marca": "MIA", "coleccion": "Sea Bless"}, {"product": "IG Jewelry / Scarf / Woman / Capilla", "qty": 27.0, "revenue": 83.0, "marca": "IG", "coleccion": "IG Jewelry Scarf"}, {"product": "MIA JEWELRY IG / Miyuki / Earrings / Medium", "qty": 1.0, "revenue": 48.0, "marca": "MIA", "coleccion": "Miyuki"}, {"product": "MIA JEWELRY IG / Miyuki / Earrings / Unic Blue Earrings", "qty": 1.0, "revenue": 29.5, "marca": "MIA", "coleccion": "Miyuki"}, {"product": "IG Jewelry / Scarf / Woman / Unconditional Love", "qty": 13.0, "revenue": 0.0, "marca": "IG", "coleccion": "IG Jewelry Scarf"}];
-const CUSTOMERS = [{"customer": "Walk-in", "months": {"2026-04": 300.05, "2026-03": 320.0, "2026-02": 255.0}, "total": 875.05}, {"customer": "walk inn", "months": {"2026-03": 138.0, "2026-02": 120.0, "2026-01": 498.0}, "total": 756.0}, {"customer": "MARGARET C VAUGHAN", "months": {"2026-03": 590.0}, "total": 590.0}, {"customer": "MARY SMOLIK", "months": {"2026-03": 590.0}, "total": 590.0}, {"customer": "ALISA BLACK", "months": {"2026-03": 437.0}, "total": 437.0}, {"customer": "MARIBETH CARLTON", "months": {"2026-05": 412.0}, "total": 412.0}, {"customer": "Emma Sterns", "months": {"2026-05": 407.0}, "total": 407.0}, {"customer": "Renee Cherpin", "months": {"2026-03": 332.0}, "total": 332.0}, {"customer": "KATHLEEN STOVER", "months": {"2026-03": 295.0}, "total": 295.0}, {"customer": "christina Pierre Tyler", "months": {"2026-05": 285.0}, "total": 285.0}, {"customer": "Wendie Storm", "months": {"2026-05": 280.0}, "total": 280.0}, {"customer": "rosemarie baldwin", "months": {"2026-01": 273.0}, "total": 273.0}, {"customer": "SARAH BEAR", "months": {"2026-04": 266.0}, "total": 266.0}, {"customer": "PAUL SKUTA", "months": {"2026-02": 250.0}, "total": 250.0}, {"customer": "GORDON MCWATT", "months": {"2026-05": 244.0}, "total": 244.0}, {"customer": "JOSE PERELMUT", "months": {"2026-03": 235.0}, "total": 235.0}, {"customer": "katherin jacob", "months": {"2026-01": 231.0}, "total": 231.0}, {"customer": "GAIL L RASK", "months": {"2026-02": 227.0}, "total": 227.0}, {"customer": "SUSAN BLACK", "months": {"2026-01": 199.0}, "total": 199.0}, {"customer": "LOREANN MERCE", "months": {"2026-03": 190.0}, "total": 190.0}, {"customer": "CINDY HINCKLEY", "months": {"2026-01": 188.0}, "total": 188.0}, {"customer": "Kim Louis Horner", "months": {"2026-04": 183.0}, "total": 183.0}, {"customer": "CANDACE BLUM", "months": {"2026-03": 183.0}, "total": 183.0}, {"customer": "LORRAINE PAICH", "months": {"2026-05": 177.0}, "total": 177.0}, {"customer": "ALEXANDER BOATRIGHT", "months": {"2026-04": 176.0}, "total": 176.0}, {"customer": "PAU", "months": {"2026-03": 176.0}, "total": 176.0}, {"customer": "MICHAEL C BROWN", "months": {"2026-02": 176.0}, "total": 176.0}, {"customer": "MICHAEL H MURPHY", "months": {"2026-02": 170.0}, "total": 170.0}, {"customer": "AMY BAKER CORONADO", "months": {"2026-03": 153.0}, "total": 153.0}, {"customer": "JESSICA WASSERMAN", "months": {"2026-03": 153.0}, "total": 153.0}, {"customer": "CHAD COLT", "months": {"2026-01": 153.0}, "total": 153.0}, {"customer": "COLABORADORES IVANGUADERRAMA", "months": {"2026-05": 37.5, "2026-03": 70.5, "2026-01": 41.0}, "total": 149.0}, {"customer": "KENDRA", "months": {"2026-04": 135.0}, "total": 135.0}, {"customer": "JIM WOLFRAME", "months": {"2026-04": 130.0}, "total": 130.0}, {"customer": "Elisa East", "months": {"2026-03": 128.0}, "total": 128.0}, {"customer": "SHELLEY ANDERSON", "months": {"2026-02": 128.0}, "total": 128.0}, {"customer": "MARILU SERRANO", "months": {"2026-04": 120.0}, "total": 120.0}, {"customer": "laurie mount", "months": {"2026-02": 120.0}, "total": 120.0}, {"customer": "WALLK INN", "months": {"2026-02": 115.0}, "total": 115.0}, {"customer": "SUSAN GELPI", "months": {"2026-04": 111.0}, "total": 111.0}, {"customer": "Tami Pelton", "months": {"2026-03": 110.0}, "total": 110.0}, {"customer": "Suzetta Alberts", "months": {"2026-04": 108.0}, "total": 108.0}, {"customer": "REBECCA BROCKMAN", "months": {"2026-03": 108.0}, "total": 108.0}, {"customer": "John Worthen", "months": {"2026-03": 105.0}, "total": 105.0}, {"customer": "walking", "months": {"2026-02": 105.0}, "total": 105.0}, {"customer": "ANDRES STEFANO", "months": {"2026-01": 95.0}, "total": 95.0}, {"customer": "PETER NEMITZ", "months": {"2026-01": 93.0}, "total": 93.0}, {"customer": "VIRGINIA KELLY", "months": {"2026-01": 75.0}, "total": 75.0}, {"customer": "LAURA L NEWSOM", "months": {"2026-02": 69.0}, "total": 69.0}, {"customer": "Lindslamar", "months": {"2026-03": 48.0}, "total": 48.0}];
-const ROWS = [{"date": "2026-05-21", "invoice": "OBR14091", "customer": "christina Pierre Tyler", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla", "sku": "A7251", "qty": 1.0, "price_unit": 95.0, "cost_unit": 27.0, "adj_price_total": 95.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-21", "invoice": "OBR14090", "customer": "christina Pierre Tyler", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Pureza en Oro", "sku": "40250", "qty": 1.0, "price_unit": 190.0, "cost_unit": 38.0, "adj_price_total": 190.0, "cost_total": 38.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-21", "invoice": "OBR14090", "customer": "christina Pierre Tyler", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-21", "invoice": "OBR14089", "customer": "Wendie Storm", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "sku": "36178", "qty": 1.0, "price_unit": 115.0, "cost_unit": 14.55, "adj_price_total": 115.0, "cost_total": 14.55, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-21", "invoice": "OBR14089", "customer": "Wendie Storm", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long", "sku": "40281", "qty": 1.0, "price_unit": 165.0, "cost_unit": 26.0, "adj_price_total": 165.0, "cost_total": 26.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-21", "invoice": "OBR14089", "customer": "Wendie Storm", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-09", "invoice": "OBR14062", "customer": "MARIBETH CARLTON", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird", "sku": "39005", "qty": 1.0, "price_unit": 170.0, "cost_unit": 15.75, "adj_price_total": 170.0, "cost_total": 15.75, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-09", "invoice": "OBR14062", "customer": "MARIBETH CARLTON", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Anillo / Ballena Ajustable", "sku": "An2437", "qty": 1.0, "price_unit": 126.0, "cost_unit": 28.0, "adj_price_total": 126.0, "cost_total": 28.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-09", "invoice": "OBR14062", "customer": "MARIBETH CARLTON", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "sku": "33752", "qty": 1.0, "price_unit": 116.0, "cost_unit": 14.7, "adj_price_total": 116.0, "cost_total": 14.7, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-09", "invoice": "OBR14062", "customer": "MARIBETH CARLTON", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 3.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 15.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-07", "invoice": "OBR14059", "customer": "LORRAINE PAICH", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Colibr\u00ed Florido Grande", "sku": "40249", "qty": 1.0, "price_unit": 177.0, "cost_unit": 15.0, "adj_price_total": 177.0, "cost_total": 15.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-07", "invoice": "OBR14059", "customer": "LORRAINE PAICH", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-07", "invoice": "OBR14055", "customer": "COLABORADORES IVANGUADERRAMA", "marca": "MIA", "coleccion": "Gafas de Sol", "product": "MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", "sku": "GU3696", "qty": 1.0, "price_unit": 37.5, "cost_unit": 16.0, "adj_price_total": 37.5, "cost_total": 16.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-02", "invoice": "OBR14048", "customer": "GORDON MCWATT", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Little Big Love Black", "sku": "36370", "qty": 1.0, "price_unit": 149.0, "cost_unit": 22.5, "adj_price_total": 149.0, "cost_total": 22.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-02", "invoice": "OBR14048", "customer": "GORDON MCWATT", "marca": "MIA", "coleccion": "Miyuki", "product": "MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio", "sku": "A4141", "qty": 1.0, "price_unit": 95.0, "cost_unit": 19.0, "adj_price_total": 95.0, "cost_total": 19.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-02", "invoice": "OBR14048", "customer": "GORDON MCWATT", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-01", "invoice": "OBR14044", "customer": "Emma Sterns", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 153.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-01", "invoice": "OBR14044", "customer": "Emma Sterns", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Arbol de Vida", "sku": "40282", "qty": 1.0, "price_unit": 179.0, "cost_unit": 47.0, "adj_price_total": 179.0, "cost_total": 47.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-05-01", "invoice": "OBR14044", "customer": "Emma Sterns", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-01", "invoice": "OBR14044", "customer": "Emma Sterns", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-05-01", "invoice": "OBR14044", "customer": "Emma Sterns", "marca": "MIA", "coleccion": "Gafas de Sol", "product": "MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", "sku": "GU3696", "qty": 1.0, "price_unit": 75.0, "cost_unit": 16.0, "adj_price_total": 75.0, "cost_total": 16.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-30", "invoice": "OBR14042", "customer": "ALEXANDER BOATRIGHT", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "sku": "39230", "qty": 1.0, "price_unit": 176.0, "cost_unit": 31.5, "adj_price_total": 176.0, "cost_total": 31.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-30", "invoice": "OBR14038", "customer": "JIM WOLFRAME", "marca": "MIA", "coleccion": "Alas de la Vida : Mujeres Elegidas", "product": "MIA JEWELRY IG / Alas de la Vida : Mujeres Elegidas / Necklace / Martha", "sku": "41392", "qty": 1.0, "price_unit": 130.0, "cost_unit": 25.0, "adj_price_total": 130.0, "cost_total": 25.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-28", "invoice": "OBR14029", "customer": "SARAH BEAR", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "sku": "33782", "qty": 1.0, "price_unit": 183.0, "cost_unit": 23.25, "adj_price_total": 183.0, "cost_total": 23.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-28", "invoice": "OBR14029", "customer": "SARAH BEAR", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 83.0, "cost_unit": 5.0, "adj_price_total": 83.0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-15", "invoice": "OBR13992", "customer": "Suzetta Alberts", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Larimar Gota", "sku": "A0892", "qty": 1.0, "price_unit": 108.0, "cost_unit": 24.0, "adj_price_total": 108.0, "cost_total": 24.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-15", "invoice": "OBR13992", "customer": "Suzetta Alberts", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-04-15", "invoice": "OBR13990", "customer": "Kim Louis Horner", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "sku": "33782", "qty": 1.0, "price_unit": 183.0, "cost_unit": 23.25, "adj_price_total": 183.0, "cost_total": 23.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-14", "invoice": "OBR13984", "customer": "MARILU SERRANO", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Collar / Coraz\u00f3n Lizo-Martillado", "sku": "C5846", "qty": 1.0, "price_unit": 120.0, "cost_unit": 27.0, "adj_price_total": 120.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-14", "invoice": "OBR13984", "customer": "MARILU SERRANO", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-04-10", "invoice": "OBR13980", "customer": "Walk-in", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-04-10", "invoice": "OBR13980", "customer": "Walk-in", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 2.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 10.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-04-10", "invoice": "OBR13979", "customer": "Walk-in", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "sku": "40109", "qty": 1.0, "price_unit": 89.0, "cost_unit": 0, "adj_price_total": 75.65, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-10", "invoice": "OBR13979", "customer": "Walk-in", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "sku": "40220", "qty": 1.0, "price_unit": 111.0, "cost_unit": 14.0, "adj_price_total": 94.35, "cost_total": 14.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-10", "invoice": "OBR13979", "customer": "Walk-in", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 130.05, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-10", "invoice": "OBR13978", "customer": "SUSAN GELPI", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "sku": "40220", "qty": 1.0, "price_unit": 111.0, "cost_unit": 14.0, "adj_price_total": 111.0, "cost_total": 14.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-09", "invoice": "OBR13961", "customer": "Jill Jhonson", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-04-02", "invoice": "OBR13948", "customer": "KENDRA", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Pulcera / Corazones Lizos", "sku": "P1047", "qty": 1.0, "price_unit": 135.0, "cost_unit": 35.0, "adj_price_total": 135.0, "cost_total": 35.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-04-02", "invoice": "OBR13948", "customer": "KENDRA", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-31", "invoice": "OBR13931", "customer": "MARGARET C VAUGHAN", "marca": "MIA", "coleccion": "Bags", "product": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "sku": "43336", "qty": 1.0, "price_unit": 295.0, "cost_unit": 50.0, "adj_price_total": 295.0, "cost_total": 50.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-31", "invoice": "OBR13931", "customer": "MARGARET C VAUGHAN", "marca": "MIA", "coleccion": "Bags", "product": "MIA JEWELRY IG / Bags / Bags / Freedom - Libertad", "sku": "40260", "qty": 1.0, "price_unit": 295.0, "cost_unit": 42.5, "adj_price_total": 295.0, "cost_total": 42.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-31", "invoice": "OBR13931", "customer": "MARGARET C VAUGHAN", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-31", "invoice": "OBR13930", "customer": "MARY SMOLIK", "marca": "MIA", "coleccion": "Bags", "product": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "sku": "43336", "qty": 1.0, "price_unit": 295.0, "cost_unit": 50.0, "adj_price_total": 295.0, "cost_total": 50.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-31", "invoice": "OBR13930", "customer": "MARY SMOLIK", "marca": "MIA", "coleccion": "Bags", "product": "MIA JEWELRY IG / Bags / Bags / Beauty - Belleza", "sku": "40254", "qty": 1.0, "price_unit": 295.0, "cost_unit": 40.0, "adj_price_total": 295.0, "cost_total": 40.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-31", "invoice": "OBR13930", "customer": "MARY SMOLIK", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-31", "invoice": "OBR13929", "customer": "KATHLEEN STOVER", "marca": "MIA", "coleccion": "Bags", "product": "MIA JEWELRY IG / Bags / Bags / Dise\u00f1os Unicos", "sku": "43336", "qty": 1.0, "price_unit": 295.0, "cost_unit": 50.0, "adj_price_total": 295.0, "cost_total": 50.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-31", "invoice": "OBR13929", "customer": "KATHLEEN STOVER", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-28", "invoice": "OBR13921", "customer": "COLABORADORES IVANGUADERRAMA", "marca": "MIA", "coleccion": "Miyuki", "product": "MIA JEWELRY IG / Miyuki / Earrings / Unic Blue Earrings", "sku": "40106", "qty": 1.0, "price_unit": 29.5, "cost_unit": 6.3, "adj_price_total": 29.5, "cost_total": 6.3, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-26", "invoice": "OBR13915", "customer": "REBECCA BROCKMAN", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Larimar Gota", "sku": "A0892", "qty": 1.0, "price_unit": 108.0, "cost_unit": 24.0, "adj_price_total": 108.0, "cost_total": 24.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-26", "invoice": "OBR13915", "customer": "REBECCA BROCKMAN", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-26", "invoice": "OBR13903", "customer": "AMY BAKER CORONADO", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-26", "invoice": "OBR13903", "customer": "AMY BAKER CORONADO", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 153.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-20", "invoice": "OBR13889", "customer": "JESSICA WASSERMAN", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 153.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-20", "invoice": "OBR13889", "customer": "JESSICA WASSERMAN", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-19", "invoice": "OBR13883", "customer": "Renee Cherpin", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Mother Pearl", "sku": "39006", "qty": 1.0, "price_unit": 96.0, "cost_unit": 18.0, "adj_price_total": 96.0, "cost_total": 18.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-19", "invoice": "OBR13883", "customer": "Renee Cherpin", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Bracelet / Pearl Hummingbird", "sku": "40449", "qty": 1.0, "price_unit": 89.0, "cost_unit": 0, "adj_price_total": 89.0, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-19", "invoice": "OBR13883", "customer": "Renee Cherpin", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,", "sku": "40231", "qty": 1.0, "price_unit": 147.0, "cost_unit": 20.0, "adj_price_total": 147.0, "cost_total": 20.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-19", "invoice": "OBR13882", "customer": "Lindslamar", "marca": "MIA", "coleccion": "Miyuki", "product": "MIA JEWELRY IG / Miyuki / Earrings / Medium", "sku": "11080", "qty": 1.0, "price_unit": 48.0, "cost_unit": 7.37, "adj_price_total": 48.0, "cost_total": 7.37, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-17", "invoice": "OBR13856", "customer": "TERRI STEVENSON", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-14", "invoice": "OBR13854", "customer": "COLABORADORES IVANGUADERRAMA", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Love Essence Necklace", "sku": "33722", "qty": 1.0, "price_unit": 41.0, "cost_unit": 17.25, "adj_price_total": 41.0, "cost_total": 17.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-14", "invoice": "OBR13850", "customer": "CANDACE BLUM", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "sku": "33782", "qty": 1.0, "price_unit": 183.0, "cost_unit": 23.25, "adj_price_total": 183.0, "cost_total": 23.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-14", "invoice": "OBR13850", "customer": "CANDACE BLUM", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-12", "invoice": "OBR13846", "customer": "Walk-in", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Coraz\u00f3n Chico", "sku": "41413", "qty": 1.0, "price_unit": 115.0, "cost_unit": 16.0, "adj_price_total": 115.0, "cost_total": 16.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-12", "invoice": "OBR13841", "customer": "John Worthen", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Bracelet / Generosity Pearl", "sku": "40393", "qty": 1.0, "price_unit": 105.0, "cost_unit": 25.0, "adj_price_total": 105.0, "cost_total": 25.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-12", "invoice": "OBR13833", "customer": "Elisa East", "marca": "MIA", "coleccion": "Alas de la Vida : Mujeres Elegidas", "product": "MIA JEWELRY IG / Alas de la Vida : Mujeres Elegidas / Ring / Rosa", "sku": "41405", "qty": 1.0, "price_unit": 128.0, "cost_unit": 14.0, "adj_price_total": 128.0, "cost_total": 14.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-12", "invoice": "OBR13833", "customer": "Elisa East", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-12", "invoice": "OBR13832", "customer": "Walk-in", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Love Signs", "sku": "33790", "qty": 1.0, "price_unit": 94.0, "cost_unit": 13.05, "adj_price_total": 94.0, "cost_total": 13.05, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-10", "invoice": "OBR13823", "customer": "LOREANN MERCE", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Alfiler con Perla", "sku": "A9958", "qty": 1.0, "price_unit": 95.0, "cost_unit": 22.0, "adj_price_total": 95.0, "cost_total": 22.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-10", "invoice": "OBR13823", "customer": "LOREANN MERCE", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla", "sku": "A7251", "qty": 1.0, "price_unit": 95.0, "cost_unit": 27.0, "adj_price_total": 95.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-10", "invoice": "OBR13823", "customer": "LOREANN MERCE", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-03-07", "invoice": "OBR13818", "customer": "PAU", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "sku": "39230", "qty": 1.0, "price_unit": 176.0, "cost_unit": 31.5, "adj_price_total": 176.0, "cost_total": 31.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-05", "invoice": "OBR13815", "customer": "Tami Pelton", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Set / Set Abulon Chico", "sku": "S2423", "qty": 1.0, "price_unit": 110.0, "cost_unit": 22.0, "adj_price_total": 110.0, "cost_total": 22.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-05", "invoice": "OBR13811", "customer": "Walk-in", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "sku": "40220", "qty": 1.0, "price_unit": 111.0, "cost_unit": 14.0, "adj_price_total": 111.0, "cost_total": 14.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-05", "invoice": "OBR13800", "customer": "ALISA BLACK", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Love Essence", "sku": "33788", "qty": 1.0, "price_unit": 160.0, "cost_unit": 28.5, "adj_price_total": 160.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-05", "invoice": "OBR13800", "customer": "ALISA BLACK", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "sku": "33782", "qty": 1.0, "price_unit": 183.0, "cost_unit": 23.25, "adj_price_total": 183.0, "cost_total": 23.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-05", "invoice": "OBR13800", "customer": "ALISA BLACK", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Love Signs", "sku": "33790", "qty": 1.0, "price_unit": 94.0, "cost_unit": 13.05, "adj_price_total": 94.0, "cost_total": 13.05, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-02", "invoice": "OBR13793", "customer": "JOSE PERELMUT", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla", "sku": "A7251", "qty": 1.0, "price_unit": 95.0, "cost_unit": 27.0, "adj_price_total": 95.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-02", "invoice": "OBR13793", "customer": "JOSE PERELMUT", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Collar / Rasimo de Perlas", "sku": "C7494", "qty": 1.0, "price_unit": 140.0, "cost_unit": 34.0, "adj_price_total": 140.0, "cost_total": 34.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-02", "invoice": "OBR13791", "customer": "walk inn", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "sku": "40108", "qty": 1.0, "price_unit": 69.0, "cost_unit": 0, "adj_price_total": 69.0, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-03-02", "invoice": "OBR13790", "customer": "walk inn", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "sku": "40108", "qty": 1.0, "price_unit": 69.0, "cost_unit": 0, "adj_price_total": 69.0, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-28", "invoice": "OBR13789", "customer": "ANDREA PHILIPS", "marca": "MIA", "coleccion": "Miyuki", "product": "MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio", "sku": "A4141", "qty": 1.0, "price_unit": 95.0, "cost_unit": 19.0, "adj_price_total": 95.0, "cost_total": 19.0, "is_excluded": true, "is_courtesy": false}, {"date": "2026-02-26", "invoice": "OBR13779", "customer": "SHELLEY ANDERSON", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Silver Ring", "sku": "40109", "qty": 1.0, "price_unit": 128.0, "cost_unit": 0, "adj_price_total": 128.0, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-23", "invoice": "OBR13753", "customer": "MICHAEL H MURPHY", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird", "sku": "39005", "qty": 1.0, "price_unit": 170.0, "cost_unit": 15.75, "adj_price_total": 170.0, "cost_total": 15.75, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-23", "invoice": "OBR13753", "customer": "MICHAEL H MURPHY", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-02-20", "invoice": "OBR13750", "customer": "Walk-in", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Alas de Mariposa", "sku": "A0423", "qty": 1.0, "price_unit": 135.0, "cost_unit": 30.0, "adj_price_total": 135.0, "cost_total": 30.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-19", "invoice": "OBR13743", "customer": "walking", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Free Heart", "sku": "33754", "qty": 1.0, "price_unit": 105.0, "cost_unit": 21.91651, "adj_price_total": 105.0, "cost_total": 21.9165, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-19", "invoice": "OBR13743", "customer": "walking", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-02-19", "invoice": "OBR13730", "customer": "laurie mount", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Collar / Cruz", "sku": "C250884", "qty": 1.0, "price_unit": 120.0, "cost_unit": 36.0, "adj_price_total": 120.0, "cost_total": 36.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-19", "invoice": "OBR13730", "customer": "laurie mount", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-02-19", "invoice": "OBR13728", "customer": "MICHAEL C BROWN", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "sku": "39230", "qty": 1.0, "price_unit": 176.0, "cost_unit": 31.5, "adj_price_total": 176.0, "cost_total": 31.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-19", "invoice": "OBR13728", "customer": "MICHAEL C BROWN", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-02-19", "invoice": "OBR13727", "customer": "LAURA L NEWSOM", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", "sku": "40108", "qty": 1.0, "price_unit": 69.0, "cost_unit": 0, "adj_price_total": 69.0, "cost_total": 0.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-16", "invoice": "OBR13717", "customer": "WALLK INN", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "sku": "36178", "qty": 1.0, "price_unit": 115.0, "cost_unit": 14.55, "adj_price_total": 115.0, "cost_total": 14.55, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-16", "invoice": "OBR13717", "customer": "WALLK INN", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-02-12", "invoice": "OBR13696", "customer": "PAUL SKUTA", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Anillo / Ajustable con Madre Perla", "sku": "An5136", "qty": 1.0, "price_unit": 250.0, "cost_unit": 56.0, "adj_price_total": 250.0, "cost_total": 56.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-07", "invoice": "OBR13677", "customer": "walk inn", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Collar / Coraz\u00f3n Lizo-Martillado", "sku": "C5846", "qty": 1.0, "price_unit": 120.0, "cost_unit": 27.0, "adj_price_total": 120.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-05", "invoice": "OBR13665", "customer": "GAIL L RASK", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", "sku": "40220", "qty": 1.0, "price_unit": 111.0, "cost_unit": 14.0, "adj_price_total": 111.0, "cost_total": 14.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-05", "invoice": "OBR13665", "customer": "GAIL L RASK", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "sku": "33752", "qty": 1.0, "price_unit": 116.0, "cost_unit": 14.7, "adj_price_total": 116.0, "cost_total": 14.7, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-05", "invoice": "OBR13643", "customer": "Walk-in", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Coraz\u00f3n Grande", "sku": "C4141", "qty": 1.0, "price_unit": 120.0, "cost_unit": 18.0, "adj_price_total": 120.0, "cost_total": 18.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-02-05", "invoice": "OBR13643", "customer": "Walk-in", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-31", "invoice": "OBR13633", "customer": "walk inn", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Love Essence Necklace", "sku": "33722", "qty": 1.0, "price_unit": 82.0, "cost_unit": 17.25, "adj_price_total": 82.0, "cost_total": 17.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-31", "invoice": "OBR13633", "customer": "walk inn", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-29", "invoice": "OBR13624", "customer": "ANDRES STEFANO", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Aretes / Alfiler con Perla", "sku": "A9958", "qty": 1.0, "price_unit": 95.0, "cost_unit": 22.0, "adj_price_total": 95.0, "cost_total": 22.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-29", "invoice": "OBR13624", "customer": "ANDRES STEFANO", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-29", "invoice": "OBR13613", "customer": "Walk-in", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-29", "invoice": "OBR13612", "customer": "katherin jacob", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-29", "invoice": "OBR13611", "customer": "walk inn", "marca": "MIA", "coleccion": "Masterpieces Of Love", "product": "MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long", "sku": "40281", "qty": 1.0, "price_unit": 165.0, "cost_unit": 26.0, "adj_price_total": 165.0, "cost_total": 26.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-29", "invoice": "OBR13610", "customer": "katherin jacob", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", "sku": "36178", "qty": 1.0, "price_unit": 115.0, "cost_unit": 14.55, "adj_price_total": 115.0, "cost_total": 14.55, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-29", "invoice": "OBR13610", "customer": "katherin jacob", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", "sku": "33752", "qty": 1.0, "price_unit": 116.0, "cost_unit": 14.7, "adj_price_total": 116.0, "cost_total": 14.7, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-28", "invoice": "OBR13599", "customer": "CINDY HINCKLEY", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Protect My Love Small Necklace", "sku": "36397", "qty": 1.0, "price_unit": 188.0, "cost_unit": 27.0, "adj_price_total": 188.0, "cost_total": 27.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-28", "invoice": "OBR13599", "customer": "CINDY HINCKLEY", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-24", "invoice": "OBR13588", "customer": "VIRGINIA KELLY", "marca": "MIA", "coleccion": "Gafas de Sol", "product": "MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", "sku": "GU3696", "qty": 1.0, "price_unit": 75.0, "cost_unit": 16.0, "adj_price_total": 75.0, "cost_total": 16.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-22", "invoice": "OBR13577", "customer": "rosemarie baldwin", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Collar / Cruz", "sku": "C250884", "qty": 1.0, "price_unit": 120.0, "cost_unit": 36.0, "adj_price_total": 120.0, "cost_total": 36.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-22", "invoice": "OBR13577", "customer": "rosemarie baldwin", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 153.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-22", "invoice": "OBR13577", "customer": "rosemarie baldwin", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Capilla", "sku": "40089", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-22", "invoice": "OBR13572", "customer": "COLABORADORES IVANGUADERRAMA", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Necklace / Love Essence Necklace", "sku": "33722", "qty": 1.0, "price_unit": 41.0, "cost_unit": 17.25, "adj_price_total": 41.0, "cost_total": 17.25, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-22", "invoice": "OBR13564", "customer": "SUSAN BLACK", "marca": "MIA", "coleccion": "Chosen", "product": "MIA JEWELRY IG / Chosen / Set / Juego Madre Perla", "sku": "J1981", "qty": 1.0, "price_unit": 199.0, "cost_unit": 70.0, "adj_price_total": 199.0, "cost_total": 70.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-21", "invoice": "OBR13554", "customer": "PETER NEMITZ", "marca": "MIA", "coleccion": "Miyuki", "product": "MIA JEWELRY IG / Miyuki / Necklace / Love Strings", "sku": "36171", "qty": 1.0, "price_unit": 93.0, "cost_unit": 8.4, "adj_price_total": 93.0, "cost_total": 8.4, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-12", "invoice": "OBR13509", "customer": "walk inn", "marca": "MIA", "coleccion": "Gafas de Sol", "product": "MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", "sku": "GU3696", "qty": 1.0, "price_unit": 75.0, "cost_unit": 16.0, "adj_price_total": 75.0, "cost_total": 16.0, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-12", "invoice": "OBR13508", "customer": "CHAD COLT", "marca": "IG", "coleccion": "IG Jewelry Scarf", "product": "IG Jewelry / Scarf / Woman / Unconditional Love", "sku": "40090", "qty": 1.0, "price_unit": 0, "cost_unit": 5.0, "adj_price_total": 0, "cost_total": 5.0, "is_excluded": false, "is_courtesy": true}, {"date": "2026-01-12", "invoice": "OBR13508", "customer": "CHAD COLT", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", "sku": "34687", "qty": 1.0, "price_unit": 153.0, "cost_unit": 28.5, "adj_price_total": 153.0, "cost_total": 28.5, "is_excluded": false, "is_courtesy": false}, {"date": "2026-01-08", "invoice": "OBR13496", "customer": "walk inn", "marca": "MIA", "coleccion": "Sea Bless", "product": "MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", "sku": "39230", "qty": 1.0, "price_unit": 176.0, "cost_unit": 31.5, "adj_price_total": 176.0, "cost_total": 31.5, "is_excluded": false, "is_courtesy": false}];
-const EXCLUDED = [{"sale_id": "402755ec-4dc1-9591-11f1-14dfadc10679", "invoice": "OBR13789", "date_mz": "2026-02-28 14:15:42", "date_iso": "2026-02-28", "month": "2026-02", "customer": "ANDREA PHILIPS", "status": "CLOSED", "marca": "MIA", "coleccion": "Miyuki", "product_name": "MIA JEWELRY IG / Miyuki / Earrings / Aretes Vidrio", "sku": "A4141", "qty": 1.0, "price_unit": 95.0, "cost_unit": 19.0, "price_total": 95.0, "adj_price_total": 95.0, "cost_total": 19.0, "is_excluded": true, "is_courtesy": false}];
-const SORTED_MONTHS = ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05"];
-const MES_NOMBRES = {"01": "Enero", "02": "Febrero", "03": "Marzo", "04": "Abril", "05": "Mayo", "06": "Junio", "07": "Julio", "08": "Agosto", "09": "Septiembre", "10": "Octubre", "11": "Noviembre", "12": "Diciembre"};
-const TARGET_MONTH = "2026-04";
-
-const usd = x => "$" + (x || 0).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});
-const int = x => (x || 0).toLocaleString("en-US");
-const monthLabel = k => {
-  const [y, m] = k.split("-"); return MES_NOMBRES[m] + " " + y;
-};
-
-// Tabs
-document.querySelectorAll(".tab").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
-  });
-});
-
-// ===== MENSUAL =====
-const sel = document.getElementById("month-select");
-SORTED_MONTHS.forEach(k => {
-  const o = document.createElement("option");
-  o.value = k; o.textContent = monthLabel(k);
-  if (k === TARGET_MONTH) o.selected = true;
-  sel.appendChild(o);
-});
-
-let collectionChart = null;
-
-function renderMonth() {
-  const k = sel.value;
-  const m = MONTHS[k] || {};
-  // Exclusión
-  const note = document.getElementById("month-exclusion-note");
-  if ((m.tickets_excluidos||0) > 0) {
-    note.innerHTML = `<div class="exclusion-note">⚠️ Este mes tiene <b>${m.tickets_excluidos} ticket(s) excluido(s)</b> (${usd(m.ingreso_excluido)}). Ver "Acumulado YTD" para detalle.</div>`;
-  } else { note.innerHTML = ""; }
-
-  // KPIs mías
-  document.getElementById("month-kpis").innerHTML = `
-    <div class="kpi"><div class="label">Ingreso Bruto</div><div class="value">${usd(m.ingreso_bruto)}</div></div>
-    <div class="kpi"><div class="label">Costo Producción</div><div class="value">${usd(m.costo_produccion)}</div></div>
-    <div class="kpi"><div class="label">Ingreso Neto</div><div class="value">${usd(m.ingreso_neto)}</div></div>
-    <div class="kpi"><div class="label">Comisión Imelda (30%)</div><div class="value">${usd(m.comision_imelda)}</div><div class="sub">sobre bruto sin IVA</div></div>
-    <div class="kpi"><div class="label">Piezas vendidas</div><div class="value">${int(m.piezas_vendidas)}</div><div class="sub">+ ${int(m.cortesias_items)} cortesías</div></div>
-    <div class="kpi"><div class="label">Tickets con joyería</div><div class="value">${int(m.tickets_con_joyeria)}</div><div class="sub">+ ${int(m.tickets_solo_cortesia)} solo cortesía</div></div>
-  `;
-  // KPIs Lightspeed
-  document.getElementById("month-ls-kpis").innerHTML = `
-    <div class="kpi ls"><div class="label">Vista Lightspeed POS — Revenue</div><div class="value">${usd(m.lightspeed_revenue)}</div></div>
-    <div class="kpi ls"><div class="label">Lightspeed — COGS</div><div class="value">${usd(m.lightspeed_cogs)}</div></div>
-    <div class="kpi ls"><div class="label">Lightspeed — Sale Count</div><div class="value">${int(m.lightspeed_sale_count)}</div></div>
-    <div class="kpi ls"><div class="label">Lightspeed — Piezas totales</div><div class="value">${int(m.lightspeed_total_piezas)}</div></div>
-  `;
-
-  // Colección breakdown
-  const colMap = {};
-  ROWS.filter(r => r.date.startsWith(k) && !r.is_excluded && !r.is_courtesy).forEach(r => {
-    const key = r.marca + " · " + r.coleccion;
-    colMap[key] = (colMap[key] || 0) + r.adj_price_total;
-  });
-  const labels = Object.keys(colMap);
-  const values = labels.map(l => colMap[l]);
-  if (collectionChart) collectionChart.destroy();
-  const ctx = document.getElementById("chart-collection").getContext("2d");
-  collectionChart = new Chart(ctx, {
-    type: "bar",
-    data: { labels, datasets: [{ label: "Ingreso USD", data: values, backgroundColor: "#EC4899" }] },
-    options: { responsive: true, maintainAspectRatio: false, indexAxis: "y",
-      scales: { x: { ticks: { callback: v => usd(v) } } },
-      plugins: { legend: { display: false } } }
-  });
-
-  // Top products this month
-  const pmap = {};
-  ROWS.filter(r => r.date.startsWith(k) && !r.is_excluded).forEach(r => {
-    const key = r.product;
-    if (!pmap[key]) pmap[key] = { qty:0, revenue:0, marca:r.marca, coleccion:r.coleccion };
-    pmap[key].qty += r.qty;
-    pmap[key].revenue += r.adj_price_total;
-  });
-  const top = Object.entries(pmap).map(([p,v]) => ({p, ...v})).sort((a,b) => b.revenue - a.revenue).slice(0,10);
-  let html = '<table><thead><tr><th>#</th><th>Producto</th><th>Marca</th><th class="num">Qty</th><th class="num">Ingreso</th></tr></thead><tbody>';
-  top.forEach((t,i) => {
-    const badge = t.marca === "MIA" ? '<span class="badge mia">MIA</span>' : '<span class="badge ig">IG</span>';
-    html += `<tr><td>${i+1}</td><td>${t.p}</td><td>${badge}</td><td class="num">${int(t.qty)}</td><td class="num">${usd(t.revenue)}</td></tr>`;
-  });
-  html += "</tbody></table>";
-  document.getElementById("month-top-products").innerHTML = top.length ? html : '<div style="color:var(--muted);padding:12px">No hay ventas en este mes.</div>';
-}
-sel.addEventListener("change", renderMonth);
-renderMonth();
-
-// ===== YTD =====
-document.getElementById("ytd-kpis").innerHTML = `
-  <div class="kpi"><div class="label">Bruto YTD</div><div class="value">${usd(YTD.ingreso_bruto)}</div></div>
-  <div class="kpi"><div class="label">Costo YTD</div><div class="value">${usd(YTD.costo_produccion)}</div></div>
-  <div class="kpi"><div class="label">Neto YTD</div><div class="value">${usd(YTD.ingreso_neto)}</div></div>
-  <div class="kpi"><div class="label">Comisión Imelda YTD</div><div class="value">${usd(YTD.comision_imelda)}</div></div>
-  <div class="kpi"><div class="label">Piezas YTD</div><div class="value">${int(YTD.piezas_vendidas)}</div><div class="sub">+ ${int(YTD.cortesias_items)} cortesías</div></div>
-  <div class="kpi"><div class="label">Tickets YTD</div><div class="value">${int(YTD.tickets_con_joyeria)}</div><div class="sub">+ ${int(YTD.tickets_solo_cortesia)} solo cortesía + ${int(YTD.tickets_excluidos)} excl.</div></div>
-`;
-document.getElementById("ytd-ls-kpis").innerHTML = `
-  <div class="kpi ls"><div class="label">Vista Lightspeed POS — Revenue YTD</div><div class="value">${usd(YTD.lightspeed_revenue)}</div></div>
-  <div class="kpi ls"><div class="label">Lightspeed — COGS YTD</div><div class="value">${usd(YTD.lightspeed_cogs)}</div></div>
-  <div class="kpi ls"><div class="label">Lightspeed — Sale Count YTD</div><div class="value">${int(YTD.lightspeed_sale_count)}</div></div>
-  <div class="kpi ls"><div class="label">Lightspeed — Piezas YTD</div><div class="value">${int(YTD.lightspeed_total_piezas)}</div></div>
-`;
-
-// Evolution chart
-const labels = SORTED_MONTHS.map(k => monthLabel(k));
-const brutoData = SORTED_MONTHS.map(k => MONTHS[k].ingreso_bruto);
-const netoData = SORTED_MONTHS.map(k => MONTHS[k].ingreso_neto);
-const comData = SORTED_MONTHS.map(k => MONTHS[k].comision_imelda);
-new Chart(document.getElementById("chart-evolution"), {
-  type: "line",
-  data: { labels, datasets: [
-    { label: "Bruto", data: brutoData, borderColor: "#6B21A8", backgroundColor: "#6B21A833", fill: true, tension: .3 },
-    { label: "Neto", data: netoData, borderColor: "#EC4899", backgroundColor: "#EC489933", fill: true, tension: .3 },
-    { label: "Comisión Imelda", data: comData, borderColor: "#10b981", backgroundColor: "#10b98133", fill: false, tension: .3 },
-  ]},
-  options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { callback: v => usd(v) } } } }
-});
-
-// Pieces chart
-const piezasData = SORTED_MONTHS.map(k => MONTHS[k].piezas_vendidas);
-const cortData = SORTED_MONTHS.map(k => MONTHS[k].cortesias_items);
-new Chart(document.getElementById("chart-pieces"), {
-  type: "bar",
-  data: { labels, datasets: [
-    { label: "Piezas vendidas", data: piezasData, backgroundColor: "#6B21A8" },
-    { label: "Cortesías", data: cortData, backgroundColor: "#EC4899" },
-  ]},
-  options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
-});
-
-// YTD table mes-a-mes
-let th = `<thead><tr>
-  <th>Mes</th>
-  <th class="num">Bruto</th><th class="num">Costo</th><th class="num">Neto</th><th class="num">Comisión</th>
-  <th class="num">Piezas</th><th class="num">Cort.</th><th class="num">Tickets</th>
-  <th class="num ls-col">LS Rev</th><th class="num ls-col">LS COGS</th><th class="num ls-col">LS Count</th><th class="num ls-col">LS Piezas</th>
-</tr></thead><tbody>`;
-SORTED_MONTHS.forEach(k => {
-  const m = MONTHS[k];
-  const cls = (m.tickets_excluidos||0) > 0 ? ' class="excluded-row"' : '';
-  th += `<tr${cls}>
-    <td><b>${monthLabel(k)}</b></td>
-    <td class="num">${usd(m.ingreso_bruto)}</td><td class="num">${usd(m.costo_produccion)}</td>
-    <td class="num">${usd(m.ingreso_neto)}</td><td class="num">${usd(m.comision_imelda)}</td>
-    <td class="num">${int(m.piezas_vendidas)}</td><td class="num">${int(m.cortesias_items)}</td>
-    <td class="num">${int(m.tickets_con_joyeria)}</td>
-    <td class="num ls-col">${usd(m.lightspeed_revenue)}</td>
-    <td class="num ls-col">${usd(m.lightspeed_cogs)}</td>
-    <td class="num ls-col">${int(m.lightspeed_sale_count)}</td>
-    <td class="num ls-col">${int(m.lightspeed_total_piezas)}</td>
-  </tr>`;
-});
-th += `<tr style="background:#f9fafb;font-weight:700">
-  <td>TOTAL YTD</td>
-  <td class="num">${usd(YTD.ingreso_bruto)}</td><td class="num">${usd(YTD.costo_produccion)}</td>
-  <td class="num">${usd(YTD.ingreso_neto)}</td><td class="num">${usd(YTD.comision_imelda)}</td>
-  <td class="num">${int(YTD.piezas_vendidas)}</td><td class="num">${int(YTD.cortesias_items)}</td>
-  <td class="num">${int(YTD.tickets_con_joyeria)}</td>
-  <td class="num ls-col">${usd(YTD.lightspeed_revenue)}</td>
-  <td class="num ls-col">${usd(YTD.lightspeed_cogs)}</td>
-  <td class="num ls-col">${int(YTD.lightspeed_sale_count)}</td>
-  <td class="num ls-col">${int(YTD.lightspeed_total_piezas)}</td>
-</tr>`;
-th += "</tbody>";
-document.getElementById("ytd-table").innerHTML = th;
-
-// Excluded section
-if (EXCLUDED.length > 0) {
-  let html = `<div class="card" style="border-color:var(--warning); background:#fffbeb">
-    <h3 style="color:#9a3412">⚠️ Ventas Excluidas del Reporte (visibles para validación con Lightspeed POS)</h3>
-    <table><thead><tr><th>Fecha</th><th>Invoice</th><th>Cliente</th><th>Producto</th><th class="num">Qty</th><th class="num">Precio</th><th>Razón</th></tr></thead><tbody>`;
-  EXCLUDED.forEach(e => {
-    html += `<tr><td>${e.date_iso}</td><td><b>${e.invoice}</b></td><td>${e.customer}</td><td>${e.product_name}</td>
-      <td class="num">${int(e.qty)}</td><td class="num">${usd(e.adj_price_total)}</td>
-      <td><span class="badge excluded">Excluida por Imelda — 2026-05-21</span></td></tr>`;
-  });
-  html += "</tbody></table></div>";
-  document.getElementById("excluded-section").innerHTML = html;
+function showTab(i) {
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  document.querySelectorAll('.panel').forEach((p,idx)=>p.classList.toggle('active', idx===i));
 }
 
-// ===== TOP =====
-let medals = ["🥇","🥈","🥉"];
-let top10html = '<div style="display:grid;gap:8px;grid-template-columns:1fr">';
-TOP_PRODUCTS.slice(0,10).forEach((t,i) => {
-  const badge = t.marca === "MIA" ? '<span class="badge mia">MIA</span>' : '<span class="badge ig">IG</span>';
-  const m = i < 3 ? `<span class="medal">${medals[i]}</span> ` : `<span style="color:var(--muted);font-weight:700">#${i+1}</span> `;
-  top10html += `<div style="padding:10px;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
-    <div>${m}<b>${t.product}</b> ${badge} <span class="ts">${t.coleccion}</span></div>
-    <div><span style="color:var(--muted)">Qty ${int(t.qty)}</span> <b style="color:var(--morado);margin-left:12px">${usd(t.revenue)}</b></div>
-  </div>`;
-});
-top10html += "</div>";
-document.getElementById("top-10").innerHTML = top10html;
+const monthsLbl = ["Enero", "Febrero", "Marzo", "Abril", "Mayo"];
+const dataBruto = [1846.0, 1735.0, 4361.5, 1582.0, 3058.5];
+const dataNeto = [1472.35, 1455.58, 3645.48, 1331.5, 2518.0];
+const dataPiezas = [15, 13, 31, 12, 22];
+const dataCortesias = [7, 6, 10, 7, 14];
+const dataComision = [477.41, 448.71, 1127.97, 409.14, 790.99];
+const dataLsRev = [1846.0, 1830.0, 4361.5, 1582.0, 3058.5];
+const catBruto = {"MIA Jewelry": 3058.5, "IG Jewelry": 0.0};
+const topQtyData = [["MIA JEWELRY IG / Sea Bless / Ring / Protect My Love", 8.0, 1224.0], ["MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF", 4.0, 371.0], ["MIA JEWELRY IG / Gafas de Sol / Unisex / Polarizadas Clasicas", 4.0, 262.5], ["MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big", 4.0, 704.0], ["MIA JEWELRY IG / Sea Bless / Earrings / Loved", 4.0, 732.0], ["MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz", 4.0, 444.0], ["MIA JEWELRY IG / Chosen / Collar / Coraz\u00f3n Lizo-Martillado", 3.0, 360.0], ["MIA JEWELRY IG / Chosen / Aretes / Rasimo de Perla", 3.0, 285.0], ["MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun", 3.0, 345.0], ["MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh", 3.0, 348.0]];
 
-let tt = '<thead><tr><th>#</th><th>Producto</th><th>Marca</th><th>Colección</th><th class="num">Qty</th><th class="num">Ingreso</th></tr></thead><tbody>';
-TOP_PRODUCTS.slice(0,50).forEach((t,i) => {
-  const badge = t.marca === "MIA" ? '<span class="badge mia">MIA</span>' : '<span class="badge ig">IG</span>';
-  tt += `<tr><td>${i+1}</td><td>${t.product}</td><td>${badge}</td><td>${t.coleccion}</td><td class="num">${int(t.qty)}</td><td class="num">${usd(t.revenue)}</td></tr>`;
+new Chart(document.getElementById('chartTendencia'), {
+  type: 'bar',
+  data: {
+    labels: monthsLbl,
+    datasets: [
+      { label: 'Bruto', data: dataBruto, backgroundColor: '#EC4899' },
+      { label: 'Neto', data: dataNeto, backgroundColor: '#6B21A8' },
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false }
 });
-tt += "</tbody>";
-document.getElementById("top-table").innerHTML = tt;
 
-// ===== CLIENTES =====
-let ch = '<thead><tr><th>Cliente</th>';
-SORTED_MONTHS.forEach(k => { ch += `<th class="num">${monthLabel(k)}</th>`; });
-ch += '<th class="num">Total YTD</th></tr></thead><tbody>';
-CUSTOMERS.slice(0,200).forEach(c => {
-  ch += `<tr><td>${c.customer}</td>`;
-  SORTED_MONTHS.forEach(k => {
-    const v = c.months[k] || 0;
-    ch += `<td class="num">${v ? usd(v) : '—'}</td>`;
-  });
-  ch += `<td class="num"><b>${usd(c.total)}</b></td></tr>`;
+new Chart(document.getElementById('chartCategoria'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(catBruto),
+    datasets: [{ data: Object.values(catBruto), backgroundColor: ['#6B21A8', '#EC4899'] }]
+  },
+  options: { responsive:true, maintainAspectRatio:false }
 });
-ch += "</tbody>";
-document.getElementById("customer-table").innerHTML = ch;
 
-// ===== DETALLE =====
-const sortedRows = [...ROWS].sort((a,b) => b.date.localeCompare(a.date));
-let dh = '<thead><tr><th>Fecha</th><th>Invoice</th><th>Cliente</th><th>Producto</th><th>Marca</th><th>Colección</th><th class="num">Qty</th><th class="num">Costo U.</th><th class="num">Precio U.</th><th class="num">Total Aj.</th><th>Tipo</th></tr></thead><tbody>';
-sortedRows.forEach(r => {
-  const badge = r.marca === "MIA" ? '<span class="badge mia">MIA</span>' : '<span class="badge ig">IG</span>';
-  let typ = '';
-  if (r.is_excluded) typ = '<span class="badge excluded">Excluida</span>';
-  else if (r.is_courtesy) typ = '<span class="badge courtesy">Cortesía</span>';
-  const rowCls = r.is_excluded ? ' class="excluded-row"' : '';
-  dh += `<tr${rowCls}><td>${r.date}</td><td>${r.invoice}</td><td>${r.customer}</td><td>${r.product}</td>
-    <td>${badge}</td><td>${r.coleccion}</td><td class="num">${int(r.qty)}</td>
-    <td class="num">${usd(r.cost_unit)}</td><td class="num">${usd(r.price_unit)}</td>
-    <td class="num">${usd(r.adj_price_total)}</td><td>${typ}</td></tr>`;
+new Chart(document.getElementById('chartYTD'), {
+  type: 'line',
+  data: {
+    labels: monthsLbl,
+    datasets: [
+      { label: 'Bruto (mis)', data: dataBruto, borderColor: '#EC4899', backgroundColor:'rgba(236,72,153,0.1)', tension:0.3, fill:true },
+      { label: 'Revenue LS', data: dataLsRev, borderColor:'#6B21A8', backgroundColor:'rgba(107,33,168,0.1)', tension:0.3, borderDash:[6,3] },
+      { label: 'Comision Imelda', data: dataComision, borderColor:'#10b981', tension:0.3 },
+    ]
+  },
+  options: { responsive:true, maintainAspectRatio:false }
 });
-dh += "</tbody>";
-document.getElementById("detail-table").innerHTML = dh;
+
+new Chart(document.getElementById('chartTopProd'), {
+  type: 'bar',
+  data: {
+    labels: topQtyData.map(x => x[0].slice(0, 40)),
+    datasets: [{ label:'Piezas', data: topQtyData.map(x => x[1]), backgroundColor: '#EC4899' }]
+  },
+  options: { indexAxis:'y', responsive:true, maintainAspectRatio:false }
+});
 </script>
 </body>
 </html>
