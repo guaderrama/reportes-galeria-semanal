@@ -3,328 +3,446 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Clarity Semanal — Ivan Guaderrama Online Store</title>
+<title>Reporte Clarity Semanal · Ivan Guaderrama Online Store</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root{
-    --bg:#0f1117; --card:#1a1d27; --card2:#21263340; --border:#2a2f3d;
-    --txt:#e7eaf0; --muted:#9aa3b2; --accent:#6c8cff; --accent2:#22d3ee;
-    --green:#34d399; --yellow:#fbbf24; --red:#f87171; --purple:#a78bfa;
+    --bg:#0f1117; --card:#1a1d27; --card2:#212533; --border:#2a2e3a;
+    --text:#e5e7eb; --muted:#9ca3af; --muted2:#6b7280;
+    --green:#34d399; --green-bg:rgba(52,211,153,.12);
+    --yellow:#fbbf24; --yellow-bg:rgba(251,191,36,.12);
+    --red:#f87171; --red-bg:rgba(248,113,113,.12);
+    --blue:#60a5fa; --purple:#a78bfa; --pink:#f472b6; --teal:#2dd4bf; --orange:#fb923c;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.5;padding:0 0 60px}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-  header.top{padding:38px 20px 26px;background:linear-gradient(135deg,#161a24,#0f1117);border-bottom:1px solid var(--border)}
-  header.top .wrap{padding:0 20px}
-  h1{font-size:26px;font-weight:700;letter-spacing:-.3px}
-  .sub{color:var(--muted);font-size:14px;margin-top:6px}
-  .badge{display:inline-block;background:#6c8cff22;color:var(--accent);border:1px solid #6c8cff44;padding:3px 10px;border-radius:20px;font-size:12px;margin-top:12px}
-  section{margin-top:34px}
-  h2{font-size:19px;font-weight:650;margin-bottom:4px;display:flex;align-items:center;gap:9px}
-  h2 .n{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
-  .sec-desc{color:var(--muted);font-size:13px;margin-bottom:16px}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55;padding:24px 16px 80px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto}
+  header.top{text-align:center;padding:28px 20px 24px;background:linear-gradient(160deg,#1a1d27 0%,#15171f 100%);border:1px solid var(--border);border-radius:18px;margin-bottom:26px}
+  header.top h1{font-size:26px;font-weight:700;letter-spacing:-.4px}
+  header.top .sub{color:var(--muted);margin-top:6px;font-size:15px}
+  header.top .range{display:inline-block;margin-top:14px;padding:6px 16px;background:var(--card2);border:1px solid var(--border);border-radius:999px;font-size:13px;color:var(--blue);font-weight:600}
+  section{margin-bottom:34px}
+  .sec-head{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+  .sec-head .num{flex:0 0 32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--card2);border:1px solid var(--border);border-radius:9px;font-size:14px;font-weight:700;color:var(--blue)}
+  .sec-head h2{font-size:19px;font-weight:650;letter-spacing:-.2px}
   .grid{display:grid;gap:14px}
-  .kpis{grid-template-columns:repeat(6,1fr)}
-  .k2{grid-template-columns:1fr 1fr}
-  .k3{grid-template-columns:1fr 1fr 1fr}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px}
-  .kpi .lbl{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px}
-  .kpi .val{font-size:27px;font-weight:700;margin-top:6px}
-  .kpi .meta{font-size:12px;color:var(--muted);margin-top:3px}
-  .val.good{color:var(--green)} .val.warn{color:var(--yellow)} .val.bad{color:var(--red)}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 16px 14px;position:relative;overflow:hidden}
+  .kpi .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+  .kpi .val{font-size:28px;font-weight:730;margin-top:6px;letter-spacing:-.5px}
+  .kpi .meta{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .kpi .bar-accent{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+  .card h3{font-size:14.5px;font-weight:630;margin-bottom:14px;color:var(--text)}
+  .two{grid-template-columns:1fr 1fr}
+  .chart-box{position:relative;height:280px}
+  .chart-box.tall{height:330px}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
-  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
-  td.num,th.num{text-align:right}
+  th{text-align:left;color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;padding:8px 10px;border-bottom:1px solid var(--border)}
+  td{padding:9px 10px;border-bottom:1px solid #23262f;vertical-align:middle}
   tr:last-child td{border-bottom:none}
-  .bar{height:8px;border-radius:5px;background:var(--accent);display:inline-block;vertical-align:middle}
-  .bar-wrap{background:#ffffff0d;border-radius:5px;width:100%;height:8px;overflow:hidden}
-  .chip{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
-  .chip.green{background:#34d39922;color:var(--green)}
-  .chip.yellow{background:#fbbf2422;color:var(--yellow)}
-  .chip.red{background:#f8717122;color:var(--red)}
-  .chip.gray{background:#9aa3b222;color:var(--muted)}
-  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
-  .chartbox{position:relative;height:300px}
-  .chartbox.sm{height:240px}
-  a{color:var(--accent2);text-decoration:none}
-  a:hover{text-decoration:underline}
-  .insight{border-left:3px solid var(--accent);background:var(--card);border-radius:0 11px 11px 0;padding:15px 18px;margin-bottom:12px}
-  .insight.red{border-color:var(--red)} .insight.yellow{border-color:var(--yellow)} .insight.green{border-color:var(--green)}
-  .insight h4{font-size:15px;margin-bottom:5px}
-  .insight p{font-size:13px;color:var(--muted)}
-  .insight .act{font-size:13px;color:var(--txt);margin-top:7px}
-  .insight .act b{color:var(--accent2)}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .alert-tag{font-size:10px;background:#f8717122;color:var(--red);padding:2px 7px;border-radius:5px;font-weight:700;margin-left:6px}
-  footer{margin-top:46px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:12px;text-align:center}
-  @media(max-width:880px){.kpis{grid-template-columns:repeat(2,1fr)}.two,.k2,.k3{grid-template-columns:1fr}}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .urlcell{color:var(--text);font-size:12.5px}
+  .urlcell small{display:block;color:var(--muted2);font-size:11px;margin-top:1px}
+  .barcell{position:relative}
+  .barcell .track{height:7px;background:var(--card2);border-radius:4px;overflow:hidden;margin-top:5px}
+  .barcell .fill{height:100%;border-radius:4px}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:650;white-space:nowrap}
+  .b-green{background:var(--green-bg);color:var(--green)}
+  .b-yellow{background:var(--yellow-bg);color:var(--yellow)}
+  .b-red{background:var(--red-bg);color:var(--red)}
+  .b-blue{background:rgba(96,165,250,.12);color:var(--blue)}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+  .ux-cards{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+  .uxc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+  .uxc .big{font-size:32px;font-weight:740;letter-spacing:-.5px}
+  .uxc .lab{font-size:12.5px;color:var(--muted);margin-top:2px;font-weight:600}
+  .uxc .hint{font-size:11.5px;margin-top:7px}
+  .session{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;margin-bottom:11px}
+  .session .row1{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .session .stamp{font-size:12.5px;color:var(--muted)}
+  .session .chips{margin-top:9px;display:flex;gap:7px;flex-wrap:wrap}
+  .chip{font-size:11.5px;padding:3px 9px;border-radius:7px;background:var(--card2);border:1px solid var(--border);color:var(--muted)}
+  .chip b{color:var(--text);font-weight:650}
+  .session .why{font-size:13px;color:#cbd0db;margin-top:11px;padding-top:11px;border-top:1px solid #23262f}
+  .session .why b{color:var(--text)}
+  .playbtn{flex:0 0 auto;background:#7c3aed;color:#fff;text-decoration:none;font-size:12.5px;font-weight:650;padding:8px 14px;border-radius:9px;white-space:nowrap;transition:background .15s}
+  .playbtn:hover{background:#8b5cf6}
+  .insight{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:12px;border-left:4px solid var(--blue)}
+  .insight.crit{border-left-color:var(--red)}
+  .insight.warn{border-left-color:var(--yellow)}
+  .insight.ok{border-left-color:var(--green)}
+  .insight .ih{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
+  .insight .ih h4{font-size:15px;font-weight:650}
+  .insight p{font-size:13.5px;color:#cbd0db;margin-bottom:6px}
+  .insight .action{font-size:13px;color:var(--text);background:var(--card2);border-radius:9px;padding:9px 12px;margin-top:8px}
+  .insight .action b{color:var(--green)}
+  .conf{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:6px;letter-spacing:.3px}
+  .c-seguro{background:var(--green-bg);color:var(--green)}
+  .c-probable{background:var(--yellow-bg);color:var(--yellow)}
+  .c-espec{background:rgba(167,139,250,.14);color:var(--purple)}
+  .note{font-size:12px;color:var(--muted2);margin-top:10px;font-style:italic}
+  footer{text-align:center;color:var(--muted2);font-size:12px;margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+  .legend-inline{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}
+  @media(max-width:760px){.two{grid-template-columns:1fr}.kpi .val{font-size:24px}}
 </style>
 </head>
 <body>
-<header class="top">
-  <div class="wrap">
-    <h1>📊 Reporte Clarity Semanal</h1>
-    <div class="sub">Ivan Guaderrama Online Store · ivanguaderramaonlinestore.com</div>
-    <div class="badge">25 may – 1 jun 2026 · últimos 7 días</div>
-  </div>
-</header>
-
 <div class="wrap">
 
-<!-- 1. RESUMEN EJECUTIVO -->
+<header class="top">
+  <h1>📊 Reporte Clarity Semanal</h1>
+  <div class="sub">Ivan Guaderrama Online Store · ivanguaderramaonlinestore.com</div>
+  <div class="range">2 – 8 de junio, 2026 · últimos 7 días</div>
+</header>
+
+<!-- ============ 1. RESUMEN EJECUTIVO ============ -->
 <section>
-  <h2><span class="n">1</span>Resumen Ejecutivo</h2>
-  <div class="sec-desc">Métricas clave de tráfico y engagement de la semana.</div>
+  <div class="sec-head"><div class="num">1</div><h2>Resumen Ejecutivo</h2></div>
   <div class="grid kpis">
-    <div class="card kpi"><div class="lbl">Sesiones</div><div class="val">840</div><div class="meta">8 días registrados</div></div>
-    <div class="card kpi"><div class="lbl">Usuarios</div><div class="val">726</div><div class="meta">714 nuevos · 27 recurrentes</div></div>
-    <div class="card kpi"><div class="lbl">Duración prom.</div><div class="val">1m 46s</div><div class="meta">106.2 s / sesión</div></div>
-    <div class="card kpi"><div class="lbl">Páginas / sesión</div><div class="val">1.62</div><div class="meta">Mobile 2.14 · PC 1.21</div></div>
-    <div class="card kpi"><div class="lbl">% Recurrentes</div><div class="val bad">3.7%</div><div class="meta">⚠ &lt;5% (arte = revisitas)</div></div>
-    <div class="card kpi"><div class="lbl">Quick Backs</div><div class="val warn">208</div><div class="meta">123 dead clicks</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--blue)"></div><div class="label">Sesiones</div><div class="val">489</div><div class="meta">69.9 / día</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--purple)"></div><div class="label">Usuarios</div><div class="val">415</div><div class="meta">400 nuevos · 28 recurrentes</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--teal)"></div><div class="label">Duración prom.</div><div class="val">2:08</div><div class="meta">128 s por sesión</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--green)"></div><div class="label">Páginas / sesión</div><div class="val">1.91</div><div class="meta">Mobile 2.31 · PC 1.48</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--orange)"></div><div class="label">% Usuarios nuevos</div><div class="val">96.4%</div><div class="meta">Recurrentes solo 6.7%</div></div>
+    <div class="kpi"><div class="bar-accent" style="background:var(--red)"></div><div class="label">Quick backs</div><div class="val">162</div><div class="meta">≈33% de sesiones · alto</div></div>
   </div>
+  <p class="note">El total de sesiones por día (34+190+41+72+40+62+50) cuadra exactamente con 489. Algunos cortes de Clarity (dispositivo y conteos de UX) incluyen el 1-jun por límites de la API; el efecto de borde es menor y se indica donde aplica.</p>
 </section>
 
-<!-- 2. TRAFICO Y ADQUISICION -->
+<!-- ============ 2. TRÁFICO Y ADQUISICIÓN ============ -->
 <section>
-  <h2><span class="n">2</span>Tráfico y Adquisición</h2>
-  <div class="sec-desc">Canales, fuentes, tendencia diaria y geografía.</div>
-  <div class="two">
-    <div class="card"><div class="chartbox"><canvas id="chChannels"></canvas></div></div>
+  <div class="sec-head"><div class="num">2</div><h2>Tráfico y Adquisición</h2></div>
+  <div class="grid two">
     <div class="card">
+      <h3>Canales de adquisición</h3>
+      <div class="chart-box"><canvas id="chCanales"></canvas></div>
+      <div class="legend-inline">
+        <span><span class="dot" style="background:var(--blue)"></span>Directo 56%</span>
+        <span><span class="dot" style="background:var(--green)"></span>Orgánico 16%</span>
+        <span><span class="dot" style="background:var(--purple)"></span>Referral 15%</span>
+        <span><span class="dot" style="background:var(--pink)"></span>Social 0.4%</span>
+        <span><span class="dot" style="background:var(--muted2)"></span>Otros 12%</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Tendencia diaria de sesiones</h3>
+      <div class="chart-box"><canvas id="chDaily"></canvas></div>
+      <p class="note">Pico del 3-jun (190 sesiones, 39% de la semana) coincide con el total de EE.UU. — posible campaña o publicación.</p>
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="card">
+      <h3>Fuentes principales</h3>
       <table>
         <thead><tr><th>Fuente</th><th>Canal</th><th class="num">Sesiones</th></tr></thead>
         <tbody>
-          <tr><td>ivanguaderramaonlinestore.com</td><td><span class="chip gray">Directo</span></td><td class="num">287</td></tr>
-          <tr><td>google</td><td><span class="chip green">Orgánico</span></td><td class="num">130</td></tr>
-          <tr><td>ivanguaderrama.com</td><td><span class="chip yellow">Referral</span></td><td class="num">35</td></tr>
-          <tr><td>bit.ly</td><td><span class="chip yellow">Referral</span></td><td class="num">30</td></tr>
-          <tr><td>lab-test.ariai.cloud</td><td><span class="chip yellow">Referral</span></td><td class="num">17</td></tr>
-          <tr><td>bing</td><td><span class="chip green">Orgánico</span></td><td class="num">4</td></tr>
-          <tr><td>ig (Instagram)</td><td><span class="chip red">Social</span></td><td class="num">4</td></tr>
+          <tr><td>ivanguaderramaonlinestore.com</td><td><span class="badge b-blue">Directo</span></td><td class="num">274</td></tr>
+          <tr><td>google</td><td><span class="badge b-green">Orgánico</span></td><td class="num">78</td></tr>
+          <tr><td>ivanguaderrama.com</td><td><span class="badge b-blue">Referral</span></td><td class="num">39</td></tr>
+          <tr><td>bit.ly</td><td><span class="badge b-blue">Referral</span></td><td class="num">27</td></tr>
+          <tr><td>uqr.to (QR)</td><td><span class="badge b-blue">Referral</span></td><td class="num">3</td></tr>
+          <tr><td>visitloscabos.travel</td><td><span class="badge b-blue">Referral</span></td><td class="num">3</td></tr>
+          <tr><td>instagram (ig)</td><td><span class="badge b-blue">Social</span></td><td class="num">2</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
-  <div class="two" style="margin-top:14px">
-    <div class="card"><div class="chartbox"><canvas id="chDaily"></canvas></div></div>
     <div class="card">
+      <h3>Geografía · top países</h3>
       <table>
-        <thead><tr><th>País</th><th class="num">Sesiones</th><th style="width:38%">Volumen</th></tr></thead>
+        <thead><tr><th>País</th><th class="num">Ses.</th><th style="width:42%">&nbsp;</th></tr></thead>
         <tbody id="geoBody"></tbody>
       </table>
     </div>
   </div>
 </section>
 
-<!-- 3. COMPORTAMIENTO Y ENGAGEMENT -->
+<!-- ============ 3. COMPORTAMIENTO Y ENGAGEMENT ============ -->
 <section>
-  <h2><span class="n">3</span>Comportamiento y Engagement</h2>
-  <div class="sec-desc">Mobile descubre, Desktop decide. Profundidad de scroll y colecciones.</div>
-  <div class="two">
-    <div class="card"><div class="chartbox sm"><canvas id="chDevice"></canvas></div></div>
-    <div class="card"><div class="chartbox sm"><canvas id="chScroll"></canvas></div></div>
-  </div>
-  <div class="card" style="margin-top:14px">
-    <table>
-      <thead><tr><th>Colección</th><th class="num">Vistas</th></tr></thead>
-      <tbody>
-        <tr><td>Interactive Christian Wall Art (AR)</td><td class="num">134</td></tr>
-        <tr><td>All Originals</td><td class="num">109</td></tr>
-        <tr><td>Limited Edition</td><td class="num">45</td></tr>
-        <tr><td>New Art</td><td class="num">37</td></tr>
-        <tr><td>Smiling Jesus Paintings</td><td class="num">35</td></tr>
-        <tr><td>Heart Painting</td><td class="num">19</td></tr>
-        <tr><td>Pet Paradise</td><td class="num">17</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 4. PRODUCTOS POR ENGAGEMENT -->
-<section>
-  <h2><span class="n">4</span>Productos por Engagement</h2>
-  <div class="sec-desc">Engagement: <span class="chip green">Alto &gt;60s</span> <span class="chip yellow">Medio 30-60s</span> <span class="chip red">Bajo &lt;30s</span>. &gt;60s en producto = interés real de compra.</div>
-  <div class="card">
-    <table>
-      <thead><tr><th>Producto</th><th class="num">Vistas</th><th class="num">Tiempo prom.</th><th>Engagement</th></tr></thead>
-      <tbody>
-        <tr><td>Ticket To Heaven<span class="alert-tag">ALTO TRÁFICO · BAJO ENGAGEMENT</span></td><td class="num">90</td><td class="num">19.4 s</td><td><span class="chip red">Bajo</span></td></tr>
-        <tr><td>Family First (Canvas)</td><td class="num">11</td><td class="num">205.8 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>The Last Supper Wine Tumblers</td><td class="num">10</td><td class="num">62.9 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>Love and Color</td><td class="num">9</td><td class="num">118.0 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>Expressive Love</td><td class="num">8</td><td class="num">86.5 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>Colorful Fresh Emotions</td><td class="num">8</td><td class="num">92.8 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>Colors of Connection</td><td class="num">8</td><td class="num">89.5 s</td><td><span class="chip green">Alto</span></td></tr>
-        <tr><td>My Heart Belongs To You</td><td class="num">8</td><td class="num">31.7 s</td><td><span class="chip yellow">Medio</span></td></tr>
-        <tr><td>Family First</td><td class="num">7</td><td class="num">18.8 s</td><td><span class="chip red">Bajo</span></td></tr>
-        <tr><td>Angel of Protection</td><td class="num">7</td><td class="num">275.3 s</td><td><span class="chip green">Alto</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- 5. UX Y RENDIMIENTO -->
-<section>
-  <h2><span class="n">5</span>UX y Rendimiento</h2>
-  <div class="sec-desc">Errores de interacción, Core Web Vitals, páginas problemáticas y errores JS.</div>
-  <div class="grid k3">
-    <div class="card kpi"><div class="lbl">Rage Clicks</div><div class="val good">1</div><div class="meta">clics de frustración</div></div>
-    <div class="card kpi"><div class="lbl">Dead Clicks</div><div class="val warn">123</div><div class="meta">clics sin respuesta</div></div>
-    <div class="card kpi"><div class="lbl">Quick Backs</div><div class="val warn">208</div><div class="meta">retrocesos rápidos</div></div>
-  </div>
-  <div class="card" style="margin-top:14px">
-    <h4 style="margin-bottom:12px;font-size:14px;color:var(--muted)">Core Web Vitals (P75)</h4>
-    <table>
-      <thead><tr><th>Métrica</th><th class="num">Promedio</th><th class="num">P75</th><th>Estado</th></tr></thead>
-      <tbody>
-        <tr><td>LCP — Largest Contentful Paint</td><td class="num">1747 ms</td><td class="num">2264 ms</td><td><span class="chip green">● Bueno &lt;2.5s</span></td></tr>
-        <tr><td>FID — First Input Delay</td><td class="num">74 ms</td><td class="num">123 ms</td><td><span class="chip green">● Bueno</span></td></tr>
-        <tr><td>CLS — Cumulative Layout Shift</td><td class="num">—</td><td class="num">0.03</td><td><span class="chip green">● Bueno &lt;0.1</span></td></tr>
-        <tr><td>INP — Interaction to Next Paint</td><td class="num">374 ms</td><td class="num">312 ms</td><td><span class="chip red">● Pobre &gt;200ms</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="two" style="margin-top:14px">
+  <div class="sec-head"><div class="num">3</div><h2>Comportamiento y Engagement</h2></div>
+  <div class="grid two">
     <div class="card">
-      <h4 style="margin-bottom:12px;font-size:14px;color:var(--muted)">Páginas con más fricción (dead clicks + quick backs)</h4>
-      <table>
-        <thead><tr><th>Página</th><th class="num">Dead</th><th class="num">QBack</th><th class="num">Total</th></tr></thead>
-        <tbody>
-          <tr><td>/collections/all-originals</td><td class="num">7</td><td class="num">51</td><td class="num">58</td></tr>
-          <tr><td>/collections/interactive-christian-wall-art</td><td class="num">20</td><td class="num">26</td><td class="num">46</td></tr>
-          <tr><td>/ (Home)</td><td class="num">4</td><td class="num">23</td><td class="num">27</td></tr>
-          <tr><td>/collections/limited-edition</td><td class="num">1</td><td class="num">21</td><td class="num">22</td></tr>
-          <tr><td>/products/my-heart-belongs-to-you</td><td class="num">15</td><td class="num">4</td><td class="num">19</td></tr>
-        </tbody>
-      </table>
+      <h3>Mobile vs Desktop</h3>
+      <div class="chart-box"><canvas id="chDevice"></canvas></div>
+      <p class="note">Mobile descubre y navega más páginas (2.31); Desktop decide y permanece más tiempo (2:23 vs 2:01). Tablet marginal (10 ses.).</p>
     </div>
     <div class="card">
-      <h4 style="margin-bottom:12px;font-size:14px;color:var(--muted)">Errores JavaScript (32 total)</h4>
-      <table>
-        <thead><tr><th>Error</th><th class="num">Conteo</th></tr></thead>
-        <tbody>
-          <tr><td>Script error.</td><td class="num">15</td></tr>
-          <tr><td>NetworkError: Load failed</td><td class="num">5</td></tr>
-          <tr><td>Maximum call stack size exceeded.</td><td class="num">5</td></tr>
-          <tr><td>ResizeObserver loop completed…</td><td class="num">4</td></tr>
-          <tr><td>w.charCodeAt is not a function</td><td class="num">2</td></tr>
-          <tr><td>c[X[0]] is not a function</td><td class="num">1</td></tr>
-        </tbody>
-      </table>
+      <h3>Profundidad de scroll por página</h3>
+      <div class="chart-box tall"><canvas id="chScroll"></canvas></div>
+      <p class="note">Home en rojo: solo 22% — los usuarios casi no bajan. Las colecciones (45-56%) sí muestran exploración.</p>
     </div>
   </div>
-</section>
-
-<!-- 6. SESIONES PROBLEMATICAS -->
-<section>
-  <h2><span class="n">6</span>Sesiones Problemáticas</h2>
-  <div class="sec-desc">Top 5 sesiones con quick backs — grabaciones de Clarity para revisión.</div>
-  <div class="card">
+  <div class="card" style="margin-top:14px">
+    <h3>Colecciones más vistas</h3>
     <table>
-      <thead><tr><th>#</th><th>Fecha/hora</th><th class="num">Duración</th><th class="num">Páginas</th><th class="num">Clics</th><th>Grabación</th></tr></thead>
+      <thead><tr><th>Colección</th><th class="num">Vistas</th><th class="num">Scroll</th><th class="num">Quick backs</th></tr></thead>
       <tbody>
-        <tr><td>1</td><td>26 may 19:05</td><td class="num">13m 14s</td><td class="num">36</td><td class="num">55</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/nvrr2l/5w5p8a" target="_blank">Ver ▶</a></td></tr>
-        <tr><td>2</td><td>30 may 23:21</td><td class="num">12m 58s</td><td class="num">31</td><td class="num">36</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/y1tq0o/fiisub" target="_blank">Ver ▶</a></td></tr>
-        <tr><td>3</td><td>26 may 02:32</td><td class="num">5m 18s</td><td class="num">11</td><td class="num">36</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/14oinfk/192zgkf" target="_blank">Ver ▶</a></td></tr>
-        <tr><td>4</td><td>31 may 02:06</td><td class="num">6m 31s</td><td class="num">25</td><td class="num">26</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/1n99zm1/lvw186" target="_blank">Ver ▶</a></td></tr>
-        <tr><td>5</td><td>25 may 19:35</td><td class="num">3m 20s</td><td class="num">17</td><td class="num">26</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/9b0aen/mzdqyr" target="_blank">Ver ▶</a></td></tr>
+        <tr><td class="urlcell">/collections/interactive-christian-wall-art<small>Arte interactivo AR — la insignia de la galería</small></td><td class="num">121</td><td class="num"><span class="badge b-green">55%</span></td><td class="num"><span class="badge b-red">25</span></td></tr>
+        <tr><td class="urlcell">/collections/all-originals</td><td class="num">88</td><td class="num"><span class="badge b-green">51%</span></td><td class="num"><span class="badge b-red">21</span></td></tr>
+        <tr><td class="urlcell">/collections/limited-edition</td><td class="num">59</td><td class="num"><span class="badge b-green">51%</span></td><td class="num"><span class="badge b-red">20</span></td></tr>
+        <tr><td class="urlcell">/collections/christian-wall-art</td><td class="num">51</td><td class="num"><span class="badge b-green">53%</span></td><td class="num"><span class="badge b-yellow">9</span></td></tr>
+        <tr><td class="urlcell">/collections/smiling-jesus-paintings-collection</td><td class="num">48</td><td class="num"><span class="badge b-yellow">45%</span></td><td class="num">—</td></tr>
+        <tr><td class="urlcell">/collections/heart-painting</td><td class="num">44</td><td class="num"><span class="badge b-green">50%</span></td><td class="num"><span class="badge b-yellow">12</span></td></tr>
+        <tr><td class="urlcell">/collections/pet-paradise</td><td class="num">31</td><td class="num"><span class="badge b-yellow">45%</span></td><td class="num"><span class="badge b-yellow">8</span></td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- 7. INSIGHTS Y RECOMENDACIONES -->
+<!-- ============ 4. PRODUCTOS POR ENGAGEMENT ============ -->
 <section>
-  <h2><span class="n">7</span>Insights y Recomendaciones</h2>
-  <div class="sec-desc">Hallazgos accionables priorizados con datos y acciones concretas.</div>
+  <div class="sec-head"><div class="num">4</div><h2>Productos por Engagement</h2></div>
+  <div class="card">
+    <h3>Fichas de producto · tiempo en página y nivel de interés</h3>
+    <table>
+      <thead><tr><th>Producto</th><th class="num">Vistas</th><th class="num">Tiempo prom.</th><th>Engagement</th><th>Señal</th></tr></thead>
+      <tbody>
+        <tr><td class="urlcell">ticket-to-heaven</td><td class="num">47</td><td class="num">23 s</td><td><span class="badge b-red">Bajo</span></td><td><span class="badge b-red">⚠ Alto tráfico · bajo interés</span></td></tr>
+        <tr><td class="urlcell">tree-of-life</td><td class="num">9</td><td class="num">7:29</td><td><span class="badge b-green">Alto</span></td><td><span class="badge b-green">Interés real de compra</span></td></tr>
+        <tr><td class="urlcell">interactive…/tree-of-life</td><td class="num">8</td><td class="num">42 s</td><td><span class="badge b-yellow">Medio</span></td><td>—</td></tr>
+        <tr><td class="urlcell">last-supper-communion-in-color</td><td class="num">7</td><td class="num">26 s</td><td><span class="badge b-red">Bajo</span></td><td>—</td></tr>
+        <tr><td class="urlcell">interactive…/ay-chihuahua</td><td class="num">7</td><td class="num">3:01</td><td><span class="badge b-green">Alto</span></td><td><span class="badge b-green">Interés real de compra</span></td></tr>
+        <tr><td class="urlcell">smiling-jesus…/last-supper-landscape</td><td class="num">7</td><td class="num">8 s</td><td><span class="badge b-red">Bajo</span></td><td><span class="badge b-yellow">Rebote rápido</span></td></tr>
+        <tr><td class="urlcell">smiling-jesus…/the-shepherds-presence</td><td class="num">6</td><td class="num">9 s</td><td><span class="badge b-red">Bajo</span></td><td><span class="badge b-yellow">Rebote rápido</span></td></tr>
+        <tr><td class="urlcell">heart-painting…/the-fruit-of-the-spirit-canvas</td><td class="num">5</td><td class="num">6:27</td><td><span class="badge b-green">Alto</span></td><td><span class="badge b-green">Interés real de compra</span></td></tr>
+        <tr><td class="urlcell">azel</td><td class="num">5</td><td class="num">46 s</td><td><span class="badge b-yellow">Medio</span></td><td>—</td></tr>
+        <tr><td class="urlcell">interactive…/angel-eternal-flame</td><td class="num">4</td><td class="num">14 s</td><td><span class="badge b-red">Bajo</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="legend-inline">
+      <span><span class="dot" style="background:var(--green)"></span>Alto &gt;60s</span>
+      <span><span class="dot" style="background:var(--yellow)"></span>Medio 30-60s</span>
+      <span><span class="dot" style="background:var(--red)"></span>Bajo &lt;30s</span>
+    </div>
+    <p class="note">Ticket to Heaven es la ficha #1 en tráfico (47 vistas, 5× la siguiente) pero con 23s y 37% de scroll no se llega al precio. Tree of Life, Ay Chihuahua y Fruit of the Spirit son los verdaderos imanes de intención de compra (&gt;3 min).</p>
+  </div>
+</section>
 
-  <div class="insight red">
-    <h4>🔴 "Ticket To Heaven": alto tráfico, engagement crítico</h4>
-    <p>Es el producto #1 en vistas (90) pero solo 19.4 s de tiempo promedio — muy por debajo del umbral de 60s de interés real. Los demás productos del top 10 superan los 80-275s.</p>
-    <p class="act"><b>Acción:</b> revisar la página: imagen principal, precio visible above-the-fold, CTA y velocidad de carga. Comparar contra "Angel of Protection" (275s) que retiene bien. Posible mismatch entre el anuncio/enlace que trae el tráfico y el contenido.</p>
+<!-- ============ 5. UX Y RENDIMIENTO ============ -->
+<section>
+  <div class="sec-head"><div class="num">5</div><h2>UX y Rendimiento</h2></div>
+  <div class="grid ux-cards">
+    <div class="uxc"><div class="big" style="color:var(--green)">3</div><div class="lab">Rage clicks</div><div class="hint"><span class="badge b-green">Saludable</span></div></div>
+    <div class="uxc"><div class="big" style="color:var(--red)">111</div><div class="lab">Dead clicks</div><div class="hint"><span class="badge b-red">Elevado · &gt;20</span></div></div>
+    <div class="uxc"><div class="big" style="color:var(--yellow)">162</div><div class="lab">Quick backs</div><div class="hint"><span class="badge b-yellow">≈33% · sobre umbral</span></div></div>
+    <div class="uxc"><div class="big" style="color:var(--green)">1</div><div class="lab">Scroll excesivo</div><div class="hint"><span class="badge b-green">Saludable</span></div></div>
+  </div>
+  <div class="grid two" style="margin-top:14px">
+    <div class="card">
+      <h3>Core Web Vitals (P75)</h3>
+      <table>
+        <thead><tr><th>Métrica</th><th class="num">P75</th><th class="num">Prom.</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>LCP <small style="color:var(--muted2)">carga</small></td><td class="num">1.41 s</td><td class="num">1.16 s</td><td><span class="badge b-green">● Bueno</span></td></tr>
+          <tr><td>INP <small style="color:var(--muted2)">interacción</small></td><td class="num">208 ms</td><td class="num">204 ms</td><td><span class="badge b-yellow">● A mejorar</span></td></tr>
+          <tr><td>CLS <small style="color:var(--muted2)">estabilidad</small></td><td class="num">0.03</td><td class="num">0.14</td><td><span class="badge b-green">● Bueno*</span></td></tr>
+          <tr><td>FID <small style="color:var(--muted2)">legado</small></td><td class="num">14 ms</td><td class="num">33 ms</td><td><span class="badge b-green">● Bueno</span></td></tr>
+        </tbody>
+      </table>
+      <p class="note">*CLS global sano, pero el HOME muestra 0.34-0.39 en grabaciones (rojo). INP 208ms apenas sobre el umbral de 200ms. El promedio de CLS (0.14) lo arrastra el home.</p>
+    </div>
+    <div class="card">
+      <h3>Errores JavaScript</h3>
+      <table>
+        <thead><tr><th>Error</th><th class="num">Veces</th></tr></thead>
+        <tbody>
+          <tr><td class="urlcell">ResizeObserver loop… <small>benigno, no afecta al usuario</small></td><td class="num">4</td></tr>
+          <tr><td class="urlcell">Script error. <small>genérico cross-origin</small></td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:18px">Solo 5 errores JS en 7 días — la salud técnica del código es excelente. No es una fuente de fricción.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>Páginas con más problemas de UX</h3>
+    <table>
+      <thead><tr><th>Página</th><th class="num">Dead clicks</th><th class="num">Quick backs</th><th class="num">Total</th></tr></thead>
+      <tbody>
+        <tr><td class="urlcell">/collections/interactive-christian-wall-art</td><td class="num">11</td><td class="num">25</td><td class="num"><span class="badge b-red">36</span></td></tr>
+        <tr><td class="urlcell">/collections/all-originals</td><td class="num">3</td><td class="num">21</td><td class="num"><span class="badge b-red">24</span></td></tr>
+        <tr><td class="urlcell">/collections/limited-edition</td><td class="num">3</td><td class="num">20</td><td class="num"><span class="badge b-red">23</span></td></tr>
+        <tr><td class="urlcell">/collections/heart-painting</td><td class="num">5</td><td class="num">12</td><td class="num"><span class="badge b-yellow">17</span></td></tr>
+        <tr><td class="urlcell">/pages/wall-art</td><td class="num">10</td><td class="num">7</td><td class="num"><span class="badge b-yellow">17</span></td></tr>
+        <tr><td class="urlcell">/ (home)</td><td class="num">1</td><td class="num">14</td><td class="num"><span class="badge b-yellow">15</span></td></tr>
+        <tr><td class="urlcell">/products/sanctuary</td><td class="num">13</td><td class="num">0</td><td class="num"><span class="badge b-yellow">13</span></td></tr>
+        <tr><td class="urlcell">…/products/the-fruit-of-the-spirit-canvas</td><td class="num">13</td><td class="num">0</td><td class="num"><span class="badge b-yellow">13</span></td></tr>
+      </tbody>
+    </table>
+    <p class="note">Patrón claro: dead clicks en miniaturas de producto y en la paginación de las colecciones; quick backs altos donde la gente entra y rebota rápido al listado.</p>
+  </div>
+</section>
+
+<!-- ============ 6. SESIONES PROBLEMÁTICAS ============ -->
+<section>
+  <div class="sec-head"><div class="num">6</div><h2>Sesiones Problemáticas · Top 5</h2></div>
+
+  <div class="session">
+    <div class="row1">
+      <div><div class="stamp">5-jun 19:27 · Desktop · entró por Google</div></div>
+      <a class="playbtn" href="https://clarity.microsoft.com/player/wlgselt9ss/smwuuy/1xvi0zo" target="_blank">▶ Ver grabación</a>
+    </div>
+    <div class="chips"><span class="chip"><b>17:06</b> min</span><span class="chip"><b>9</b> páginas</span><span class="chip"><b>42</b> clicks</span><span class="chip">CLS home <b>0.39</b></span></div>
+    <div class="why"><b>Por qué importa:</b> sesión larga y muy activa, pero con clicks muertos repetidos sobre las miniaturas "Christian wall art" y "Thankful Grateful Blessed" en las colecciones — el usuario insiste 8-9 veces porque la imagen no abre el producto. Alta intención frustrada por miniaturas no clickeables.</div>
   </div>
 
-  <div class="insight red">
-    <h4>🔴 Recurrentes solo 3.7% — el arte requiere varias visitas</h4>
-    <p>27 de 726 usuarios regresaron. En e-commerce de arte la decisión de compra rara vez es en la primera visita; un &lt;5% recurrente limita la conversión.</p>
-    <p class="act"><b>Acción:</b> activar remarketing (Meta/Google), captura de email con incentivo (guía o descuento), y email de "obras que viste". Las visitas desde Instagram (solo 4 sesiones) están infrautilizadas como canal de retorno.</p>
+  <div class="session">
+    <div class="row1">
+      <div><div class="stamp">8-jun 10:38 · navegación profunda colección AR</div></div>
+      <a class="playbtn" href="https://clarity.microsoft.com/player/wlgselt9ss/18v1s6k/19kkf1u" target="_blank">▶ Ver grabación</a>
+    </div>
+    <div class="chips"><span class="chip"><b>10:05</b> min</span><span class="chip"><b>16</b> páginas</span><span class="chip"><b>17</b> clicks</span><span class="chip">CWV <b>verde</b></span></div>
+    <div class="why"><b>Por qué importa:</b> recorrió 16 páginas de interactive-christian-wall-art (varias veces páginas 2-3-4) y abrió Quivira, Sea Turtle y Thankful Grateful Blessed con dead click en la imagen del producto (intento de zoom). Mucho interés en el arte AR, pero la paginación lo obliga a dar vueltas en círculo.</div>
   </div>
 
-  <div class="insight yellow">
-    <h4>🟡 Scroll del Home: 15.3% — no ven la oferta completa</h4>
-    <p>La página principal recibe 194 vistas pero el scroll promedio es 15.3% (umbral de alerta &lt;25%). Los usuarios no llegan a las colecciones destacadas más abajo.</p>
-    <p class="act"><b>Acción:</b> subir las colecciones top (Interactive AR, All Originals) más arriba en el Home y reforzar el hero con un CTA claro a "Originals".</p>
+  <div class="session">
+    <div class="row1">
+      <div><div class="stamp">4-jun 02:20 · Instagram (link in bio)</div></div>
+      <a class="playbtn" href="https://clarity.microsoft.com/player/wlgselt9ss/1otx0oo/1wgj91v" target="_blank">▶ Ver grabación</a>
+    </div>
+    <div class="chips"><span class="chip"><b>6:38</b> min</span><span class="chip"><b>10</b> páginas</span><span class="chip">LCP <b>2.1s</b></span><span class="chip">CLS <b>0.34</b></span><span class="chip">carga <b>6.1s</b></span></div>
+    <div class="why"><b>Por qué importa:</b> tráfico de Instagram que aterriza en un home lento (carga 6.1s, CLS 0.34) y aun así llega a Contact Us y se queda 3+ min — interés genuino que casi pierde la mala primera impresión. Dead click en la descripción del producto Pitbull.</div>
   </div>
 
-  <div class="insight yellow">
-    <h4>🟡 INP en P75 = 312 ms — interactividad lenta</h4>
-    <p>LCP (2264ms), FID y CLS están en verde, pero INP supera el umbral de 200ms. La respuesta a clics/taps se siente lenta, sobre todo en la galería AR.</p>
-    <p class="act"><b>Acción:</b> auditar scripts pesados (la colección Interactive AR tiene 20 dead clicks). Diferir JS no crítico y revisar los errores "Maximum call stack" y ResizeObserver.</p>
+  <div class="session">
+    <div class="row1">
+      <div><div class="stamp">4-jun 10:27 · Google · rage clicks</div></div>
+      <a class="playbtn" href="https://clarity.microsoft.com/player/wlgselt9ss/120tb41/l0qx7g" target="_blank">▶ Ver grabación</a>
+    </div>
+    <div class="chips"><span class="chip"><b>7:27</b> min</span><span class="chip"><b>7</b> páginas</span><span class="chip">carga home <b>9.3s</b></span><span class="chip b-red" style="background:var(--red-bg);color:var(--red);border-color:transparent">RAGE CLICKS</span></div>
+    <div class="why"><b>Por qué importa:</b> la única sesión con rage clicks de la semana — el usuario hace clicks furiosos + muertos sobre la galería de imágenes del blog "Grow Your Brand" (el carrusel no responde). Además el home tardó 9.3s en cargar. Combinación de frustración y lentitud puntual.</div>
   </div>
 
-  <div class="insight yellow">
-    <h4>🟡 "All Originals": 51 quick backs (la más alta del sitio)</h4>
-    <p>La colección con segundo mayor tráfico (109 vistas) genera 51 retrocesos rápidos: los usuarios entran y salen sin encontrar lo que buscan.</p>
-    <p class="act"><b>Acción:</b> revisar filtros/orden de la colección y los thumbnails. Verificar que los enlaces a productos carguen rápido y muestren precio.</p>
+  <div class="session">
+    <div class="row1">
+      <div><div class="stamp">5-jun 01:21 · ficha de producto lenta</div></div>
+      <a class="playbtn" href="https://clarity.microsoft.com/player/wlgselt9ss/1x4rkhe/y4nejt" target="_blank">▶ Ver grabación</a>
+    </div>
+    <div class="chips"><span class="chip"><b>2:47</b> min</span><span class="chip"><b>8</b> páginas</span><span class="chip b-red" style="background:var(--red-bg);color:var(--red);border-color:transparent">LCP 4.5s · carga 17.9s</span></div>
+    <div class="why"><b>Por qué importa:</b> entró a "The Last Supper" que tardó 17.9s en cargar (LCP 4.5s, rojo) y luego dio dead clicks repetidos sobre la paginación "← ▫ ▫ →" en limited-edition (páginas 2-5). Doble fricción: carga inicial lenta + controles de paginación que no responden.</div>
+  </div>
+</section>
+
+<!-- ============ 7. INSIGHTS Y RECOMENDACIONES ============ -->
+<section>
+  <div class="sec-head"><div class="num">7</div><h2>Insights y Recomendaciones</h2></div>
+
+  <div class="insight crit">
+    <div class="ih"><h4>① Home: scroll bajísimo (22%) + CLS alto (0.34-0.39)</h4><span class="conf c-probable">PROBABLE</span></div>
+    <p>El home es la página #1 (162 vistas) pero solo 22% de scroll promedio —bajo el umbral de 25%— y un layout shift de 0.34-0.39 en grabaciones (rojo, umbral &lt;0.1). El contenido "salta" al cargar y la gente no baja a ver las colecciones.</p>
+    <div class="action"><b>Acción:</b> fijar dimensiones (width/height) de las imágenes del hero y banners para eliminar el CLS, y subir las colecciones destacadas above-the-fold. Es el arreglo de mayor impacto de la semana.</div>
   </div>
 
-  <div class="insight green">
-    <h4>🟢 Mobile lidera engagement: 2.14 págs/sesión vs 1.21 en PC</h4>
-    <p>Mobile (353 sesiones) navega más profundo y dura más (116s vs 98s). Confirma el patrón "Mobile descubre". LCP en verde refuerza buena base técnica.</p>
-    <p class="act"><b>Acción:</b> priorizar la experiencia mobile en producto y checkout; es donde se está descubriendo el catálogo. Optimizar el paso mobile→compra.</p>
+  <div class="insight crit">
+    <div class="ih"><h4>② "Ticket to Heaven": mucho tráfico, poco interés</h4><span class="conf c-probable">PROBABLE</span></div>
+    <p>Es la ficha de producto más vista (47, 5× la siguiente) pero con 23s de tiempo y 37% de scroll: no llegan al precio ni al CTA. Es la puerta de entrada (probable campaña) que no convierte atención en consideración.</p>
+    <div class="action"><b>Acción:</b> rediseñar el above-the-fold de esa ficha — precio y botón de compra/AR visibles sin scroll, primera imagen de máximo impacto, y experiencia AR un clic arriba. Comparar contra Tree of Life (7:29) que sí engancha.</div>
+  </div>
+
+  <div class="insight warn">
+    <div class="ih"><h4>③ Dead clicks en miniaturas y paginación (111 en la semana)</h4><span class="conf c-probable">PROBABLE</span></div>
+    <p>Las grabaciones muestran un patrón claro: clicks muertos sobre las miniaturas de producto en las colecciones y sobre el control de paginación "← ▫ ▫ →" (mismo elemento, hash 5dgwzr6ch) en limited-edition. Los usuarios creen que son clickeables y no responden.</p>
+    <div class="action"><b>Acción:</b> hacer que toda la imagen de la miniatura sea un enlace al producto y agrandar el área táctil de las flechas de paginación. Ataca a la vez los dead clicks y los quick backs de colecciones.</div>
+  </div>
+
+  <div class="insight warn">
+    <div class="ih"><h4>④ Quick backs al 33% — fricción en colecciones</h4><span class="conf c-seguro">SEGURO (dato)</span></div>
+    <p>162 quick backs (≈33% de sesiones, sobre el umbral de 30%), concentrados en interactive-christian-wall-art (25), all-originals (21) y limited-edition (20). La gente entra a un producto y rebota de inmediato al listado.</p>
+    <div class="action"><b>Acción:</b> verificar que cada miniatura lleve al producto correcto y que la ficha cargue rápido (ver insight ⑥). Si el rebote es por "no era lo que esperaba", revisar que la imagen de la miniatura represente bien la obra.</div>
+  </div>
+
+  <div class="insight">
+    <div class="ih"><h4>⑤ Pico del 3-jun (190 sesiones) impulsado por EE.UU.</h4><span class="conf c-espec">ESPECULANDO (causa)</span></div>
+    <p>Ese día concentró el 39% del tráfico de la semana y coincide casi exacto con el total de sesiones de EE.UU. (190). Apunta a un email, post o anuncio dirigido a EE.UU. ese día.</p>
+    <div class="action"><b>Acción:</b> confirmar la fuente del 3-jun (revisar UTMs/envíos). Si fue una campaña, vale replicarla; el resto de los días ronda 40-70 sesiones, así que el canal que disparó ese pico es el de mayor palanca.</div>
+  </div>
+
+  <div class="insight">
+    <div class="ih"><h4>⑥ Recurrencia 6.7% — el arte necesita varias visitas</h4><span class="conf c-probable">PROBABLE</span></div>
+    <p>96.4% de usuarios nuevos y solo 28 recurrentes. Para arte de alto ticket esto es esperable (se compra tras varias visitas), pero falta un mecanismo de retorno. Hay usuarios con engagement altísimo (Tree of Life 7:29, Fruit of the Spirit 6:27) que no volvieron.</p>
+    <div class="action"><b>Acción:</b> capturar email con un lead magnet ligado a la app AR y hacer retargeting a quienes pasaron &gt;3 min en una ficha sin comprar. Convertir el interés alto medido esta semana en una segunda visita.</div>
+  </div>
+
+  <div class="insight ok">
+    <div class="ih"><h4>✓ Lo que está bien</h4><span class="conf c-seguro">SEGURO</span></div>
+    <p>Salud técnica sólida: LCP P75 1.41s, FID 14ms, solo 5 errores JS y 3 rage clicks en toda la semana. El problema no es el código sino UX puntual (home CLS, miniaturas/paginación, alguna carga lenta aislada de 17.9s). Las colecciones logran 45-56% de scroll — la gente sí explora el catálogo cuando llega a él.</p>
   </div>
 </section>
 
 <footer>
-  Generado automáticamente · Microsoft Clarity · ivanguaderramaonlinestore.com<br>
-  Reporte semanal 25 may – 1 jun 2026 · Equipo Marketing
+  Generado automáticamente · Microsoft Clarity · datos del 2-8 jun 2026 · Ivan Guaderrama Online Store<br>
+  Reporte semanal · Equipo Marketing
 </footer>
 
 </div>
 
 <script>
-Chart.defaults.color = '#9aa3b2';
+const FONT = "#9ca3af", GRID = "rgba(255,255,255,.06)";
+Chart.defaults.color = FONT;
 Chart.defaults.font.family = "-apple-system,Segoe UI,Roboto,sans-serif";
-Chart.defaults.borderColor = '#2a2f3d';
 
-new Chart(document.getElementById('chChannels'),{
+// 2 · Canales (doughnut)
+new Chart(document.getElementById('chCanales'), {
   type:'doughnut',
-  data:{labels:['Directo (287)','Orgánico (134)','Referral (89)','Social (4)'],
-    datasets:[{data:[287,134,89,4],backgroundColor:['#6c8cff','#34d399','#fbbf24','#f87171'],borderColor:'#1a1d27',borderWidth:3}]},
-  options:{plugins:{legend:{position:'bottom'},title:{display:true,text:'Sesiones por canal',color:'#e7eaf0',font:{size:14}}},cutout:'58%'}
+  data:{labels:['Directo','Búsqueda orgánica','Referral','Social','Otros / sin atribución'],
+    datasets:[{data:[274,79,74,2,60],
+      backgroundColor:['#60a5fa','#34d399','#a78bfa','#f472b6','#4b5563'],
+      borderColor:'#1a1d27',borderWidth:3}]},
+  options:{cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw} ses.`}}}}
 });
 
-new Chart(document.getElementById('chDaily'),{
+// 2 · Tendencia diaria (line)
+new Chart(document.getElementById('chDaily'), {
   type:'line',
-  data:{labels:['25 may','26 may','27 may','28 may','29 may','30 may','31 may','1 jun'],
-    datasets:[{label:'Sesiones',data:[214,194,72,49,83,95,91,42],borderColor:'#22d3ee',backgroundColor:'#22d3ee22',fill:true,tension:.35,pointRadius:4,pointBackgroundColor:'#22d3ee'}]},
-  options:{plugins:{legend:{display:false},title:{display:true,text:'Tendencia diaria de sesiones',color:'#e7eaf0',font:{size:14}}},scales:{y:{beginAtZero:true,grid:{color:'#2a2f3d'}},x:{grid:{display:false}}}}
+  data:{labels:['2 jun','3 jun','4 jun','5 jun','6 jun','7 jun','8 jun'],
+    datasets:[{data:[34,190,41,72,40,62,50],borderColor:'#60a5fa',
+      backgroundColor:'rgba(96,165,250,.15)',fill:true,tension:.34,
+      pointBackgroundColor:'#60a5fa',pointRadius:4,pointHoverRadius:6}]},
+  options:{plugins:{legend:{display:false}},
+    scales:{y:{beginAtZero:true,grid:{color:GRID}},x:{grid:{display:false}}}}
 });
 
-new Chart(document.getElementById('chDevice'),{
+// 3 · Mobile vs Desktop (grouped bar, dual axis)
+new Chart(document.getElementById('chDevice'), {
   type:'bar',
-  data:{labels:['Duración prom. (s)','Páginas / sesión'],
+  data:{labels:['Mobile','Desktop','Tablet'],
     datasets:[
-      {label:'Mobile',data:[116.75,2.14],backgroundColor:'#6c8cff'},
-      {label:'PC',data:[98.57,1.21],backgroundColor:'#a78bfa'}
+      {label:'Duración (s)',data:[121,143,52],backgroundColor:'#2dd4bf',yAxisID:'y',borderRadius:6},
+      {label:'Páginas/sesión',data:[2.31,1.48,null],backgroundColor:'#a78bfa',yAxisID:'y1',borderRadius:6}
     ]},
-  options:{plugins:{legend:{position:'bottom'},title:{display:true,text:'Mobile vs Desktop',color:'#e7eaf0',font:{size:14}}},scales:{y:{beginAtZero:true,grid:{color:'#2a2f3d'}},x:{grid:{display:false}}}}
+  options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14}}},
+    scales:{
+      y:{position:'left',beginAtZero:true,grid:{color:GRID},title:{display:true,text:'Duración (s)'}},
+      y1:{position:'right',beginAtZero:true,grid:{display:false},title:{display:true,text:'Páginas'}},
+      x:{grid:{display:false}}}}
 });
 
-new Chart(document.getElementById('chScroll'),{
+// 3 · Scroll depth (horizontal bar)
+const scrollData=[
+  ['Home',21.96],['Producto Ticket to Heaven',36.64],['Smiling Jesus',44.88],
+  ['Pet Paradise',44.94],['Heart Painting',50.30],['All Originals',50.90],
+  ['Limited Edition',50.90],['Christian Wall Art',52.61],
+  ['Interactive AR',55.23],['Wall Art',56.05]];
+new Chart(document.getElementById('chScroll'), {
   type:'bar',
-  data:{labels:['Search','Wall Art','Limited Ed.','All Originals','Interactive AR','New Art','Smiling Jesus','Ticket Heaven','Mobile App','Home'],
-    datasets:[{label:'% Scroll',data:[68.4,66.9,56.6,55.2,50.8,43.4,42.2,41.8,36.2,15.3],
-      backgroundColor:['#34d399','#34d399','#34d399','#34d399','#6c8cff','#6c8cff','#6c8cff','#6c8cff','#fbbf24','#f87171']}]},
-  options:{indexAxis:'y',plugins:{legend:{display:false},title:{display:true,text:'Profundidad de scroll por página',color:'#e7eaf0',font:{size:14}}},scales:{x:{beginAtZero:true,max:100,grid:{color:'#2a2f3d'}},y:{grid:{display:false}}}}
+  data:{labels:scrollData.map(d=>d[0]),
+    datasets:[{data:scrollData.map(d=>d[1]),
+      backgroundColor:scrollData.map(d=>d[1]<25?'#f87171':d[1]<45?'#fbbf24':'#34d399'),
+      borderRadius:5}]},
+  options:{indexAxis:'y',plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>` ${c.raw}% scroll`}}},
+    scales:{x:{beginAtZero:true,max:70,grid:{color:GRID},ticks:{callback:v=>v+'%'}},
+      y:{grid:{display:false},ticks:{font:{size:11}}}}}
 });
 
-const geo=[['México',382],['Estados Unidos',246],['Filipinas',29],['Suecia',16],['India',13],['China',12],['Canadá',10],['Alemania',10]];
-const max=382;
-document.getElementById('geoBody').innerHTML=geo.map(([c,v])=>
-  `<tr><td>${c}</td><td class="num">${v}</td><td><div class="bar-wrap"><div class="bar" style="width:${(v/max*100).toFixed(0)}%"></div></div></td></tr>`).join('');
+// 2 · Geografía (tabla con barras)
+const geo=[['🇲🇽 México',213],['🇺🇸 EE.UU.',190],['🇨🇦 Canadá',10],['🇵🇭 Filipinas',7],
+  ['🇩🇪 Alemania',6],['🇬🇧 Reino Unido',4],['🇮🇩 Indonesia',4],['🇮🇳 India',4]];
+const gmax=213, gb=document.getElementById('geoBody');
+const gcolors=['#60a5fa','#34d399','#a78bfa','#2dd4bf','#fbbf24','#f472b6','#fb923c','#9ca3af'];
+geo.forEach((r,i)=>{
+  gb.innerHTML+=`<tr><td>${r[0]}</td><td class="num">${r[1]}</td>
+    <td class="barcell"><div class="track"><div class="fill" style="width:${(r[1]/gmax*100).toFixed(0)}%;background:${gcolors[i]}"></div></div></td></tr>`;
+});
 </script>
 </body>
 </html>
