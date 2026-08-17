@@ -3,318 +3,451 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Clarity Semanal · 13–20 Jul 2026 · ivanguaderramaonlinestore.com</title>
+<title>Reporte Clarity Semanal · Ivan Guaderrama Online Store</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root{
-    --bg:#0f1117; --card:#1a1d27; --card2:#20242f; --border:#2a2f3d;
-    --text:#e8eaf0; --muted:#8b90a0; --accent:#6c8cff; --accent2:#4fc3f7;
-    --green:#2ecc71; --yellow:#f1c40f; --red:#e74c3c; --orange:#e67e22;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.5;padding:24px;}
-  .container{max-width:1200px;margin:0 auto;}
-  header{margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:18px;}
-  header h1{font-size:1.7rem;font-weight:700;}
-  header .sub{color:var(--muted);margin-top:4px;font-size:.95rem;}
-  h2{font-size:1.15rem;margin:34px 0 14px;padding-left:10px;border-left:4px solid var(--accent);}
-  .grid{display:grid;gap:14px;}
-  .kpis{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
-  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
-  .kpi .label{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;}
-  .kpi .value{font-size:1.75rem;font-weight:700;margin-top:4px;}
-  .kpi .detail{color:var(--muted);font-size:.8rem;margin-top:3px;}
-  .cols2{grid-template-columns:1fr 1fr;}
-  .cols3{grid-template-columns:repeat(3,1fr);}
-  @media(max-width:820px){.cols2,.cols3{grid-template-columns:1fr;}}
-  table{width:100%;border-collapse:collapse;font-size:.87rem;}
-  th{text-align:left;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;}
-  td{padding:8px 10px;border-bottom:1px solid rgba(42,47,61,.5);}
-  tr:last-child td{border-bottom:none;}
-  .num{text-align:right;font-variant-numeric:tabular-nums;}
-  .chart-box{position:relative;height:260px;}
-  .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.75rem;font-weight:600;}
-  .b-green{background:rgba(46,204,113,.15);color:var(--green);}
-  .b-yellow{background:rgba(241,196,15,.15);color:var(--yellow);}
-  .b-red{background:rgba(231,76,60,.15);color:var(--red);}
-  .b-orange{background:rgba(230,126,34,.15);color:var(--orange);}
-  .bar-bg{background:var(--card2);border-radius:4px;height:8px;width:100%;overflow:hidden;}
-  .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;}
-  .insight{border-left:4px solid var(--accent2);margin-bottom:12px;}
-  .insight.warn{border-left-color:var(--yellow);}
-  .insight.alert{border-left-color:var(--red);}
-  .insight.good{border-left-color:var(--green);}
-  .insight h3{font-size:.95rem;margin-bottom:6px;}
-  .insight p{font-size:.86rem;color:var(--muted);}
-  .insight .action{color:var(--text);font-size:.86rem;margin-top:6px;}
-  .insight .action strong{color:var(--accent2);}
-  a{color:var(--accent2);text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  .small{font-size:.78rem;color:var(--muted);}
-  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;text-align:center;}
+:root{
+  --bg:#0f1117; --card:#1a1d27; --card2:#212533; --line:#2b3040;
+  --tx:#e8eaf2; --tx2:#9aa2b8; --tx3:#6b7386;
+  --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --acc:#6366f1; --acc2:#06b6d4; --gold:#d4af37;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55;padding:0 0 60px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header{background:linear-gradient(135deg,#151824 0%,#1e2233 100%);border-bottom:1px solid var(--line);padding:38px 0 30px;margin-bottom:34px}
+header h1{font-size:28px;font-weight:700;letter-spacing:-.5px}
+header .sub{color:var(--tx2);font-size:14px;margin-top:6px}
+header .badge{display:inline-block;background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.35);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:600;margin-top:12px}
+h2{font-size:19px;font-weight:700;margin:38px 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+h2 .n{background:var(--acc);color:#fff;width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;flex:none}
+h3{font-size:14px;font-weight:600;color:var(--tx2);margin:22px 0 11px;text-transform:uppercase;letter-spacing:.6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:17px 18px}
+.kpi .lbl{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.kpi .val{font-size:30px;font-weight:700;margin:5px 0 2px;letter-spacing:-1px}
+.kpi .note{font-size:12px;color:var(--tx2)}
+.kpi.ok{border-left:3px solid var(--ok)} .kpi.warn{border-left:3px solid var(--warn)} .kpi.bad{border-left:3px solid var(--bad)} .kpi.acc{border-left:3px solid var(--acc)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--tx3);font-size:11px;text-transform:uppercase;letter-spacing:.6px;padding:8px 10px;border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid rgba(43,48,64,.6);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(99,102,241,.05)}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{max-width:330px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:600;white-space:nowrap}
+.t-ok{background:rgba(34,197,94,.15);color:#4ade80} .t-warn{background:rgba(245,158,11,.15);color:#fbbf24} .t-bad{background:rgba(239,68,68,.15);color:#f87171} .t-nt{background:rgba(154,162,184,.13);color:var(--tx2)}
+.bar{background:var(--line);height:6px;border-radius:3px;overflow:hidden;min-width:60px}
+.bar span{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.chart{position:relative;height:270px}
+.chart.tall{height:330px}
+.alert{border-radius:10px;padding:14px 16px;margin-bottom:12px;font-size:13.5px;border-left:3px solid}
+.a-bad{background:rgba(239,68,68,.08);border-color:var(--bad)}
+.a-warn{background:rgba(245,158,11,.08);border-color:var(--warn)}
+.a-ok{background:rgba(34,197,94,.08);border-color:var(--ok)}
+.a-info{background:rgba(99,102,241,.08);border-color:var(--acc)}
+.alert b{display:block;margin-bottom:5px;font-size:14px}
+.alert .act{margin-top:8px;color:var(--tx2);font-size:12.5px}
+.alert .act b{display:inline;font-size:12.5px;color:var(--tx)}
+a{color:#818cf8;text-decoration:none} a:hover{text-decoration:underline}
+.mut{color:var(--tx3);font-size:12px}
+.foot{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:var(--tx3);font-size:12px;text-align:center}
+.scroll{overflow-x:auto}
+@media(max-width:640px){.kpi .val{font-size:24px}.tw{max-width:170px}header h1{font-size:21px}}
 </style>
 </head>
 <body>
-<div class="container">
 
 <header>
-  <h1>📊 Reporte Clarity Semanal — Ivan Guaderrama Online Store</h1>
-  <div class="sub">ivanguaderramaonlinestore.com · 13 al 20 de julio de 2026 · Generado automáticamente desde Microsoft Clarity</div>
+  <div class="wrap">
+    <h1>📊 Reporte Clarity Semanal</h1>
+    <div class="sub">ivanguaderramaonlinestore.com · 11 – 17 de agosto de 2026</div>
+    <div class="badge">594 sesiones · 446 usuarios · generado 17 ago 2026</div>
+  </div>
 </header>
 
+<div class="wrap">
+
 <!-- 1. RESUMEN EJECUTIVO -->
-<h2>1 · Resumen Ejecutivo</h2>
-<div class="grid kpis">
-  <div class="card kpi"><div class="label">Sesiones</div><div class="value">244</div><div class="detail">~35/día promedio</div></div>
-  <div class="card kpi"><div class="label">Usuarios</div><div class="value">160</div><div class="detail">149 nuevos · 22 recurrentes</div></div>
-  <div class="card kpi"><div class="label">Duración promedio</div><div class="value">2m 25s</div><div class="detail">145 seg/sesión</div></div>
-  <div class="card kpi"><div class="label">Páginas / sesión</div><div class="value">3.06</div><div class="detail">≈747 páginas vistas</div></div>
-  <div class="card kpi"><div class="label">% Usuarios nuevos</div><div class="value">87%</div><div class="detail">Recurrentes: 13% ⚠️ bajo para arte</div></div>
-  <div class="card kpi"><div class="label">Quick backs</div><div class="value">246</div><div class="detail">≈33% de páginas vistas 🔴</div></div>
+<h2><span class="n">1</span> Resumen Ejecutivo</h2>
+<div class="grid g4">
+  <div class="kpi acc"><div class="lbl">Sesiones</div><div class="val">594</div><div class="note">446 usuarios únicos</div></div>
+  <div class="kpi warn"><div class="lbl">Nuevos vs recurrentes</div><div class="val">78.8%</div><div class="note">nuevos · 21.2% recurrentes</div></div>
+  <div class="kpi ok"><div class="lbl">Duración promedio</div><div class="val">2:48</div><div class="note">167.8 segundos</div></div>
+  <div class="kpi acc"><div class="lbl">Páginas / sesión</div><div class="val">2.63</div><div class="note">1,562 pageviews aprox.</div></div>
+  <div class="kpi bad"><div class="lbl">Quick backs</div><div class="val">353</div><div class="note">118 sesiones afectadas (19.9%)</div></div>
+  <div class="kpi warn"><div class="lbl">Dead clicks</div><div class="val">305</div><div class="note">67 sesiones afectadas (11.3%)</div></div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h3 style="margin-top:0">Lectura de la semana</h3>
+  <p style="font-size:13.5px;color:var(--tx2)">
+    La semana giró alrededor de un solo activo: <b style="color:var(--tx)">la colección Interactive Christian Wall Art</b>, con 544 de ~1,562 pageviews (35% de todo el tráfico del sitio) y un pico de 229 sesiones el 12 de agosto. Ese mismo día concentró tanto el mejor tráfico como los peores indicadores de UX. El rendimiento técnico es sólido (LCP p75 de 1.45 s, CLS prácticamente en cero), así que los problemas de comportamiento no son culpa de la velocidad: son de interfaz. Los dos focos rojos son el <b style="color:var(--tx)">21.2% de recurrentes</b> — bajo para un e-commerce de arte donde la compra requiere varias visitas — y el <b style="color:var(--tx)">18.6% de scroll en la home</b>, que indica que la portada no invita a bajar.
+  </p>
 </div>
 
 <!-- 2. TRÁFICO Y ADQUISICIÓN -->
-<h2>2 · Tráfico y Adquisición</h2>
-<div class="grid cols2">
+<h2><span class="n">2</span> Tráfico y Adquisición</h2>
+<div class="grid g2">
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Canales</h3>
-    <div class="chart-box"><canvas id="chartChannels"></canvas></div>
+    <h3 style="margin-top:0">Distribución por canal</h3>
+    <div class="chart"><canvas id="chCanal"></canvas></div>
+    <p class="mut" style="margin-top:10px">Clarity atribuye 755 orígenes sobre 594 sesiones porque una misma sesión puede registrar más de una fuente al navegar. Los porcentajes son sobre atribuciones, no sobre sesiones.</p>
   </div>
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Fuentes principales</h3>
-    <table>
-      <tr><th>Fuente</th><th>Canal</th><th class="num">Sesiones</th></tr>
-      <tr><td>Directo / tienda</td><td>Direct</td><td class="num">150</td></tr>
-      <tr><td>google</td><td>Búsqueda orgánica</td><td class="num">72</td></tr>
-      <tr><td>ivanguaderrama.com</td><td>Referral</td><td class="num">33</td></tr>
-      <tr><td>bit.ly (QR galería)</td><td>Referral</td><td class="num">30</td></tr>
-      <tr><td>Instagram</td><td>Social</td><td class="num">5</td></tr>
-      <tr><td>visitloscabos.travel</td><td>Referral</td><td class="num">3</td></tr>
-      <tr><td>Otros (FB, Marriott, studio…)</td><td>Referral</td><td class="num">4</td></tr>
-    </table>
+    <h3 style="margin-top:0">Fuentes de tráfico</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Fuente</th><th>Canal</th><th class="num">Sesiones</th><th class="num">Share</th></tr></thead>
+      <tbody id="tbFuentes"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Tendencia diaria de sesiones</h3>
+  <div class="chart"><canvas id="chDia"></canvas></div>
+  <p class="mut" style="margin-top:10px">El 12 de agosto (229 sesiones) representa el 38.6% de toda la semana. Sin ese día, el promedio diario es de 60.8 sesiones.</p>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h3 style="margin-top:0">Geografía</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>País</th><th class="num">Sesiones</th><th style="width:110px">Peso</th><th class="num">%</th></tr></thead>
+      <tbody id="tbPais"></tbody>
+    </table></div>
+    <p class="mut" style="margin-top:10px">EEUU + México + Canadá concentran el 90% del tráfico. Las 12 sesiones de Alemania promedian 2 segundos: es tráfico automatizado, no visitantes reales.</p>
   </div>
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Tendencia diaria de sesiones</h3>
-    <div class="chart-box"><canvas id="chartDaily"></canvas></div>
-    <div class="small" style="margin-top:8px;">* 20 de julio parcial (día en curso al generar el reporte)</div>
-  </div>
-  <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Geografía</h3>
-    <table>
-      <tr><th>País</th><th class="num">Sesiones</th><th style="width:40%"></th></tr>
-      <tr><td>🇺🇸 Estados Unidos</td><td class="num">162</td><td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td></tr>
-      <tr><td>🇲🇽 México</td><td class="num">46</td><td><div class="bar-bg"><div class="bar-fill" style="width:28%"></div></div></td></tr>
-      <tr><td>🇨🇦 Canadá</td><td class="num">17</td><td><div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div></td></tr>
-      <tr><td>🇮🇳 India</td><td class="num">8</td><td><div class="bar-bg"><div class="bar-fill" style="width:5%"></div></div></td></tr>
-      <tr><td>🇬🇧 Reino Unido</td><td class="num">6</td><td><div class="bar-bg"><div class="bar-fill" style="width:4%"></div></div></td></tr>
-      <tr><td>🇵🇭 Filipinas</td><td class="num">6</td><td><div class="bar-bg"><div class="bar-fill" style="width:4%"></div></div></td></tr>
-    </table>
+    <h3 style="margin-top:0">Navegadores y sistemas operativos</h3>
+    <div class="chart"><canvas id="chOS"></canvas></div>
+    <p class="mut" style="margin-top:10px">68% de las sesiones son iOS y 62% Mobile Safari. El sitio es, en la práctica, una experiencia de iPhone.</p>
   </div>
 </div>
 
 <!-- 3. COMPORTAMIENTO Y ENGAGEMENT -->
-<h2>3 · Comportamiento y Engagement</h2>
-<div class="grid cols3">
-  <div class="card kpi">
-    <div class="label">📱 Mobile — descubre</div>
-    <div class="value">198 <span style="font-size:.9rem;color:var(--muted);">ses (71%)</span></div>
-    <div class="detail">Duración 2m 02s · 3.18 págs/sesión</div>
-  </div>
-  <div class="card kpi">
-    <div class="label">🖥️ Desktop — decide</div>
-    <div class="value">77 <span style="font-size:.9rem;color:var(--muted);">ses (28%)</span></div>
-    <div class="detail">Duración 4m 12s (2.1× mobile) · 2.66 págs</div>
-  </div>
-  <div class="card kpi">
-    <div class="label">Navegador líder</div>
-    <div class="value">Safari iOS</div>
-    <div class="detail">122 sesiones · Chrome 59 · Chrome Mobile 59</div>
-  </div>
+<h2><span class="n">3</span> Comportamiento y Engagement</h2>
+
+<div class="alert a-info">
+  <b>Mobile descubre, Desktop… también descubre</b>
+  El patrón esperado en arte es que mobile explore y desktop cierre. Aquí no pasa: Desktop tiene <b>1.59 páginas por sesión</b> (casi la mitad que mobile) y sesiones más cortas. Desktop no está funcionando como canal de decisión — está rebotando.
 </div>
-<div class="grid cols2" style="margin-top:14px;">
+
+<div class="grid g2">
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Scroll depth por página (%)</h3>
-    <div class="chart-box" style="height:300px;"><canvas id="chartScroll"></canvas></div>
+    <h3 style="margin-top:0">Mobile vs Desktop vs Tablet</h3>
+    <div class="chart"><canvas id="chDisp"></canvas></div>
   </div>
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Colecciones más vistas</h3>
-    <table>
-      <tr><th>Colección</th><th class="num">Vistas</th><th class="num">Scroll</th></tr>
-      <tr><td>Interactive Christian Wall Art</td><td class="num">169</td><td class="num">44.7%</td></tr>
-      <tr><td>All Originals</td><td class="num">73</td><td class="num">64.4%</td></tr>
-      <tr><td>Smiling Jesus Paintings</td><td class="num">54</td><td class="num">49.1%</td></tr>
-      <tr><td>All</td><td class="num">29</td><td class="num">81.2%</td></tr>
-      <tr><td>New Art</td><td class="num">25</td><td class="num">48.6%</td></tr>
-      <tr><td>Limited Edition</td><td class="num">24</td><td class="num">43.0%</td></tr>
-      <tr><td>Christian Wall Art</td><td class="num">20</td><td class="num">67.4%</td></tr>
-      <tr><td>Pet Paradise</td><td class="num">19</td><td class="num">—</td></tr>
-      <tr><td>Heart Painting</td><td class="num">11</td><td class="num">—</td></tr>
-    </table>
+    <h3 style="margin-top:0">Detalle por dispositivo</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Dispositivo</th><th class="num">Sesiones</th><th class="num">%</th><th class="num">Duración</th><th class="num">Pág/sesión</th></tr></thead>
+      <tbody id="tbDisp"></tbody>
+    </table></div>
+    <p class="mut" style="margin-top:10px">Los promedios de duración están calculados por Clarity excluyendo bots. En las grabaciones crudas se detectaron sesiones de 9 a 26 horas (pestañas abandonadas) que distorsionan cualquier cálculo manual.</p>
   </div>
 </div>
 
-<!-- 4. PRODUCTOS POR ENGAGEMENT -->
-<h2>4 · Productos por Engagement</h2>
 <div class="card">
-  <table>
-    <tr><th>Producto</th><th class="num">Vistas</th><th class="num">Tiempo prom.</th><th>Engagement</th><th>Nota</th></tr>
-    <tr><td>Ticket To Heaven</td><td class="num">19</td><td class="num">28s</td><td><span class="badge b-red">Bajo</span></td><td>⚠️ Top producto con bajo engagement — scroll 42.5%</td></tr>
-    <tr><td>Azel (Angel Painting)</td><td class="num">6</td><td class="num">1m 49s</td><td><span class="badge b-green">Alto</span></td><td>Interés real de compra</td></tr>
-    <tr><td>Walk By Faith Canvas</td><td class="num">5</td><td class="num">1m 19s</td><td><span class="badge b-green">Alto</span></td><td>Interés real de compra</td></tr>
-    <tr><td>Today I Choose Joy</td><td class="num">5</td><td class="num">57s</td><td><span class="badge b-yellow">Medio</span></td><td></td></tr>
-    <tr><td>The Fruit Of The Spirit Canvas</td><td class="num">8</td><td class="num">31s</td><td><span class="badge b-yellow">Medio</span></td><td></td></tr>
-    <tr><td>Love Is Patient</td><td class="num">8</td><td class="num">25s</td><td><span class="badge b-red">Bajo</span></td><td></td></tr>
-    <tr><td>Angel Of Protection</td><td class="num">8</td><td class="num">18s</td><td><span class="badge b-red">Bajo</span></td><td></td></tr>
-    <tr><td>Last Supper Landscape</td><td class="num">5</td><td class="num">16s</td><td><span class="badge b-red">Bajo</span></td><td></td></tr>
-    <tr><td>On My Way To Heaven</td><td class="num">5</td><td class="num">14s</td><td><span class="badge b-red">Bajo</span></td><td></td></tr>
-    <tr><td>Jesus Serenity Canvas</td><td class="num">6</td><td class="num">10s</td><td><span class="badge b-red">Bajo</span></td><td></td></tr>
-  </table>
-  <div class="small" style="margin-top:10px;">Criterios: Alto &gt;60s (ven precio y consideran compra) · Medio 30–60s · Bajo &lt;30s. Scroll &gt;60% en producto = llegan al precio.</div>
+  <h3 style="margin-top:0">Profundidad de scroll por página (top tráfico)</h3>
+  <div class="chart tall"><canvas id="chScroll"></canvas></div>
+  <p class="mut" style="margin-top:10px">Referencia: en fichas de producto un scroll &gt;60% significa que el visitante llegó al precio. En la home, &lt;25% es señal de alerta.</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Colecciones</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Colección</th><th class="num">Vistas</th><th class="num">Tiempo prom.</th><th class="num">Scroll</th><th>Lectura</th></tr></thead>
+    <tbody id="tbCol"></tbody>
+  </table></div>
+</div>
+
+<!-- 4. PRODUCTOS -->
+<h2><span class="n">4</span> Productos por Engagement</h2>
+
+<div class="alert a-warn">
+  <b>Alto tráfico, engagement desigual</b>
+  <b style="display:inline;color:var(--tx)">Tree of Life</b> domina con 42 vistas y 150 s de permanencia — interés de compra real. Pero acumula <b style="display:inline;color:var(--tx)">41 dead clicks</b>, el segundo peor del sitio. El producto más deseado de la semana es también uno de los más rotos.
+  <div class="act"><b>Acción:</b> revisar la grabación de sesión y auditar los elementos clicables de esa ficha (visor AR / galería de imágenes) antes de invertir un peso más en tráfico hacia ella.</div>
+</div>
+
+<div class="card">
+  <div class="scroll"><table>
+    <thead><tr><th>Producto</th><th class="num">Vistas</th><th class="num">Tiempo prom.</th><th class="num">Dead clicks</th><th>Engagement</th></tr></thead>
+    <tbody id="tbProd"></tbody>
+  </table></div>
+  <p class="mut" style="margin-top:12px">Criterio de engagement — <span class="tag t-ok">Alto</span> &gt;60 s · <span class="tag t-warn">Medio</span> 30–60 s · <span class="tag t-bad">Bajo</span> &lt;30 s. En arte, más de 60 segundos en una ficha indica interés de compra genuino.</p>
 </div>
 
 <!-- 5. UX Y RENDIMIENTO -->
-<h2>5 · UX y Rendimiento</h2>
-<div class="grid kpis">
-  <div class="card kpi"><div class="label">Rage clicks</div><div class="value" style="color:var(--green);">0</div><div class="detail">Sin frustración severa ✅</div></div>
-  <div class="card kpi"><div class="label">Dead clicks</div><div class="value" style="color:var(--yellow);">97</div><div class="detail">Concentrados en colecciones ⚠️</div></div>
-  <div class="card kpi"><div class="label">Quick backs</div><div class="value" style="color:var(--red);">246</div><div class="detail">≈33% de páginas vistas 🔴</div></div>
-  <div class="card kpi"><div class="label">Scroll excesivo</div><div class="value" style="color:var(--green);">0</div><div class="detail">✅</div></div>
-  <div class="card kpi"><div class="label">Errores JS</div><div class="value" style="color:var(--yellow);">14</div><div class="detail">2 tipos distintos</div></div>
+<h2><span class="n">5</span> UX y Rendimiento</h2>
+
+<div class="grid g4">
+  <div class="kpi ok"><div class="lbl">Rage clicks</div><div class="val">4</div><div class="note">2 sesiones · marginal</div></div>
+  <div class="kpi warn"><div class="lbl">Dead clicks</div><div class="val">305</div><div class="note">67 sesiones · 11.3%</div></div>
+  <div class="kpi bad"><div class="lbl">Quick backs</div><div class="val">353</div><div class="note">118 sesiones · 19.9%</div></div>
+  <div class="kpi ok"><div class="lbl">Scroll excesivo</div><div class="val">0</div><div class="note">sin incidencias</div></div>
 </div>
-<div class="grid cols2" style="margin-top:14px;">
+
+<div class="grid g2" style="margin-top:16px">
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Core Web Vitals (P75)</h3>
-    <table>
-      <tr><th>Métrica</th><th class="num">P75</th><th class="num">Promedio</th><th>Estado</th></tr>
-      <tr><td>LCP (carga)</td><td class="num">1.36s</td><td class="num">1.05s</td><td><span class="badge b-green">Verde &lt;2.5s</span></td></tr>
-      <tr><td>INP (interacción)</td><td class="num">168ms</td><td class="num">161ms</td><td><span class="badge b-green">Verde &lt;200ms</span></td></tr>
-      <tr><td>CLS (estabilidad)</td><td class="num">0.02</td><td class="num">—</td><td><span class="badge b-green">Verde &lt;0.1</span></td></tr>
-      <tr><td>FID</td><td class="num">21ms</td><td class="num">40ms</td><td><span class="badge b-green">Verde</span></td></tr>
-    </table>
-    <div class="small" style="margin-top:8px;">Rendimiento técnico excelente — la fricción no viene de velocidad.</div>
+    <h3 style="margin-top:0">Core Web Vitals</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Métrica</th><th class="num">Promedio</th><th class="num">P75</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td><b>LCP</b><div class="mut">Largest Contentful Paint</div></td><td class="num">1.16 s</td><td class="num">1.45 s</td><td><span class="tag t-ok">Bueno</span></td></tr>
+        <tr><td><b>CLS</b><div class="mut">Cumulative Layout Shift</div></td><td class="num">0.004</td><td class="num">0.000</td><td><span class="tag t-ok">Bueno</span></td></tr>
+        <tr><td><b>INP</b><div class="mut">Interaction to Next Paint</div></td><td class="num">197 ms</td><td class="num">208 ms</td><td><span class="tag t-warn">Límite</span></td></tr>
+        <tr><td><b>FID</b><div class="mut">First Input Delay</div></td><td class="num">—</td><td class="num">—</td><td><span class="tag t-nt">Sin datos</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="mut" style="margin-top:10px">Umbrales: LCP verde &lt;2.5 s · CLS verde &lt;0.1 · INP verde &lt;200 ms. INP está justo en la frontera: cualquier script adicional lo empuja a ámbar.</p>
   </div>
   <div class="card">
-    <h3 style="margin-bottom:10px;font-size:.95rem;">Errores JavaScript</h3>
-    <table>
-      <tr><th>Error</th><th class="num">Ocurrencias</th></tr>
-      <tr><td>Script error. (script de terceros)</td><td class="num">9</td></tr>
-      <tr><td>NetworkError: Load failed</td><td class="num">5</td></tr>
-    </table>
+    <h3 style="margin-top:0">Errores de JavaScript</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Error</th><th class="num">Ocurrencias</th><th>Severidad</th></tr></thead>
+      <tbody>
+        <tr><td><code>Script error.</code></td><td class="num">11</td><td><span class="tag t-warn">Media</span></td></tr>
+        <tr><td><code>Maximum call stack size exceeded.</code></td><td class="num">5</td><td><span class="tag t-bad">Alta</span></td></tr>
+        <tr><td><code>jQuery is not defined</code></td><td class="num">1</td><td><span class="tag t-bad">Alta</span></td></tr>
+        <tr><td><code>W.charCodeAt is not a function</code></td><td class="num">1</td><td><span class="tag t-warn">Media</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="mut" style="margin-top:10px">18 errores en total. <code>Maximum call stack</code> y <code>jQuery is not defined</code> rompen funcionalidad: son los candidatos más probables detrás de los dead clicks.</p>
   </div>
 </div>
-<div class="card" style="margin-top:14px;">
-  <h3 style="margin-bottom:10px;font-size:.95rem;">Páginas con más fricción UX</h3>
-  <table>
-    <tr><th>Página</th><th class="num">Dead clicks</th><th class="num">Quick backs</th><th class="num">Total</th><th>Estado</th></tr>
-    <tr><td>/collections/interactive-christian-wall-art</td><td class="num">16</td><td class="num">52</td><td class="num">68</td><td><span class="badge b-red">Crítico</span></td></tr>
-    <tr><td>/collections/all-originals</td><td class="num">12</td><td class="num">42</td><td class="num">54</td><td><span class="badge b-red">Crítico</span></td></tr>
-    <tr><td>/ (Home)</td><td class="num">0</td><td class="num">27</td><td class="num">27</td><td><span class="badge b-orange">Alto</span></td></tr>
-    <tr><td>/collections/smiling-jesus-paintings-collection</td><td class="num">7</td><td class="num">19</td><td class="num">26</td><td><span class="badge b-orange">Alto</span></td></tr>
-    <tr><td>/collections/all</td><td class="num">1</td><td class="num">22</td><td class="num">23</td><td><span class="badge b-yellow">Medio</span></td></tr>
-    <tr><td>/pages/wall-art</td><td class="num">6</td><td class="num">14</td><td class="num">20</td><td><span class="badge b-yellow">Medio</span></td></tr>
-  </table>
+
+<div class="card">
+  <h3 style="margin-top:0">Páginas con más fricción</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Página</th><th class="num">Dead clicks</th><th class="num">Quick backs</th><th>Diagnóstico</th></tr></thead>
+    <tbody id="tbFric"></tbody>
+  </table></div>
 </div>
 
 <!-- 6. SESIONES PROBLEMÁTICAS -->
-<h2>6 · Sesiones Problemáticas (con dead clicks)</h2>
+<h2><span class="n">6</span> Sesiones Problemáticas</h2>
 <div class="card">
-  <table>
-    <tr><th>Fecha</th><th class="num">Duración</th><th class="num">Páginas</th><th class="num">Clicks</th><th class="num">Dead clicks</th><th>Contexto</th><th>Grabación</th></tr>
-    <tr><td>19 jul 06:04</td><td class="num">8m 37s</td><td class="num">39</td><td class="num">40</td><td class="num">1</td><td>Entró por QR bit.ly → navegó 4 páginas de paginación de la colección interactiva; dead click en flechas de paginación</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/bt7vm9/szhwci" target="_blank">▶ Ver</a></td></tr>
-    <tr><td>19 jul 04:44</td><td class="num">15m 56s</td><td class="num">20</td><td class="num">35</td><td class="num">6</td><td>Exploró New Art y productos de ángeles; múltiples dead clicks en fichas de producto</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/qa0luk/1nlkegd" target="_blank">▶ Ver</a></td></tr>
-    <tr><td>19 jul 02:29</td><td class="num">8m 52s</td><td class="num">12</td><td class="num">24</td><td class="num">6</td><td>Llegó desde ivanguaderrama.com a la colección interactiva; fricción con popup "Got it"</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/bpud94/138e8gk" target="_blank">▶ Ver</a></td></tr>
-    <tr><td>16 jul 04:17</td><td class="num">16m 19s</td><td class="num">9</td><td class="num">23</td><td class="num">7</td><td>Home tardó 6.9s en cargar en su dispositivo; 7 dead clicks — la sesión con más fricción</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/ybwjg7/vfe27r" target="_blank">▶ Ver</a></td></tr>
-    <tr><td>19 jul 03:41</td><td class="num">34m 20s</td><td class="num">14</td><td class="num">22</td><td class="num">3</td><td>Sesión más larga de la semana (34 min) vía QR bit.ly; alto interés pese a fricción</td><td><a href="https://clarity.microsoft.com/player/wlgselt9ss/qa0luk/nhne5g" target="_blank">▶ Ver</a></td></tr>
-  </table>
+  <div class="scroll"><table>
+    <thead><tr><th>Fecha</th><th>Página principal</th><th class="num">Duración</th><th class="num">Clicks</th><th>Problema</th><th>Grabación</th></tr></thead>
+    <tbody id="tbSes"></tbody>
+  </table></div>
+  <p class="mut" style="margin-top:12px">Las dos sesiones con rage click caen sobre el <b style="color:var(--tx)">mismo elemento</b> (hash <code>27kk2muz4</code>) en fichas de Interactive Christian Wall Art, precedidas y seguidas de dead clicks. Es un control del visor AR o de la galería que no responde. Un solo fix resuelve ambas.</p>
 </div>
 
 <!-- 7. INSIGHTS -->
-<h2>7 · Insights y Recomendaciones</h2>
-<div class="card insight alert">
-  <h3>🔴 1. El Home retiene solo el primer pliegue — scroll depth 19.7%</h3>
-  <p>135 vistas al Home (2ª página más vista) pero el visitante promedio solo ve el 20% superior. El criterio de alerta es &lt;25%: nadie llega a las colecciones ni al contenido de abajo.</p>
-  <p class="action"><strong>Acción:</strong> Subir las 2 colecciones top (Interactive y Originals) y un CTA claro al primer pliegue del Home, especialmente en mobile (71% del tráfico).</p>
-</div>
-<div class="card insight alert">
-  <h3>🔴 2. Quick backs en 33% de páginas vistas, concentrados en paginación de colecciones</h3>
-  <p>246 quick backs; Interactive Wall Art (52) y All Originals (42) encabezan. La evidencia en grabaciones muestra dead clicks en las flechas «← ▫ ▫ ▫ →» de paginación: la gente entra-sale-entra entre páginas de colección para ver obras.</p>
-  <p class="action"><strong>Acción:</strong> Reemplazar paginación por scroll infinito o "Cargar más" en colecciones, y revisar el componente de flechas que registra clicks muertos.</p>
-</div>
-<div class="card insight warn">
-  <h3>🟡 3. Ticket To Heaven: producto top con engagement bajo</h3>
-  <p>19 vistas (producto #1) pero solo 28s promedio y 42.5% de scroll — la mayoría no llega a considerar el precio. Contraste: Azel (1m49s) y Walk By Faith (1m19s) sí generan interés real con menos tráfico.</p>
-  <p class="action"><strong>Acción:</strong> Enriquecer la página de Ticket To Heaven: video de la experiencia AR arriba, storytelling de la obra y prueba social antes del pliegue del precio.</p>
-</div>
-<div class="card insight warn">
-  <h3>🟡 4. Solo 13% de usuarios recurrentes — el arte se compra en la 2ª o 3ª visita</h3>
-  <p>149 nuevos vs 22 recurrentes. Para e-commerce de arte (ticket alto, decisión lenta) necesitas traer de vuelta al que ya miró. Las sesiones vía QR bit.ly duran 8–34 min: ese visitante ya está caliente.</p>
-  <p class="action"><strong>Acción:</strong> Captura de email con incentivo (ej. guía AR o preview de obra nueva) + retargeting a visitantes de páginas de producto. Meta: recurrentes &gt;20%.</p>
-</div>
-<div class="card insight good">
-  <h3>🟢 5. Mobile descubre, Desktop decide — patrón confirmado</h3>
-  <p>Mobile: 198 sesiones, 2m02s, 3.18 págs (exploración). Desktop: 77 sesiones pero 4m12s — 2.1× más tiempo (consideración). El funnel cruza dispositivos.</p>
-  <p class="action"><strong>Acción:</strong> En mobile priorizar wishlist/compartir/email; en desktop, detalle de obra, envíos y confianza de compra.</p>
-</div>
-<div class="card insight good">
-  <h3>🟢 6. Rendimiento técnico excelente — la velocidad no es el problema</h3>
-  <p>LCP 1.36s, INP 168ms, CLS 0.02: todo en verde. 0 rage clicks. Los 14 errores JS son de scripts de terceros y de red, sin impacto visible. La fricción de esta semana es de UX/contenido, no técnica.</p>
-  <p class="action"><strong>Acción:</strong> Ninguna urgente en performance; monitorear "NetworkError: Load failed" (5 casos) si crece la próxima semana.</p>
+<h2><span class="n">7</span> Insights y Recomendaciones</h2>
+
+<div class="alert a-bad">
+  <b>1 · Un solo elemento roto está costando el 22% del tráfico del sitio</b>
+  <code>/collections/interactive-christian-wall-art</code> acumula 51 dead clicks y 132 quick backs — el 37% de todos los quick backs del sitio. Con 544 pageviews y solo 39% de scroll promedio, la gente entra, hace clic en algo que no responde, y se va. El LCP de esa página tiene picos de 18–29 s en casos aislados pese al buen promedio general.
+  <div class="act"><b>Acción:</b> abrir el heatmap de clicks de esa colección en Clarity, identificar los elementos no clicables que la gente intenta tocar (probablemente las imágenes de producto en la grilla, que parecen clicables pero no lo son), y hacerlos enlaces reales. Es el fix de mayor retorno de toda la semana.</div>
 </div>
 
-<footer>
-  Reporte generado automáticamente · Microsoft Clarity · Ivan Guaderrama Art Gallery · 20 de julio de 2026
-</footer>
+<div class="alert a-bad">
+  <b>2 · 21.2% de recurrentes es demasiado bajo para vender arte</b>
+  El arte de precio medio-alto casi nunca se compra en la primera visita: el comprador vuelve dos o tres veces antes de decidir. Con 78.8% de tráfico nuevo y sin mecanismo de retorno visible, se está pagando por descubrimiento y regalando la conversión. Solo hubo <b>2 sesiones de email</b> en toda la semana.
+  <div class="act"><b>Acción:</b> activar retargeting sobre quienes vieron ficha de producto &gt;60 s (Tree of Life, Love is Patient, Azel, Blessed, Angel of Protection) y montar una captura de correo con incentivo real — no un pop-up genérico, sino algo tipo "te guardamos esta pieza" o el video del proceso creativo.</div>
+</div>
+
+<div class="alert a-warn">
+  <b>3 · La home solo se ve al 18.6% — la peor de todas las páginas medidas</b>
+  155 pageviews y casi nadie baja del primer scroll, aunque promedian 56 s en ella. Están mirando el hero y decidiendo desde ahí. Comparado con <code>/collections/all-originals</code> (56.6%) y <code>/collections/new-art</code> (56.9%), la portada es la que peor invita a explorar.
+  <div class="act"><b>Acción:</b> subir arriba del pliegue una fila de piezas destacadas con precio visible. Si el hero es un video o una imagen a pantalla completa, reducir su altura para que asome contenido y se entienda que hay más abajo.</div>
+</div>
+
+<div class="alert a-warn">
+  <b>4 · Desktop se comporta peor que mobile, al revés de lo esperado</b>
+  151 sesiones desktop con 1.59 páginas por sesión y 148 s promedio, contra 3.01 páginas en mobile. En arte, el desktop suele ser donde se compara, se ve en grande y se compra. Aquí es donde se rebota.
+  <div class="act"><b>Acción:</b> revisar la versión desktop de la colección principal en pantalla ancha — es probable que la grilla se vea demasiado dispersa o que el contenido relevante quede debajo del pliegue en resoluciones grandes.</div>
+</div>
+
+<div class="alert a-warn">
+  <b>5 · Tree of Life: máximo interés, máxima fricción</b>
+  42 vistas, 150 s de permanencia (el mejor engagement de producto de la semana) y 41 dead clicks. La pieza que más deseo genera es también donde más se rompe la experiencia. Love is Patient repite el patrón: 24 vistas, 107 s, pero solo 22.8% de scroll — no llegan al precio.
+  <div class="act"><b>Acción:</b> arreglar los clicks muertos de Tree of Life y subir el precio y el CTA de compra más arriba en la ficha, para que se vean sin scroll en móvil.</div>
+</div>
+
+<div class="alert a-ok">
+  <b>6 · Cabo Essence está funcionando y no se está capitalizando</b>
+  El blog post promedia <b>343 segundos</b> de lectura — 6 veces más que cualquier página del sitio — con 23 pageviews. Hay una audiencia dispuesta a leer largo sobre la historia detrás del arte, pero el contenido es casi inexistente en volumen.
+  <div class="act"><b>Acción:</b> producir 2 o 3 piezas más en esa línea y enlazarlas desde las fichas de producto de mayor engagement. Es tráfico de alta intención y bajo costo.</div>
+</div>
+
+<div class="foot">
+  Generado automáticamente desde Microsoft Clarity · Ivan Guaderrama Art Gallery<br>
+  Periodo 11–17 ago 2026 · 594 sesiones · 446 usuarios · Datos no-bot según clasificación de Clarity
+</div>
+
 </div>
 
 <script>
-const C = {muted:'#8b90a0', grid:'rgba(42,47,61,.6)'};
-Chart.defaults.color = C.muted;
-Chart.defaults.borderColor = C.grid;
-Chart.defaults.font.family = "'Segoe UI',system-ui,sans-serif";
+const T={tx:'#e8eaf2',tx2:'#9aa2b8',tx3:'#6b7386',line:'#2b3040'};
+Chart.defaults.color=T.tx2;
+Chart.defaults.borderColor=T.line;
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+const P=['#6366f1','#06b6d4','#22c55e','#f59e0b','#ef4444','#a855f7','#ec4899','#14b8a6'];
+const fmt=s=>{const m=Math.floor(s/60),x=Math.round(s%60);return m>0?m+':'+String(x).padStart(2,'0'):x+'s'};
 
-new Chart(document.getElementById('chartChannels'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Directo (150)','Orgánico (72)','Referral (70)','Social (5)'],
-    datasets: [{
-      data: [150,72,70,5],
-      backgroundColor: ['#6c8cff','#2ecc71','#4fc3f7','#e67e22'],
-      borderColor: '#1a1d27', borderWidth: 3
-    }]
-  },
-  options: {responsive:true, maintainAspectRatio:false,
-    plugins:{legend:{position:'right', labels:{padding:12, usePointStyle:true}}}}
-});
+/* ---------- DATOS ---------- */
+const TOTAL=594;
 
-new Chart(document.getElementById('chartDaily'), {
-  type: 'line',
-  data: {
-    labels: ['Mar 14','Mié 15','Jue 16','Vie 17','Sáb 18','Dom 19','Lun 20*'],
-    datasets: [{
-      label: 'Sesiones', data: [32,35,38,49,33,46,11],
-      borderColor: '#6c8cff', backgroundColor: 'rgba(108,140,255,.15)',
-      fill: true, tension: .35, pointBackgroundColor: '#6c8cff', pointRadius: 4
-    }]
-  },
-  options: {responsive:true, maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{y:{beginAtZero:true, grid:{color:C.grid}}, x:{grid:{display:false}}}}
-});
+const fuentes=[
+ {src:'Direct (sin referrer)',ch:'Directo',n:297},
+ {src:'www.ivanguaderramaonlinestore.com',ch:'Interno',n:266},
+ {src:'google',ch:'Búsqueda orgánica',n:74},
+ {src:'www.ivanguaderrama.com',ch:'Referral',n:60},
+ {src:'bit.ly',ch:'Referral (campañas)',n:50},
+ {src:'google (otro)',ch:'Otro',n:2},
+ {src:'www.marriott.com',ch:'Referral',n:2},
+ {src:'chatgpt.com',ch:'IA',n:2},
+ {src:'bing',ch:'Búsqueda orgánica',n:1},
+ {src:'www.pinterest.com',ch:'Referral',n:1}
+];
+const canales=[['Directo',297],['Interno',266],['Orgánico',75],['Referral',113],['IA / Otro',4]];
+const dias=[['Mar 11',44],['Mié 12',229],['Jue 13',62],['Vie 14',56],['Sáb 15',54],['Dom 16',68],['Lun 17',81]];
+const paises=[['Estados Unidos',365],['México',123],['Canadá',47],['Alemania',12],['Países Bajos',9],['China',8],['Suecia',4],['Reino Unido',3]];
+const os=[['iOS',403],['Windows',101],['Android',36],['macOS',27],['Linux (bots)',27]];
+const disp=[
+ {d:'Mobile',n:411,dur:171.81,pg:3.01},
+ {d:'PC / Desktop',n:151,dur:147.97,pg:1.59},
+ {d:'Tablet',n:28,dur:236.17,pg:2.79},
+ {d:'Otro',n:4,dur:9.27,pg:1.00}
+];
+const scroll=[
+ ['Interactive Christian Wall Art',39.09,543],
+ ['Home',18.58,155],
+ ['All Originals',56.56,66],
+ ['Limited Edition',51.24,55],
+ ['New Art',56.88,50],
+ ['Tree of Life (producto)',24.74,42],
+ ['Smiling Jesus Collection',34.09,33],
+ ['Pet Paradise',46.59,32],
+ ['Love is Patient (producto)',22.83,24],
+ ['Blog · Cabo Essence',42.52,23]
+];
+const cols=[
+ {c:'Interactive Christian Wall Art',v:544,t:43.62,s:39.09},
+ {c:'All Originals',v:66,t:10.66,s:56.56},
+ {c:'Limited Edition',v:55,t:16.50,s:51.24},
+ {c:'New Art',v:50,t:24.45,s:56.88},
+ {c:'Smiling Jesus Paintings',v:33,t:32.79,s:34.09},
+ {c:'Pet Paradise',v:32,t:37.40,s:46.59},
+ {c:'Hearts Paintings',v:16,t:25.22,s:null},
+ {c:'Wall Sculptures',v:11,t:42.27,s:null},
+ {c:'Angel Painting',v:10,t:80.75,s:null},
+ {c:'Minky Blankets',v:9,t:62.22,s:null}
+];
+const prods=[
+ {p:'Tree of Life',v:42,t:149.77,d:41},
+ {p:'Love is Patient',v:24,t:106.72,d:0},
+ {p:'Chosen',v:15,t:44.99,d:8},
+ {p:'Today I Choose Joy',v:14,t:65.61,d:0},
+ {p:'Azel',v:14,t:134.69,d:0},
+ {p:'Blessed',v:13,t:137.69,d:9},
+ {p:'Euphoria in Divine Radiance',v:12,t:51.42,d:0},
+ {p:'Azel (URL directa)',v:10,t:30.75,d:0},
+ {p:'Angel of Protection',v:10,t:139.38,d:8},
+ {p:'Tree of Life (URL directa)',v:10,t:95.60,d:0},
+ {p:'Ticket to Heaven',v:9,t:16.84,d:0},
+ {p:'Los Cabos Whale',v:9,t:10.20,d:0}
+];
+const fric=[
+ {u:'/collections/interactive-christian-wall-art',d:51,q:132,x:'Elemento no clicable en la grilla — foco crítico'},
+ {u:'/collections/interactive-christian-wall-art/products/tree-of-life',d:41,q:1,x:'Visor AR o galería sin respuesta'},
+ {u:'/blogs/news/cabo-essence',d:12,q:1,x:'Imágenes que parecen enlaces'},
+ {u:'/products/blessed',d:12,q:0,x:'Mismo patrón que Tree of Life'},
+ {u:'/collections/new-art/new-art',d:11,q:27,x:'Quick backs altos: expectativa no cumplida'},
+ {u:'/collections/interactive-christian-wall-art/products/blessed',d:9,q:0,x:'Duplicado de ruta — revisar canonical'},
+ {u:'/pages/videos',d:8,q:3,x:'Reproductor de video con controles muertos'},
+ {u:'/collections/interactive-christian-wall-art/products/chosen',d:8,q:1,x:'Mismo patrón de ficha interactiva'},
+ {u:'/products/on-my-way-to-heaven',d:8,q:0,x:'Mismo patrón de ficha interactiva'},
+ {u:'/collections/interactive-christian-wall-art/products/angel-of-protection',d:8,q:0,x:'Mismo patrón de ficha interactiva'}
+];
+const ses=[
+ {f:'12 ago 04:11',u:'products/blessed',t:'Blessed - Interactive Wall Art',d:214,c:22,p:['rage','dead'],l:'https://clarity.microsoft.com/player/wlgselt9ss/1migri3/9d086v'},
+ {f:'12 ago 15:36',u:'products/angel-eternal-flame',t:'Angel Eternal Flame',d:92,c:17,p:['rage','dead'],l:'https://clarity.microsoft.com/player/wlgselt9ss/1hkassc/yfnltj'},
+ {f:'12 ago 21:39',u:'collections/interactive-christian-wall-art',t:'Interactive Wall Art (colección)',d:3635,c:82,p:['dead'],l:'https://clarity.microsoft.com/player/wlgselt9ss/jf44i5/1wyzrbe'},
+ {f:'12 ago 02:14',u:'/ (home)',t:'Ivan Guaderrama Online Store',d:5004,c:59,p:['dead'],l:'https://clarity.microsoft.com/player/wlgselt9ss/1y2kx81/9w7ldc'},
+ {f:'12 ago 02:54',u:'products/love-is-patient',t:'Love Is Patient',d:4326,c:24,p:['dead'],l:'https://clarity.microsoft.com/player/wlgselt9ss/lr8v5b/l2urgv'}
+];
 
-new Chart(document.getElementById('chartScroll'), {
-  type: 'bar',
-  data: {
-    labels: ['Home ⚠️','Ticket To Heaven','Limited Edition','Interactive Wall Art','New Art','Smiling Jesus','All Originals','Christian Wall Art','Wall Art (page)','All'],
-    datasets: [{
-      label: 'Scroll depth %', data: [19.7,42.5,43.0,44.7,48.6,49.1,64.4,67.4,67.8,81.2],
-      backgroundColor: [19.7,42.5,43.0,44.7,48.6,49.1,64.4,67.4,67.8,81.2].map(v => v < 25 ? '#e74c3c' : v < 60 ? '#f1c40f' : '#2ecc71'),
-      borderRadius: 4
-    }]
-  },
-  options: {indexAxis:'y', responsive:true, maintainAspectRatio:false,
-    plugins:{legend:{display:false}},
-    scales:{x:{max:100, grid:{color:C.grid}}, y:{grid:{display:false}, ticks:{font:{size:11}}}}}
-});
+/* ---------- TABLAS ---------- */
+document.getElementById('tbFuentes').innerHTML=fuentes.map(f=>
+ `<tr><td class="tw">${f.src}</td><td><span class="tag t-nt">${f.ch}</span></td><td class="num">${f.n}</td><td class="num">${(f.n/755*100).toFixed(1)}%</td></tr>`).join('');
+
+document.getElementById('tbPais').innerHTML=paises.map(([p,n])=>
+ `<tr><td>${p}</td><td class="num">${n}</td><td><div class="bar"><span style="width:${(n/365*100)}%"></span></div></td><td class="num">${(n/TOTAL*100).toFixed(1)}%</td></tr>`).join('');
+
+document.getElementById('tbDisp').innerHTML=disp.map(d=>
+ `<tr><td><b>${d.d}</b></td><td class="num">${d.n}</td><td class="num">${(d.n/TOTAL*100).toFixed(1)}%</td><td class="num">${fmt(d.dur)}</td><td class="num">${d.pg.toFixed(2)}</td></tr>`).join('');
+
+document.getElementById('tbCol').innerHTML=cols.map(c=>{
+ let tag,lec;
+ if(c.t>=60){tag='t-ok';lec='Exploran a fondo'}
+ else if(c.t>=25){tag='t-warn';lec='Interés moderado'}
+ else{tag='t-bad';lec='Pasan de largo'}
+ return `<tr><td class="tw"><b>${c.c}</b></td><td class="num">${c.v}</td><td class="num">${fmt(c.t)}</td><td class="num">${c.s!==null?c.s.toFixed(1)+'%':'—'}</td><td><span class="tag ${tag}">${lec}</span></td></tr>`}).join('');
+
+document.getElementById('tbProd').innerHTML=prods.map(p=>{
+ let tag,lbl;
+ if(p.t>60){tag='t-ok';lbl='Alto'}else if(p.t>=30){tag='t-warn';lbl='Medio'}else{tag='t-bad';lbl='Bajo'}
+ const alerta=(p.v>=9&&p.t<30)?' <span class="tag t-bad">⚠ tráfico sin interés</span>':'';
+ const dc=p.d>20?`<span class="tag t-bad">${p.d}</span>`:(p.d>0?`<span class="tag t-warn">${p.d}</span>`:'<span class="mut">0</span>');
+ return `<tr><td class="tw"><b>${p.p}</b></td><td class="num">${p.v}</td><td class="num">${fmt(p.t)}</td><td class="num">${dc}</td><td><span class="tag ${tag}">${lbl}</span>${alerta}</td></tr>`}).join('');
+
+document.getElementById('tbFric').innerHTML=fric.map(f=>
+ `<tr><td class="tw"><code style="font-size:12px">${f.u}</code></td><td class="num">${f.d>=40?'<span class="tag t-bad">'+f.d+'</span>':(f.d>=10?'<span class="tag t-warn">'+f.d+'</span>':f.d)}</td><td class="num">${f.q>=100?'<span class="tag t-bad">'+f.q+'</span>':(f.q>=20?'<span class="tag t-warn">'+f.q+'</span>':f.q)}</td><td class="mut">${f.x}</td></tr>`).join('');
+
+const pmap={rage:'<span class="tag t-bad">Rage click</span>',dead:'<span class="tag t-warn">Dead click</span>'};
+document.getElementById('tbSes').innerHTML=ses.map(s=>
+ `<tr><td class="mut" style="white-space:nowrap">${s.f}</td><td class="tw"><b>${s.t}</b><div class="mut">${s.u}</div></td><td class="num">${fmt(s.d)}</td><td class="num">${s.c}</td><td>${s.p.map(x=>pmap[x]).join(' ')}</td><td><a href="${s.l}" target="_blank" rel="noopener">▶ Ver</a></td></tr>`).join('');
+
+/* ---------- CHARTS ---------- */
+new Chart(document.getElementById('chCanal'),{type:'doughnut',
+ data:{labels:canales.map(c=>c[0]),datasets:[{data:canales.map(c=>c[1]),backgroundColor:P,borderColor:'#1a1d27',borderWidth:3}]},
+ options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+  plugins:{legend:{position:'right',labels:{padding:12,boxWidth:12,font:{size:12}}},
+   tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw} sesiones (${(c.raw/755*100).toFixed(1)}%)`}}}}});
+
+new Chart(document.getElementById('chDia'),{type:'line',
+ data:{labels:dias.map(d=>d[0]),datasets:[{label:'Sesiones',data:dias.map(d=>d[1]),
+  borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.15)',fill:true,tension:.35,
+  pointBackgroundColor:'#6366f1',pointRadius:5,pointHoverRadius:7,borderWidth:2.5}]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false}},
+  scales:{y:{beginAtZero:true,grid:{color:T.line}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chOS'),{type:'bar',
+ data:{labels:os.map(o=>o[0]),datasets:[{data:os.map(o=>o[1]),backgroundColor:P,borderRadius:5}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} sesiones`}}},
+  scales:{x:{beginAtZero:true,grid:{color:T.line}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chDisp'),{type:'bar',
+ data:{labels:disp.slice(0,3).map(d=>d.d),
+  datasets:[
+   {label:'Duración prom. (seg)',data:disp.slice(0,3).map(d=>d.dur),backgroundColor:'#6366f1',borderRadius:5,yAxisID:'y'},
+   {label:'Páginas por sesión',data:disp.slice(0,3).map(d=>d.pg),backgroundColor:'#06b6d4',borderRadius:5,yAxisID:'y1'}
+  ]},
+ options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{position:'top',labels:{boxWidth:12,padding:14}}},
+  scales:{
+   y:{beginAtZero:true,position:'left',title:{display:true,text:'segundos'},grid:{color:T.line}},
+   y1:{beginAtZero:true,position:'right',title:{display:true,text:'páginas'},grid:{display:false}},
+   x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('chScroll'),{type:'bar',
+ data:{labels:scroll.map(s=>s[0]),datasets:[{label:'Scroll promedio %',data:scroll.map(s=>s[1]),
+  backgroundColor:scroll.map(s=>s[1]>=55?'#22c55e':(s[1]>=35?'#f59e0b':'#ef4444')),borderRadius:5}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>` ${c.raw.toFixed(1)}% de scroll · ${scroll[c.dataIndex][2]} vistas`}}},
+  scales:{x:{beginAtZero:true,max:100,grid:{color:T.line},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
 </script>
 </body>
 </html>
