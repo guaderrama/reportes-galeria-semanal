@@ -1,898 +1,239 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Joyería Semanal — Ivan Guaderrama Gallery</title>
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reporte de Joyería — Ivan Guaderrama Art Gallery</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-         background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 100%);
-         color: #1f2937; padding: 20px; min-height: 100vh; }
-  .container { max-width: 1200px; margin: 0 auto; }
-  .header { background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
-            color: white; padding: 30px 24px; border-radius: 16px 16px 0 0;
-            box-shadow: 0 4px 20px rgba(168,85,247,0.3); }
-  .header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-  .header .sub { font-size: 15px; opacity: 0.92; }
-  .header .for { margin-top: 8px; font-size: 13px; opacity: 0.95; background: rgba(255,255,255,0.18);
-                  display: inline-block; padding: 4px 10px; border-radius: 20px; }
-  .tab-bar { display: flex; background: white; border-bottom: 2px solid #f3e8ff;
-              position: sticky; top: 0; z-index: 10; }
-  .tab-btn { flex: 1; padding: 14px 20px; background: white; border: none; cursor: pointer;
-              font-size: 14px; font-weight: 600; color: #6b7280; transition: all 0.2s; }
-  .tab-btn.active { color: #a855f7; border-bottom: 3px solid #a855f7; background: #faf5ff; }
-  .tab-btn:hover { background: #faf5ff; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-  .content { background: white; padding: 24px; border-radius: 0 0 16px 16px;
-              box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-  .verify-bar { padding: 10px 14px; border-radius: 8px;
-                 margin-bottom: 20px; font-weight: 600; font-size: 14px; }
-  .verify-bar.ok { background: #d1fae5; color: #065f46; }
-  .verify-bar.bad { background: #fee2e2; color: #991b1b; }
-  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 14px; }
-  .kpi { background: linear-gradient(135deg, #faf5ff 0%, #fce7f3 100%); padding: 16px 14px;
-          border-radius: 12px; border: 1px solid #f3e8ff; }
-  .kpi-label { font-size: 11px; color: #7c2d92; font-weight: 600; text-transform: uppercase;
-                letter-spacing: 0.5px; }
-  .kpi-val { font-size: 22px; font-weight: 700; color: #581c87; margin-top: 6px; }
-  .kpi-extra { font-size: 12px; color: #6b7280; margin-top: 4px; }
-  .ls-banner { background: #ede9fe; color: #5b21b6; padding: 10px 14px; border-radius: 8px;
-                margin-bottom: 20px; font-size: 13px; border-left: 4px solid #a855f7; }
-  .section-title { font-size: 17px; font-weight: 700; color: #581c87; margin: 24px 0 12px;
-                    padding-bottom: 6px; border-bottom: 2px solid #f3e8ff; }
-  .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 22px; }
-  .day-card { background: #f9fafb; padding: 10px 6px; border-radius: 8px; text-align: center;
-                border: 1px solid #e5e7eb; }
-  .day-card.best { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-                     border-color: #f59e0b; }
-  .day-name { font-size: 11px; font-weight: 700; color: #581c87; }
-  .day-date { font-size: 10px; color: #9ca3af; }
-  .day-rev { font-size: 15px; font-weight: 700; color: #1f2937; margin-top: 4px; }
-  .day-meta { font-size: 10px; color: #6b7280; margin-top: 2px; }
-  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
-                  gap: 18px; margin-bottom: 22px; }
-  .chart-card { background: white; border: 1px solid #f3e8ff; border-radius: 12px; padding: 16px; }
-  .chart-card h3 { font-size: 14px; font-weight: 600; color: #6b7280; margin-bottom: 12px; }
-  .chart-wrapper { position: relative; overflow: hidden; height: 320px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 13px; }
-  th { background: #faf5ff; color: #581c87; padding: 10px 8px; text-align: left;
-        font-weight: 600; font-size: 12px; border-bottom: 2px solid #e9d5ff; }
-  td { padding: 8px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
-  tr:hover td { background: #fdf4ff; }
-  .brand-badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-                  color: white; font-size: 11px; font-weight: 700; }
-  .bar { width: 100%; height: 5px; background: #f3e8ff; border-radius: 3px; margin-top: 4px; overflow: hidden; }
-  .bar-fill { height: 100%; background: linear-gradient(90deg, #a855f7, #ec4899); border-radius: 3px; }
-  .courtesy-row td { background: #fef9c3; }
-  .court-tag { display: inline-block; padding: 1px 6px; border-radius: 8px;
-                 background: #f59e0b; color: white; font-size: 10px; font-weight: 700; margin-left: 4px; }
-  .excluded-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 14px 16px;
-                    border-radius: 8px; margin: 20px 0; color: #78350f; }
-  .excluded-box h3 { font-size: 15px; margin-bottom: 8px; color: #92400e; }
-  .empty-state { background: #fef9c3; color: #854d0e; padding: 16px; border-radius: 10px;
-                  text-align: center; font-size: 14px; }
-  .footer { text-align: center; padding: 16px; color: #9ca3af; font-size: 12px; }
-  @media (max-width: 768px) {
-    .kpis { grid-template-columns: repeat(2, 1fr); }
-    .charts-grid { grid-template-columns: 1fr; }
-    .kpi-val { font-size: 19px; }
-    .days-grid { grid-template-columns: repeat(4, 1fr); }
-    .header h1 { font-size: 22px; }
-  }
-  @media (max-width: 480px) {
-    .kpis { grid-template-columns: 1fr; }
-    .days-grid { grid-template-columns: repeat(2, 1fr); }
-    .tab-btn { padding: 10px 8px; font-size: 12px; }
-    table { font-size: 11px; }
-    th, td { padding: 6px 4px; }
-  }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header">
-    <h1>💎 Reporte Semanal de Joyería</h1>
-    <div class="sub">24 Agosto - 30 Agosto, 2026 — Ivan Guaderrama Art Gallery</div>
-    <div class="for">Para: Imelda · IG Álvaro Obregón · USD</div>
-  </div>
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="showTab('week', this)">Semana 24–30 Ago</button>
-    <button class="tab-btn" onclick="showTab('ytd', this)">Acumulado YTD</button>
-  </div>
-  <div class="content">
+*{box-sizing:border-box}body{margin:0;background:#0a0f1e;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 16px 60px}
+header{text-align:center;padding:28px 0 18px;border-bottom:1px solid #1e293b}
+h1{margin:0 0 6px;font-size:26px;background:linear-gradient(90deg,#a855f7,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:#94a3b8;font-size:14px}
+.badge{display:inline-block;margin-top:10px;padding:5px 14px;border-radius:999px;background:#a855f71f;color:#c084fc;font-size:12px;font-weight:600}
+.verify{margin:16px 0;padding:10px 14px;border-radius:10px;background:#10b98116;border:1px solid #10b98140;color:#6ee7b7;font-size:13px;text-align:center}
+.alert{margin:18px 0;padding:16px 18px;border-radius:12px;background:#ef444414;border:1px solid #ef444455;border-left:4px solid #ef4444}
+.alert h3{margin:0 0 6px;color:#fca5a5;font-size:15px}.alert p{margin:4px 0;color:#fecaca;font-size:13px;line-height:1.55}
+.tabs{display:flex;gap:8px;margin:22px 0 18px}
+.tab{flex:1;padding:11px;border-radius:10px;background:#111827;border:1px solid #1e293b;color:#94a3b8;cursor:pointer;font-size:14px;font-weight:600;text-align:center}
+.tab.active{background:#a855f71f;border-color:#a855f7;color:#e9d5ff}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin:16px 0}
+.kpi{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:16px}
+.kpi .l{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
+.kpi .v{font-size:22px;font-weight:700;margin-top:6px}
+.kpi.mia .v{color:#c084fc}.kpi.ig .v{color:#60a5fa}.kpi.amber .v{color:#fbbf24}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.card{background:#111827;border:1px solid #1e293b;border-radius:14px;padding:18px}
+.card.mia{border-top:3px solid #a855f7}.card.ig{border-top:3px solid #3b82f6}
+.card h3{margin:0 0 12px;font-size:15px}
+.card .big{font-size:26px;font-weight:700}
+.card.mia .big{color:#c084fc}.card.ig .big{color:#60a5fa}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b33;font-size:13px}
+.row span:last-child{color:#cbd5e1;font-weight:600}
+h2{font-size:17px;margin:30px 0 12px;padding-left:10px;border-left:3px solid #a855f7}
+.chart-wrapper{background:#111827;border:1px solid #1e293b;border-radius:14px;padding:16px;height:320px;overflow:hidden;position:relative;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;background:#111827;border:1px solid #1e293b;border-radius:12px;overflow:hidden;font-size:13px}
+th{background:#0f172a;padding:10px;text-align:left;color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+td{padding:9px 10px;border-top:1px solid #1e293b}
+td.num{text-align:right}td.strong{font-weight:700}td.small{font-size:12px;color:#94a3b8}
+.rank{width:36px;text-align:center;font-weight:700}
+.tag{padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.muted{color:#64748b;font-style:italic}.amber{color:#fbbf24}
+.empty{text-align:center;color:#64748b;padding:22px;font-style:italic}
+.disc-box{background:#f59e0b0d;border:1px solid #f59e0b40;border-left:4px solid #f59e0b;border-radius:12px;padding:16px;margin:14px 0}
+.disc-box h3{margin:0 0 10px;color:#fbbf24;font-size:15px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:14px 0}
+.mcard{background:#111827;border:1px solid #1e293b;border-radius:10px;padding:12px;text-align:center}
+.mcard-zero{opacity:.45}
+.mcard-t{font-size:11px;color:#94a3b8;text-transform:uppercase}
+.mcard-v{font-size:18px;font-weight:700;color:#c084fc;margin:4px 0}
+.mcard-s{font-size:11px;color:#64748b}
+.podiums{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.podium{background:#111827;border:1px solid #1e293b;border-radius:12px;padding:14px;text-align:center}
+.podium.p1{border-color:#f59e0b66}.podium.p2{border-color:#94a3b866}.podium.p3{border-color:#b4530066}
+.pod-m{font-size:22px}.pod-d{font-size:13px;color:#cbd5e1;margin-top:4px}.pod-h{font-size:12px;color:#94a3b8}
+.pod-v{font-size:17px;font-weight:700;color:#c084fc;margin-top:6px}
+.heat-grid{display:grid;grid-template-columns:44px repeat(13,1fr);gap:3px;background:#111827;border:1px solid #1e293b;border-radius:12px;padding:12px;overflow-x:auto}
+.heat-cell{min-height:26px;border-radius:4px;background:#0f172a;display:flex;align-items:center;justify-content:center;font-size:9px;color:#cbd5e1}
+.heat-hdr{background:transparent;color:#64748b;font-size:10px}
+.heat-row{justify-content:flex-start;font-weight:600}
+.heat-on{font-weight:600;color:#fff}
+.finding{background:#f59e0b10;border:1px solid #f59e0b40;border-radius:12px;padding:16px;margin:16px 0;font-size:13px;line-height:1.7;color:#fde68a}
+footer{margin-top:40px;text-align:center;color:#475569;font-size:12px;border-top:1px solid #1e293b;padding-top:18px}
+.hide{display:none}
+@media(max-width:720px){.two,.podiums{grid-template-columns:1fr}.heat-grid{grid-template-columns:38px repeat(13,minmax(26px,1fr))}}
+</style></head><body><div class="wrap">
+<header>
+<h1>Reporte de Joyería — Ivan Guaderrama Art Gallery</h1>
+<div class="sub">Semana del 14 – 20 de septiembre de 2026 · Outlet IG Álvaro Obregón · Moneda USD</div>
+<div class="badge">💎 MIA Jewelry + IG Jewelry</div>
+</header>
 
-    <!-- ========== TAB WEEK ========== -->
-    <div id="week" class="tab-panel active">
-      <div class="verify-bar ok">✅ 4/4 verificaciones OK</div><div style="background:#3b1d0a;border:1px solid #f59e0b;border-left:5px solid #f59e0b;border-radius:10px;padding:16px 18px;margin:14px 0;"><div style="color:#fbbf24;font-weight:700;font-size:15px;margin-bottom:6px;">&#9888;&#65039; Sin ventas registradas en el POS esta semana</div><div style="color:#e2e8f0;font-size:13px;line-height:1.6;">No hay ninguna venta capturada en Lightspeed/Vend para IG &Aacute;lvaro Obreg&oacute;n en el rango 24&ndash;30 de agosto de 2026 &mdash; ni de joyer&iacute;a ni de ning&uacute;n otro producto.<br>La <b>&uacute;ltima venta registrada en todo el POS es del 2 de julio de 2026</b> (folio OBR14191), es decir <b>8 semanas sin captura</b>.<br>Los datos de la pesta&ntilde;a <b>Acumulado YTD</b> cubren por lo tanto <b>1 de enero &ndash; 2 de julio de 2026</b>, no hasta la fecha de hoy.<br><br><b>Esto no significa que no hubo ventas</b>: significa que el POS no las tiene. Requiere revisi&oacute;n con el equipo de tienda / soporte de Lightspeed.</div></div>
+<div class="verify">✅ 4/4 verificaciones de datos OK — fuente: Vend/Lightspeed API 0.9 y 2.0 (verificación cruzada)</div>
 
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-label">Bruto</div>
-          <div class="kpi-val">$0.00</div>
-          <div class="kpi-extra">venta pagada</div></div>
-        <div class="kpi"><div class="kpi-label">Neto</div>
-          <div class="kpi-val">$0.00</div>
-          <div class="kpi-extra">bruto − costo prod</div></div>
-        <div class="kpi"><div class="kpi-label">Piezas</div>
-          <div class="kpi-val">0</div>
-          <div class="kpi-extra">+ 0 cortesías</div></div>
-        <div class="kpi"><div class="kpi-label">Tickets joyería</div>
-          <div class="kpi-val">0</div></div>
-      </div>
-
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-label">Costo producción</div>
-          <div class="kpi-val">$0.00</div></div>
-        <div class="kpi"><div class="kpi-label">Costo cortesías</div>
-          <div class="kpi-val">$0.00</div></div>
-        <div class="kpi"><div class="kpi-label">Ticket Promedio</div>
-          <div class="kpi-val">$0.00</div></div>
-        <div class="kpi"><div class="kpi-label">Marca MIA / IG</div>
-          <div class="kpi-val" style="font-size:16px">$0.00 / $0.00</div></div>
-      </div>
-
-      <div class="ls-banner">
-        💡 <strong>Validación Lightspeed (semana):</strong>
-        Revenue $0.00 ·
-        COGS $0.00 ·
-        Sale count 0 ·
-        Piezas 0
-      </div>
-
-      <h2 class="section-title">Ventas por Día</h2>
-      <div class="days-grid">
-    <div class="day-card">
-      <div class="day-name">Lunes</div>
-      <div class="day-date">08-24</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Martes</div>
-      <div class="day-date">08-25</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Miércoles</div>
-      <div class="day-date">08-26</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Jueves</div>
-      <div class="day-date">08-27</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Viernes</div>
-      <div class="day-date">08-28</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Sábado</div>
-      <div class="day-date">08-29</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div>
-    <div class="day-card">
-      <div class="day-name">Domingo</div>
-      <div class="day-date">08-30</div>
-      <div class="day-rev">$0.00</div>
-      <div class="day-meta">0 pzas · 0 tickets</div>
-    </div></div>
-
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>Ingresos por Día</h3>
-          <div class="chart-wrapper"><canvas id="chartDaily"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Distribución por Colección</h3>
-          <div class="chart-wrapper"><canvas id="chartCollW"></canvas></div>
-        </div>
-      </div>
-
-      <h2 class="section-title">Colecciones de la Semana</h2>
-      <table>
-        <thead><tr><th>Marca</th><th>Colección</th><th style="text-align:right">Piezas</th><th style="text-align:right">Bruto</th></tr></thead>
-        <tbody><tr><td colspan="4" style="text-align:center; color:#9ca3af; padding:20px">Sin ventas de joyería esta semana</td></tr></tbody>
-      </table>
-
-      <h2 class="section-title">Top Productos de la Semana</h2>
-      <table>
-        <thead><tr><th>#</th><th>Producto</th><th>SKU</th><th style="text-align:right">Qty</th><th style="text-align:right">Bruto</th></tr></thead>
-        <tbody><tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px">Sin productos esta semana</td></tr></tbody>
-      </table>
-
-      <h2 class="section-title">Clientes de la Semana</h2>
-      <table>
-        <thead><tr><th>Cliente</th><th style="text-align:right">Tickets</th><th style="text-align:right">Bruto</th></tr></thead>
-        <tbody><tr><td colspan="4" style="text-align:center; color:#9ca3af; padding:20px">Sin clientes</td></tr></tbody>
-      </table>
-
-      <h2 class="section-title">🎁 Cortesías de la Semana</h2>
-      <table>
-        <thead><tr><th>Fecha</th><th>Factura</th><th>Producto</th><th>Cliente</th><th style="text-align:right">Qty</th></tr></thead>
-        <tbody><tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px">Sin cortesías</td></tr></tbody>
-      </table>
-
-      <h2 class="section-title">Métodos de Pago (semana)</h2>
-      <table>
-        <thead><tr><th>Método</th><th style="text-align:right">Monto</th><th style="text-align:right">%</th></tr></thead>
-        <tbody><tr><td colspan="3" style="text-align:center; color:#9ca3af; padding:20px">Sin pagos</td></tr></tbody>
-      </table>
-
-      <h2 class="section-title">Detalle de Líneas (semana)</h2>
-      <table>
-        <thead><tr><th>Fecha (MZT)</th><th>Factura</th><th>Producto</th><th>Cliente</th>
-          <th style="text-align:right">Qty</th><th style="text-align:right">Precio</th><th style="text-align:right">Costo</th></tr></thead>
-        <tbody><tr><td colspan="7" style="text-align:center; color:#9ca3af; padding:20px">Sin transacciones de joyería esta semana</td></tr></tbody>
-      </table>
-    </div>
-
-    <!-- ========== TAB YTD ========== -->
-    <div id="ytd" class="tab-panel">
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-label">Bruto YTD</div>
-          <div class="kpi-val">$14,110.45</div></div>
-        <div class="kpi"><div class="kpi-label">Neto YTD</div>
-          <div class="kpi-val">$11,653.26</div></div>
-        <div class="kpi"><div class="kpi-label">Tickets Joyería</div>
-          <div class="kpi-val">84</div></div>
-        <div class="kpi"><div class="kpi-label">Piezas YTD</div>
-          <div class="kpi-val">108</div>
-          <div class="kpi-extra">+ 51 cortesías</div></div>
-      </div>
-      <div class="kpis">
-        <div class="kpi"><div class="kpi-label">Costo Producción</div>
-          <div class="kpi-val">$2,457.19</div></div>
-        <div class="kpi"><div class="kpi-label">Costo Cortesías</div>
-          <div class="kpi-val">$255.00</div></div>
-        <div class="kpi"><div class="kpi-label">Marca MIA / IG</div>
-          <div class="kpi-val" style="font-size:18px">$14,027.45 / $83.00</div></div>
-        <div class="kpi"><div class="kpi-label">Ticket Promedio</div>
-          <div class="kpi-val">$167.98</div></div>
-      </div>
-
-      <div class="ls-banner">
-        💡 <strong>Validación Lightspeed (YTD):</strong>
-        Revenue $14,585.00 ·
-        COGS $2,731.19 ·
-        Sale count 91 ·
-        Piezas 160
-      </div>
-
-      <div class="charts-grid">
-        <div class="chart-card">
-          <h3>Evolución Mensual (Bruto)</h3>
-          <div class="chart-wrapper"><canvas id="chartMonthRev"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Distribución por Colección (YTD)</h3>
-          <div class="chart-wrapper"><canvas id="chartCollY"></canvas></div>
-        </div>
-      </div>
-
-      <h2 class="section-title">Mes a Mes</h2>
-      <table>
-        <thead><tr><th>Mes</th><th style="text-align:right">Bruto</th><th style="text-align:right">Piezas</th><th style="text-align:right">Tickets</th></tr></thead>
-        <tbody>
-        <tr><td>Ene</td><td style='text-align:right; font-weight:600'>$1,846.00</td><td style='text-align:right'>15</td><td style='text-align:right'>13</td></tr><tr><td>Feb</td><td style='text-align:right; font-weight:600'>$1,735.00</td><td style='text-align:right'>13</td><td style='text-align:right'>12</td></tr><tr><td>Mar</td><td style='text-align:right; font-weight:600'>$4,361.50</td><td style='text-align:right'>31</td><td style='text-align:right'>23</td></tr><tr><td>Abr</td><td style='text-align:right; font-weight:600'>$1,529.05</td><td style='text-align:right'>12</td><td style='text-align:right'>9</td></tr><tr><td>May</td><td style='text-align:right; font-weight:600'>$3,008.50</td><td style='text-align:right'>22</td><td style='text-align:right'>15</td></tr><tr><td>Jun</td><td style='text-align:right; font-weight:600'>$1,077.00</td><td style='text-align:right'>11</td><td style='text-align:right'>8</td></tr><tr><td>Jul</td><td style='text-align:right; font-weight:600'>$553.40</td><td style='text-align:right'>4</td><td style='text-align:right'>4</td></tr><tr><td>Ago</td><td style='text-align:right; font-weight:600'>$0.00</td><td style='text-align:right'>0</td><td style='text-align:right'>0</td></tr>
-        </tbody>
-      </table>
-
-      <h2 class="section-title">Top 15 Productos YTD</h2>
-      <table>
-        <thead><tr><th>#</th><th>Producto</th><th>SKU</th><th style="text-align:right">Qty</th><th style="text-align:right">Bruto</th></tr></thead>
-        <tbody>
-        <tr>
-          <td>🥇</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td>
-          <td>34687</td>
-          <td style="text-align:right">8</td>
-          <td style="text-align:right; font-weight:600">$1,201.05
-            <div class="bar"><div class="bar-fill" style="width:100.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>🥈</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Bags / Bags / Diseños Unicos</td>
-          <td>43336</td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$885.00
-            <div class="bar"><div class="bar-fill" style="width:73.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>🥉</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big</td>
-          <td>39230</td>
-          <td style="text-align:right">6</td>
-          <td style="text-align:right; font-weight:600">$862.40
-            <div class="bar"><div class="bar-fill" style="width:71.8%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>4.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Earrings / Loved</td>
-          <td>33782</td>
-          <td style="text-align:right">4</td>
-          <td style="text-align:right; font-weight:600">$732.00
-            <div class="bar"><div class="bar-fill" style="width:60.9%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>5.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF</td>
-          <td>40108</td>
-          <td style="text-align:right">6</td>
-          <td style="text-align:right; font-weight:600">$469.00
-            <div class="bar"><div class="bar-fill" style="width:39.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>6.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun</td>
-          <td>36178</td>
-          <td style="text-align:right">4</td>
-          <td style="text-align:right; font-weight:600">$460.00
-            <div class="bar"><div class="bar-fill" style="width:38.3%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>7.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz</td>
-          <td>40220</td>
-          <td style="text-align:right">4</td>
-          <td style="text-align:right; font-weight:600">$427.35
-            <div class="bar"><div class="bar-fill" style="width:35.6%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>8.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,</td>
-          <td>40231</td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$419.76
-            <div class="bar"><div class="bar-fill" style="width:34.9%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>9.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Chosen / Set / Juego Madre Perla</td>
-          <td>J1981</td>
-          <td style="text-align:right">2</td>
-          <td style="text-align:right; font-weight:600">$369.24
-            <div class="bar"><div class="bar-fill" style="width:30.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>10.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Chosen / Collar / Corazón Lizo-Martillado</td>
-          <td>C5846</td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$360.00
-            <div class="bar"><div class="bar-fill" style="width:30.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>11.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh</td>
-          <td>33752</td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$348.00
-            <div class="bar"><div class="bar-fill" style="width:29.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>12.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Masterpieces Of Love / Necklace / Corazón Chico</td>
-          <td>41413</td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$345.00
-            <div class="bar"><div class="bar-fill" style="width:28.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>13.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird</td>
-          <td>39005</td>
-          <td style="text-align:right">2</td>
-          <td style="text-align:right; font-weight:600">$340.00
-            <div class="bar"><div class="bar-fill" style="width:28.3%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>14.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long</td>
-          <td>40281</td>
-          <td style="text-align:right">2</td>
-          <td style="text-align:right; font-weight:600">$330.00
-            <div class="bar"><div class="bar-fill" style="width:27.5%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>15.</td>
-          <td><span class="brand-badge" style="background:#a855f7">MIA</span> MIA JEWELRY IG / MIA JEWELRY IG / Bags / Bags / Freedom - Libertad</td>
-          <td>40260</td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$295.00
-            <div class="bar"><div class="bar-fill" style="width:24.6%"></div></div>
-          </td>
-        </tr></tbody>
-      </table>
-
-      <h2 class="section-title">Top 20 Clientes YTD</h2>
-      <table>
-        <thead><tr><th>Cliente</th><th style="text-align:right">Tickets</th><th style="text-align:right">Bruto</th></tr></thead>
-        <tbody>
-        <tr>
-          <td>WALKIN<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">13</td>
-          <td style="text-align:right; font-weight:600">$1,526.45
-            <div class="bar"><div class="bar-fill" style="width:100.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>walk inn<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">7</td>
-          <td style="text-align:right; font-weight:600">$756.00
-            <div class="bar"><div class="bar-fill" style="width:49.5%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>MARGARET C VAUGHAN<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$590.00
-            <div class="bar"><div class="bar-fill" style="width:38.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>MARY SMOLIK<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$590.00
-            <div class="bar"><div class="bar-fill" style="width:38.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>ALISA BLACK<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$437.00
-            <div class="bar"><div class="bar-fill" style="width:28.6%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>MARIBETH CARLTON<br><span style="color:#6b7280; font-size:11px">SIXCARLTONS@GMAIL.COM</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$412.00
-            <div class="bar"><div class="bar-fill" style="width:27.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>Emma Sterns<br><span style="color:#6b7280; font-size:11px">esterne12@yahoo.com</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$407.00
-            <div class="bar"><div class="bar-fill" style="width:26.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>Renee Cherpin<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$332.00
-            <div class="bar"><div class="bar-fill" style="width:21.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>Pamela Spanko<br><span style="color:#6b7280; font-size:11px">flipflopsyearround@yahoo.com</span></td>
-          <td style="text-align:right">2</td>
-          <td style="text-align:right; font-weight:600">$306.00
-            <div class="bar"><div class="bar-fill" style="width:20.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>Trang Bui<br><span style="color:#6b7280; font-size:11px">tdbui1@yahoo.com</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$296.00
-            <div class="bar"><div class="bar-fill" style="width:19.4%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>KATHLEEN STOVER<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$295.00
-            <div class="bar"><div class="bar-fill" style="width:19.3%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>christina Pierre Tyler<br><span style="color:#6b7280; font-size:11px">Christinaapierre@gmail.com</span></td>
-          <td style="text-align:right">2</td>
-          <td style="text-align:right; font-weight:600">$285.00
-            <div class="bar"><div class="bar-fill" style="width:18.7%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>Wendie Storm<br><span style="color:#6b7280; font-size:11px">wendiestorm@gmail.com</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$280.00
-            <div class="bar"><div class="bar-fill" style="width:18.3%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>ifueko Okundaye<br><span style="color:#6b7280; font-size:11px">Ifueko.okundaye@gmail.com</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$279.00
-            <div class="bar"><div class="bar-fill" style="width:18.3%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>rosemarie baldwin<br><span style="color:#6b7280; font-size:11px">rosemarie.baldwin@comcast.net</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$273.00
-            <div class="bar"><div class="bar-fill" style="width:17.9%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>SARAH BEAR<br><span style="color:#6b7280; font-size:11px">BEHRA@COMCAST.NET</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$266.00
-            <div class="bar"><div class="bar-fill" style="width:17.4%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>PAUL SKUTA<br><span style="color:#dc2626; font-size:11px">sin email</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$250.00
-            <div class="bar"><div class="bar-fill" style="width:16.4%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>GORDON MCWATT<br><span style="color:#6b7280; font-size:11px">MCWATT.GRANT@GMAIL.COM</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$244.00
-            <div class="bar"><div class="bar-fill" style="width:16.0%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>judy coffey<br><span style="color:#6b7280; font-size:11px">Judycoffey@comcast.net</span></td>
-          <td style="text-align:right">3</td>
-          <td style="text-align:right; font-weight:600">$235.00
-            <div class="bar"><div class="bar-fill" style="width:15.4%"></div></div>
-          </td>
-        </tr>
-        <tr>
-          <td>JOSE PERELMUT<br><span style="color:#6b7280; font-size:11px">JPERELMU@GMAIL.COM</span></td>
-          <td style="text-align:right">1</td>
-          <td style="text-align:right; font-weight:600">$235.00
-            <div class="bar"><div class="bar-fill" style="width:15.4%"></div></div>
-          </td>
-        </tr></tbody>
-      </table>
-
-      <h2 class="section-title">Cortesías YTD (últimas 30)</h2>
-      <table>
-        <thead><tr><th>Fecha</th><th>Factura</th><th>Producto</th><th>Cliente</th><th style="text-align:right">Qty</th></tr></thead>
-        <tbody>
-        <tr>
-          <td>2026-07-02</td>
-          <td>OBR14182</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>WALKIN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-07-02</td>
-          <td>OBR14181</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>WALKIN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-06-11</td>
-          <td>OBR14156</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>ifueko Okundaye</td>
-          <td style="text-align:right">2</td>
-        </tr>
-        <tr>
-          <td>2026-06-11</td>
-          <td>OBR14152</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>WALKIN</td>
-          <td style="text-align:right">2</td>
-        </tr>
-        <tr>
-          <td>2026-06-08</td>
-          <td>OBR14142</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>LESLY FORWEY</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-30</td>
-          <td>OBR14122</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>judy coffey</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-28</td>
-          <td>OBR14110</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>Pamela Spanko</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-28</td>
-          <td>OBR14109</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>Pamela Spanko</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-28</td>
-          <td>OBR14108</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>Esperanza Santos</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-23</td>
-          <td>OBR14098</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>BARBARA BEEGHLEY</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-21</td>
-          <td>OBR14090</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>christina Pierre Tyler</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-21</td>
-          <td>OBR14089</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>Wendie Storm</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-09</td>
-          <td>OBR14062</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>MARIBETH CARLTON</td>
-          <td style="text-align:right">3</td>
-        </tr>
-        <tr>
-          <td>2026-05-07</td>
-          <td>OBR14059</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>LORRAINE PAICH</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-02</td>
-          <td>OBR14048</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>GORDON MCWATT</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-01</td>
-          <td>OBR14044</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>Emma Sterns</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-05-01</td>
-          <td>OBR14044</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>Emma Sterns</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-04-15</td>
-          <td>OBR13992</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>Suzetta Alberts</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-04-14</td>
-          <td>OBR13984</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>MARILU SERRANO</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-04-10</td>
-          <td>OBR13980</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>WALKIN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-04-10</td>
-          <td>OBR13980</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>WALKIN</td>
-          <td style="text-align:right">2</td>
-        </tr>
-        <tr>
-          <td>2026-04-09</td>
-          <td>OBR13961</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>Jill Jhonson</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-04-02</td>
-          <td>OBR13948</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>KENDRA</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-31</td>
-          <td>OBR13931</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>MARGARET C VAUGHAN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-31</td>
-          <td>OBR13930</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>MARY SMOLIK</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-31</td>
-          <td>OBR13929</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>KATHLEEN STOVER</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-26</td>
-          <td>OBR13915</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>REBECCA BROCKMAN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-26</td>
-          <td>OBR13903</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>AMY BAKER CORONADO</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-20</td>
-          <td>OBR13889</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Capilla</td>
-          <td>JESSICA WASSERMAN</td>
-          <td style="text-align:right">1</td>
-        </tr>
-        <tr>
-          <td>2026-03-17</td>
-          <td>OBR13856</td>
-          <td><span class="brand-badge" style="background:#f97316">IG</span> IG Jewelry / IG Jewelry / Scarf / Woman / Unconditional Love</td>
-          <td>TERRI STEVENSON</td>
-          <td style="text-align:right">1</td>
-        </tr></tbody>
-      </table>
-
-      <h2 class="section-title">Métodos de Pago (YTD)</h2>
-      <table>
-        <thead><tr><th>Método</th><th style="text-align:right">Monto</th><th style="text-align:right">%</th></tr></thead>
-        <tbody>
-        <tr><td>Credit Card MNX</td>
-        <td style="text-align:right">$9,499.00</td>
-        <td style="text-align:right">66.3%</td></tr>
-        <tr><td>American Express MNX</td>
-        <td style="text-align:right">$3,138.00</td>
-        <td style="text-align:right">21.9%</td></tr>
-        <tr><td>Credit Card USD</td>
-        <td style="text-align:right">$789.94</td>
-        <td style="text-align:right">5.5%</td></tr>
-        <tr><td>Cash USD</td>
-        <td style="text-align:right">$713.50</td>
-        <td style="text-align:right">5.0%</td></tr>
-        <tr><td>Cash MXN</td>
-        <td style="text-align:right">$185.56</td>
-        <td style="text-align:right">1.3%</td></tr></tbody>
-      </table>
-
-      
-    <div class="excluded-box">
-      <h3>⚠️ Ventas Excluidas del Reporte</h3>
-      <p style="font-size:13px; color:#92400e; margin-bottom:8px">Estas ventas existen en Lightspeed pero NO están contadas en los KPIs:</p>
-      <ul style="margin-left:20px; font-size:13px"><li><strong>OBR13789</strong> — excluida del reporte (validar contra Lightspeed)</li></ul>
-      <p style="font-size:12px; color:#92400e; margin-top:8px">Diferencia con Lightspeed YTD: Mio $14,110.45 vs LS $14,585.00 = $474.55</p>
-    </div>
-    </div>
-
-  </div>
-  <div class="footer">Generado 2026-08-30 16:54 UTC · Hora Mazatlán (UTC-7) · Ivan Guaderrama Gallery</div>
+<div class="tabs">
+<div class="tab active" onclick="show('w')">📅 Semana</div>
+<div class="tab" onclick="show('y')">📈 Acumulado YTD</div>
 </div>
 
+<div id="tab-w">
+<div class="alert">
+<h3>⚠️ Sin registro de ventas en el POS — semana en cero</h3>
+<p>No existe <strong>ninguna venta</strong> registrada en Vend/Lightspeed para el outlet IG Álvaro Obregón durante el periodo del 14 – 20 de septiembre de 2026. No es una semana floja de joyería: <strong>toda la galería está en cero</strong>.</p>
+<p>La última venta capturada en el sistema es del <strong>2 de julio de 2026</strong> (folio OBR14191). Van <strong>11 semanas consecutivas</strong> sin captura en el punto de venta.</p>
+<p>Verificado de forma independiente con dos endpoints (<em>API 0.9 register_sales</em> y <em>API 2.0 search</em>): ambos devuelven cero transacciones. Esto apunta a un problema de captura/sincronización del POS, no a una caída real de ventas. <strong>Requiere revisión con el equipo de la galería.</strong></p>
+</div>
+
+<div class="grid">
+<div class="kpi"><div class="l">💎 Total Joyería</div><div class="v">$0.00</div></div>
+<div class="kpi mia"><div class="l">💜 MIA Jewelry</div><div class="v">$0.00</div></div>
+<div class="kpi ig"><div class="l">💙 IG Jewelry</div><div class="v">$0.00</div></div>
+<div class="kpi"><div class="l">📦 Piezas vendidas</div><div class="v">0</div></div>
+<div class="kpi"><div class="l">🎫 Ticket promedio</div><div class="v">$0.00</div></div>
+<div class="kpi"><div class="l">📊 % del total galería</div><div class="v">0.0%</div></div>
+</div>
+
+<div class="two">
+<div class="card mia"><h3>💜 MIA Jewelry</h3><div class="big">$0.00</div>
+<div class="row"><span>Piezas</span><span>0</span></div>
+<div class="row"><span>Ticket promedio</span><span>$0.00</span></div>
+<div class="row"><span>Top colección</span><span>—</span></div>
+<div class="row"><span>Top producto</span><span>—</span></div></div>
+<div class="card ig"><h3>💙 IG Jewelry</h3><div class="big">$0.00</div>
+<div class="row"><span>Piezas</span><span>0</span></div>
+<div class="row"><span>Ticket promedio</span><span>$0.00</span></div>
+<div class="row"><span>Cortesías entregadas</span><span>0</span></div>
+<div class="row"><span>Ventas galería (todo)</span><span>$0.00</span></div></div>
+</div>
+
+<h2>Ventas por día — MIA vs IG</h2>
+<div class="chart-wrapper"><canvas id="c_wk"></canvas></div>
+
+<h2>🏷️ Descuentos Aplicados (semana)</h2>
+<div class="disc-box">
+<div style="font-size:22px;font-weight:700;color:#fbbf24;margin-bottom:10px">$0.00</div>
+<table><thead><tr><th>Fecha</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>Productos afectados</th></tr></thead>
+<tbody><tr><td colspan="5" class="empty">Sin descuentos registrados en el periodo</td></tr></tbody></table>
+<div style="margin-top:10px;font-size:12px;color:#94a3b8">Acumulado YTD de descuentos en ventas con joyería: <strong class="amber">$4,346.55</strong></div>
+</div>
+
+<h2>🎁 Cortesías de la semana</h2>
+<table><thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th></tr></thead>
+<tbody><tr><td colspan="3" class="empty">Sin cortesías registradas en el periodo</td></tr></tbody></table>
+
+<h2>👥 Clientes de Joyería esta Semana</h2>
+<table><tbody><tr><td class="empty">Sin transacciones de joyería registradas en el periodo</td></tr></tbody></table>
+</div>
+
+<div id="tab-y" class="hide">
+<div class="alert" style="background:#f59e0b12;border-color:#f59e0b55;border-left-color:#f59e0b">
+<h3 style="color:#fbbf24">📌 Acumulado congelado al 2 de julio</h3>
+<p style="color:#fde68a">Las cifras YTD son reales pero <strong>no avanzan desde el 2-jul-2026</strong> porque el POS dejó de registrar ventas. Julio aparece parcial (1–2 jul) y agosto/septiembre en cero.</p>
+</div>
+
+<div class="grid">
+<div class="kpi"><div class="l">💎 Total Joyería YTD</div><div class="v">$14,110.45</div></div>
+<div class="kpi mia"><div class="l">💜 MIA Jewelry</div><div class="v">$14,027.45</div></div>
+<div class="kpi ig"><div class="l">💙 IG Jewelry</div><div class="v">$83.00</div></div>
+<div class="kpi"><div class="l">📦 Piezas vendidas</div><div class="v">106</div></div>
+<div class="kpi"><div class="l">🎫 Ticket promedio</div><div class="v">$172.08</div></div>
+<div class="kpi"><div class="l">📊 % del total galería</div><div class="v">10.9%</div></div>
+</div>
+
+<h2>Tendencia mensual</h2>
+<div class="mgrid"><div class="mcard"><div class="mcard-t">Ene</div><div class="mcard-v">$1,846</div><div class="mcard-s">MIA $1,846 · IG $0</div><div class="mcard-s">15 pzs</div></div><div class="mcard"><div class="mcard-t">Feb</div><div class="mcard-v">$1,735</div><div class="mcard-s">MIA $1,735 · IG $0</div><div class="mcard-s">13 pzs</div></div><div class="mcard"><div class="mcard-t">Mar</div><div class="mcard-v">$4,362</div><div class="mcard-s">MIA $4,362 · IG $0</div><div class="mcard-s">31 pzs</div></div><div class="mcard"><div class="mcard-t">Abr</div><div class="mcard-v">$1,529</div><div class="mcard-s">MIA $1,446 · IG $83</div><div class="mcard-s">12 pzs</div></div><div class="mcard"><div class="mcard-t">May</div><div class="mcard-v">$3,008</div><div class="mcard-s">MIA $3,008 · IG $0</div><div class="mcard-s">22 pzs</div></div><div class="mcard"><div class="mcard-t">Jun</div><div class="mcard-v">$1,077</div><div class="mcard-s">MIA $1,077 · IG $0</div><div class="mcard-s">10 pzs</div></div><div class="mcard"><div class="mcard-t">Jul</div><div class="mcard-v">$553</div><div class="mcard-s">MIA $553 · IG $0</div><div class="mcard-s">3 pzs</div></div><div class="mcard mcard-zero"><div class="mcard-t">Ago</div><div class="mcard-v">$0</div><div class="mcard-s">MIA $0 · IG $0</div><div class="mcard-s">0 pzs</div></div><div class="mcard mcard-zero"><div class="mcard-t">Sep</div><div class="mcard-v">$0</div><div class="mcard-s">MIA $0 · IG $0</div><div class="mcard-s">0 pzs</div></div></div>
+<div class="chart-wrapper"><canvas id="c_mes"></canvas></div>
+
+<h2>Colecciones MIA y tipos de pieza</h2>
+<div class="two">
+<div class="chart-wrapper" style="margin:0"><canvas id="c_col"></canvas></div>
+<div class="chart-wrapper" style="margin:0"><canvas id="c_pie"></canvas></div>
+</div>
+
+<h2>Desglose por colección</h2>
+<table><thead><tr><th>Colección</th><th style="text-align:right">Piezas</th><th style="text-align:right">Ingreso</th><th style="text-align:right">% MIA</th></tr></thead>
+<tbody><tr><td><span class="dot" style="background:#06b6d4"></span>Sea Bless</td><td class="num">51</td><td class="num">$6,442.10</td><td class="num">45.9%</td></tr><tr><td><span class="dot" style="background:#f59e0b"></span>Chosen</td><td class="num">21</td><td class="num">$2,836.24</td><td class="num">20.2%</td></tr><tr><td><span class="dot" style="background:#ec4899"></span>Masterpieces Of Love</td><td class="num">18</td><td class="num">$2,488.11</td><td class="num">17.7%</td></tr><tr><td><span class="dot" style="background:#8b5cf6"></span>Bags</td><td class="num">5</td><td class="num">$1,475.00</td><td class="num">10.5%</td></tr><tr><td><span class="dot" style="background:#10b981"></span>Miyuki</td><td class="num">4</td><td class="num">$265.50</td><td class="num">1.9%</td></tr><tr><td><span class="dot" style="background:#eab308"></span>Gafas de Sol</td><td class="num">4</td><td class="num">$262.50</td><td class="num">1.9%</td></tr><tr><td><span class="dot" style="background:#f472b6"></span>Alas de la Vida</td><td class="num">2</td><td class="num">$258.00</td><td class="num">1.8%</td></tr></tbody></table>
+
+<h2>Top 10 productos por ingreso</h2>
+<div class="chart-wrapper" style="height:380px"><canvas id="c_top"></canvas></div>
+
+<h2>Top 15 productos</h2>
+<table><thead><tr><th>#</th><th>Producto</th><th>Marca</th><th style="text-align:right">Piezas</th><th style="text-align:right">Ingreso</th></tr></thead>
+<tbody><tr><td class="rank">🥇</td><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">8</td><td class="num strong">$1,201.05</td></tr><tr><td class="rank">🥈</td><td>MIA JEWELRY IG / Bags / Bags / Diseños Unicos</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">3</td><td class="num strong">$885.00</td></tr><tr><td class="rank">🥉</td><td>MIA JEWELRY IG / Sea Bless / Ring / Protect My Love Big</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">5</td><td class="num strong">$862.40</td></tr><tr><td class="rank">4</td><td>MIA JEWELRY IG / Sea Bless / Earrings / Loved</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">4</td><td class="num strong">$732.00</td></tr><tr><td class="rank">5</td><td>MIA JEWELRY IG / Sea Bless / Unique Piece / MIA BF</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">6</td><td class="num strong">$469.00</td></tr><tr><td class="rank">6</td><td>MIA JEWELRY IG / Sea Bless / Bracelet / Sea & Sun</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">4</td><td class="num strong">$460.00</td></tr><tr><td class="rank">7</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / La Cruz</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">4</td><td class="num strong">$427.35</td></tr><tr><td class="rank">8</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Radiante Amanecer,</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">3</td><td class="num strong">$419.76</td></tr><tr><td class="rank">9</td><td>MIA JEWELRY IG / Chosen / Set / Juego Madre Perla</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">2</td><td class="num strong">$369.24</td></tr><tr><td class="rank">10</td><td>MIA JEWELRY IG / Chosen / Collar / Corazón Lizo-Martillado</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">3</td><td class="num strong">$360.00</td></tr><tr><td class="rank">11</td><td>MIA JEWELRY IG / Sea Bless / Necklace / Sea Sigh</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">3</td><td class="num strong">$348.00</td></tr><tr><td class="rank">12</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Corazón Chico</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">3</td><td class="num strong">$345.00</td></tr><tr><td class="rank">13</td><td>MIA JEWELRY IG / Sea Bless / Earrings / Hummingbird</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">2</td><td class="num strong">$340.00</td></tr><tr><td class="rank">14</td><td>MIA JEWELRY IG / Masterpieces Of Love / Necklace / Collar Radiante Amanecer - Long</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">2</td><td class="num strong">$330.00</td></tr><tr><td class="rank">15</td><td>MIA JEWELRY IG / Bags / Bags / Freedom - Libertad</td><td><span class="tag" style="background:#06b6d422;color:#a855f7">MIA</span></td><td class="num">1</td><td class="num strong">$295.00</td></tr></tbody></table>
+
+<h2>👥 Clientes VIP de Joyería — YTD</h2>
+<table><thead><tr><th>#</th><th>Nombre</th><th>Email</th><th style="text-align:right">Total</th><th style="text-align:right">Piezas</th><th style="text-align:right">Visitas</th><th style="text-align:right">Ticket prom.</th><th>Productos</th><th>Última compra</th></tr></thead>
+<tbody><tr><td class="rank">🥇</td><td>Sin nombre registrado</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$1,526.45</td><td class="num">13</td><td class="num">10</td><td class="num">$152.65</td><td class="small">Alas de Mariposa, Corazón Chico, Corazón Grande, La Cruz</td><td class="small">2026-07-02</td></tr><tr><td class="rank">🥈</td><td>walk inn</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$612.00</td><td class="num">5</td><td class="num">5</td><td class="num">$122.40</td><td class="small">Collar Radiante Amanecer - Long, Corazón Lizo-Martillado, Love Essence Necklace, MIA BF</td><td class="small">2026-03-02</td></tr><tr><td class="rank">🥉</td><td>MARGARET C VAUGHAN</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$590.00</td><td class="num">2</td><td class="num">1</td><td class="num">$590.00</td><td class="small">Diseños Unicos, Freedom - Libertad</td><td class="small">2026-03-31</td></tr><tr><td class="rank">4</td><td>MARY SMOLIK</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$590.00</td><td class="num">2</td><td class="num">1</td><td class="num">$590.00</td><td class="small">Beauty - Belleza, Diseños Unicos</td><td class="small">2026-03-31</td></tr><tr><td class="rank">5</td><td>ALISA BLACK</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$437.00</td><td class="num">3</td><td class="num">1</td><td class="num">$437.00</td><td class="small">Love Essence, Love Signs, Loved</td><td class="small">2026-03-05</td></tr><tr><td class="rank">6</td><td>MARIBETH CARLTON</td><td class="small">SIXCARLTONS@GMAIL.COM</td><td class="num strong">$412.00</td><td class="num">3</td><td class="num">1</td><td class="num">$412.00</td><td class="small">Ballena Ajustable, Hummingbird, Sea Sigh</td><td class="small">2026-05-09</td></tr><tr><td class="rank">7</td><td>Emma Sterns</td><td class="small">esterne12@yahoo.com</td><td class="num strong">$407.00</td><td class="num">3</td><td class="num">1</td><td class="num">$407.00</td><td class="small">Arbol de Vida, Polarizadas Clasicas, Protect My Love</td><td class="small">2026-05-01</td></tr><tr><td class="rank">8</td><td>Renee Cherpin</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$332.00</td><td class="num">3</td><td class="num">1</td><td class="num">$332.00</td><td class="small">Mother Pearl, Pearl Hummingbird, Radiante Amanecer,</td><td class="small">2026-03-19</td></tr><tr><td class="rank">9</td><td>Pamela Spanko</td><td class="small">flipflopsyearround@yahoo.com</td><td class="num strong">$306.00</td><td class="num">2</td><td class="num">2</td><td class="num">$153.00</td><td class="small">Protect My Love</td><td class="small">2026-05-28</td></tr><tr><td class="rank">10</td><td>Trang Bui</td><td class="small">tdbui1@yahoo.com</td><td class="num strong">$296.00</td><td class="num">2</td><td class="num">1</td><td class="num">$296.00</td><td class="small">Juego Madre Perla, Radiante Amanecer,</td><td class="small">2026-05-28</td></tr><tr><td class="rank">11</td><td>KATHLEEN STOVER</td><td class="small"><span class="muted">Sin email registrado</span></td><td class="num strong">$295.00</td><td class="num">1</td><td class="num">1</td><td class="num">$295.00</td><td class="small">Diseños Unicos</td><td class="small">2026-03-31</td></tr><tr><td class="rank">12</td><td>christina Pierre Tyler</td><td class="small">Christinaapierre@gmail.com</td><td class="num strong">$285.00</td><td class="num">2</td><td class="num">2</td><td class="num">$142.50</td><td class="small">Pureza en Oro, Rasimo de Perla</td><td class="small">2026-05-21</td></tr><tr><td class="rank">13</td><td>Wendie Storm</td><td class="small">wendiestorm@gmail.com</td><td class="num strong">$280.00</td><td class="num">2</td><td class="num">1</td><td class="num">$280.00</td><td class="small">Collar Radiante Amanecer - Long, Sea & Sun</td><td class="small">2026-05-21</td></tr><tr><td class="rank">14</td><td>ifueko Okundaye</td><td class="small">Ifueko.okundaye@gmail.com</td><td class="num strong">$279.00</td><td class="num">2</td><td class="num">1</td><td class="num">$279.00</td><td class="small">Love Signs, Radiante Amanecer XL</td><td class="small">2026-06-11</td></tr><tr><td class="rank">15</td><td>rosemarie baldwin</td><td class="small">rosemarie.baldwin@comcast.net</td><td class="num strong">$273.00</td><td class="num">2</td><td class="num">1</td><td class="num">$273.00</td><td class="small">Cruz, Protect My Love</td><td class="small">2026-01-22</td></tr></tbody></table>
+<div style="margin-top:10px;font-size:12px;color:#94a3b8">Clientes únicos de joyería: <strong>62</strong> · con email registrado: <strong>33</strong> (53%). Capturar el correo en el POS es la vía más barata para reactivar compradores de joyería.</div>
+
+<h2>📊 Análisis de Horarios y Días (YTD)</h2>
+<div class="podiums"><div class="podium p1"><div class="pod-m">🥇</div><div class="pod-d">Jueves</div><div class="pod-h">19:00</div><div class="pod-v">$2,011.00</div></div><div class="podium p2"><div class="pod-m">🥈</div><div class="pod-d">Martes</div><div class="pod-h">12:00</div><div class="pod-v">$1,741.00</div></div><div class="podium p3"><div class="pod-m">🥉</div><div class="pod-d">Jueves</div><div class="pod-h">18:00</div><div class="pod-v">$1,731.90</div></div></div>
+<div class="two">
+<div class="chart-wrapper" style="margin:0"><canvas id="c_dow"></canvas></div>
+<div class="chart-wrapper" style="margin:0"><canvas id="c_hr"></canvas></div>
+</div>
+<h2>Mapa de calor — Día × Hora</h2>
+<div class="heat-grid"><div class="heat-cell heat-hdr"></div><div class="heat-cell heat-hdr">9a</div><div class="heat-cell heat-hdr">10a</div><div class="heat-cell heat-hdr">11a</div><div class="heat-cell heat-hdr">12p</div><div class="heat-cell heat-hdr">1p</div><div class="heat-cell heat-hdr">2p</div><div class="heat-cell heat-hdr">3p</div><div class="heat-cell heat-hdr">4p</div><div class="heat-cell heat-hdr">5p</div><div class="heat-cell heat-hdr">6p</div><div class="heat-cell heat-hdr">7p</div><div class="heat-cell heat-hdr">8p</div><div class="heat-cell heat-hdr">9p</div><div class="heat-cell heat-hdr heat-row">Lun</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.24)" title="Lunes 12h — $138.00">$138</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.36)" title="Lunes 14h — $436.00">$436</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.24)" title="Lunes 15h — $147.00">$147</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.24)" title="Lunes 16h — $153.00">$153</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.21)" title="Lunes 17h — $75.00">$75</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.25)" title="Lunes 18h — $170.00">$170</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.28)" title="Lunes 20h — $235.00">$235</div><div class="heat-cell"></div><div class="heat-cell heat-hdr heat-row">Mar</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.89)" title="Martes 12h — $1,741.00">$1,741</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.23)" title="Martes 13h — $120.00">$120</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.26)" title="Martes 14h — $190.00">$190</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-hdr heat-row">Mié</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.29)" title="Miércoles 12h — $281.00">$281</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.25)" title="Miércoles 17h — $183.00">$183</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.22)" title="Miércoles 19h — $108.00">$108</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-hdr heat-row">Jue</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.36)" title="Jueves 12h — $437.00">$437</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.21)" title="Jueves 14h — $69.00">$69</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.41)" title="Jueves 16h — $572.00">$572</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.40)" title="Jueves 17h — $533.00">$533</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.89)" title="Jueves 18h — $1,731.90">$1,732</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,1.00)" title="Jueves 19h — $2,011.00">$2,011</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.71)" title="Jueves 20h — $1,309.00">$1,309</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.43)" title="Jueves 21h — $603.00">$603</div><div class="heat-cell heat-hdr heat-row">Vie</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.24)" title="Viernes 11h — $153.00">$153</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.24)" title="Viernes 14h — $135.00">$135</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.39)" title="Viernes 16h — $527.00">$527</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.27)" title="Viernes 17h — $226.00">$226</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.30)" title="Viernes 19h — $300.05">$300</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-hdr heat-row">Sáb</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.19)" title="Sábado 9h — $29.50">$30</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.28)" title="Sábado 10h — $244.00">$244</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.25)" title="Sábado 11h — $183.00">$183</div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.21)" title="Sábado 12h — $75.00">$75</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.47)" title="Sábado 14h — $708.00">$708</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.25)" title="Sábado 16h — $164.00">$164</div><div class="heat-cell"></div><div class="heat-cell heat-on" style="background:rgba(168,85,247,0.23)" title="Sábado 18h — $123.00">$123</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell heat-hdr heat-row">Dom</div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div><div class="heat-cell"></div></div>
+<div class="finding">💡 <strong>Hallazgo clave:</strong> el mejor día es <strong>Jueves</strong> con $7,265.90 (51% del total de joyería). El mejor horario es alrededor de las <strong>12 PM</strong>. Días sin ventas de joyería en todo el año: Domingo.</div>
+
+<h2>🎁 Cortesías acumuladas por mes</h2>
+<table><thead><tr><th>Mes</th><th style="text-align:right">Piezas entregadas</th></tr></thead>
+<tbody><tr><td>Ene</td><td class="num">7</td></tr><tr><td>Feb</td><td class="num">6</td></tr><tr><td>Mar</td><td class="num">10</td></tr><tr><td>Abr</td><td class="num">7</td></tr><tr><td>May</td><td class="num">14</td></tr><tr><td>Jun</td><td class="num">6</td></tr><tr><td>Jul</td><td class="num">3</td></tr><tr><td>Ago</td><td class="num">0</td></tr><tr><td>Sep</td><td class="num">0</td></tr></tbody></table>
+<div style="margin-top:10px;font-size:12px;color:#94a3b8">Total cortesías YTD: <strong>53</strong> piezas (IG Jewelry Scarf a $0, regalo con compra). No se incluyen en los totales de venta.</div>
+
+<h2>🏷️ Descuentos Aplicados — YTD</h2>
+<div class="disc-box">
+<div style="font-size:22px;font-weight:700;color:#fbbf24;margin-bottom:10px">$4,346.55</div>
+<table><thead><tr><th>Fecha</th><th>Factura</th><th>Tipo</th><th>Monto</th><th>Productos afectados</th></tr></thead>
+<tbody><tr><td>2026-07-02</td><td>OBR14188</td><td>Discount</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-07-02</td><td>OBR14182</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-07-02</td><td>OBR14181</td><td>Discount</td><td class="num strong amber">$17.60</td><td class="small">Protect My Love Big, Capilla</td></tr><tr><td>2026-07-02</td><td>OBR14181</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-06-11</td><td>OBR14156</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-06-11</td><td>OBR14152</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-06-10</td><td>OBR14147</td><td>Discount</td><td class="num strong amber">$176.00</td><td class="small">Protect My Love Big</td></tr><tr><td>2026-06-08</td><td>OBR14142</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-30</td><td>OBR14122</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-28</td><td>OBR14115</td><td>Discount</td><td class="num strong amber">$50.00</td><td class="small">Radiante Amanecer,, Juego Madre Perla</td></tr><tr><td>2026-05-28</td><td>OBR14110</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Unconditional Love</td></tr><tr><td>2026-05-28</td><td>OBR14109</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Unconditional Love</td></tr><tr><td>2026-05-28</td><td>OBR14108</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-23</td><td>OBR14098</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Unconditional Love</td></tr><tr><td>2026-05-21</td><td>OBR14090</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-21</td><td>OBR14089</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-09</td><td>OBR14062</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-07</td><td>OBR14059</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Unconditional Love</td></tr><tr><td>2026-05-07</td><td>OBR14055</td><td>Descuento de línea</td><td class="num strong amber">$37.50</td><td class="small">Polarizadas Clasicas</td></tr><tr><td>2026-05-02</td><td>OBR14048</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-01</td><td>OBR14044</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-05-01</td><td>OBR14044</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Unconditional Love</td></tr><tr><td>2026-04-15</td><td>OBR13992</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-04-14</td><td>OBR13984</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr><tr><td>2026-04-10</td><td>OBR13980</td><td>Descuento de línea</td><td class="num strong amber">$83.00</td><td class="small">Capilla</td></tr></tbody></table>
+<div style="margin-top:10px;font-size:12px;color:#94a3b8">Se muestran los 25 más recientes de 55 registros. Incluye descuentos a nivel de ticket en ventas que contenían joyería.</div>
+</div>
+</div>
+
+<footer>Generado automáticamente el 22 de septiembre de 2026 · Datos: Vend/Lightspeed · Hora Mazatlán (UTC-7) · Moneda USD<br>Ivan Guaderrama Art Gallery — San José del Cabo, BCS</footer>
+</div>
 <script>
-  const dailyLabels = ["Lunes", "Martes", "Mi\u00e9rcoles", "Jueves", "Viernes", "S\u00e1bado", "Domingo"];
-  const dailyValues = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
-  const collWLabels = ["Sin ventas"];
-  const collWValues = [0];
-  const collWColors = ["#94a3b8"];
-  const collYLabels = ["Sea Bless", "Chosen", "Masterpieces Of Love", "Bags", "Miyuki", "Gafas de Sol", "Alas de la Vida", "IG Jewelry"];
-  const collYValues = [6442.1, 2836.24, 2488.11, 1475.0, 265.5, 262.5, 258.0, 83.0];
-  const collYColors = ["#06b6d4", "#8b5cf6", "#ec4899", "#6366f1", "#a855f7", "#0ea5e9", "#f59e0b", "#f97316"];
-  const monthLabels = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago"];
-  const monthRev = [1846.0, 1735.0, 4361.5, 1529.05, 3008.5, 1077.0, 553.4, 0.0];
-
-  let chartsWeek = [];
-  let chartsYTD = [];
-
-  function destroyAll(arr) {
-    arr.forEach(c => c && c.destroy());
-    arr.length = 0;
+const CH = {"mes_lbl": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep"], "mes_mia": [1846.0, 1735.0, 4361.5, 1446.05, 3008.5, 1077.0, 553.4, 0, 0], "mes_ig": [0, 0, 0, 83.0, 0, 0, 0, 0, 0], "col_lbl": ["Sea Bless", "Chosen", "Masterpieces Of Love", "Bags", "Miyuki", "Gafas de Sol", "Alas de la Vida"], "col_val": [6442.1, 2836.24, 2488.11, 1475.0, 265.5, 262.5, 258.0], "col_col": ["#06b6d4", "#f59e0b", "#ec4899", "#8b5cf6", "#10b981", "#eab308", "#f472b6"], "pie_lbl": ["Necklace", "Ring", "Bags", "Otros", "Bracelet", "Earrings", "Gafas de Sol", "Scarf"], "pie_val": [4900.11, 4737.6, 1475.0, 948.24, 878.0, 826.0, 262.5, 83.0], "pie_col": ["#3b82f6", "#ef4444", "#8b5cf6", "#64748b", "#10b981", "#f59e0b", "#eab308", "#94a3b8"], "top_lbl": ["MIA JEWELRY IG / Sea Bless / Ring / Protect M", "MIA JEWELRY IG / Bags / Bags / Diseños Unicos", "MIA JEWELRY IG / Sea Bless / Ring / Protect M", "MIA JEWELRY IG / Sea Bless / Earrings / Loved", "MIA JEWELRY IG / Sea Bless / Unique Piece / M", "MIA JEWELRY IG / Sea Bless / Bracelet / Sea &", "MIA JEWELRY IG / Masterpieces Of Love / Neckl", "MIA JEWELRY IG / Masterpieces Of Love / Neckl", "MIA JEWELRY IG / Chosen / Set / Juego Madre P", "MIA JEWELRY IG / Chosen / Collar / Corazón Li"], "top_val": [1201.05, 885.0, 862.4, 732.0, 469.0, 460.0, 427.35, 419.76, 369.24, 360.0], "dow_lbl": ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"], "dow_val": [1354.0, 2051.0, 572.0, 7265.9, 1341.05, 1526.5, 0], "dow_col": ["#a855f7", "#a855f7", "#a855f7", "#f59e0b", "#a855f7", "#a855f7", "#a855f7"], "hr_lbl": ["9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM"], "hr_val": [29.5, 244.0, 336.0, 2672.0, 120.0, 1538.0, 147.0, 1416.0, 1017.0, 2024.9, 2419.05, 1544.0, 603.0], "hr_col": ["#a855f7", "#a855f7", "#a855f7", "#f59e0b", "#a855f7", "#a855f7", "#a855f7", "#a855f7", "#a855f7", "#a855f7", "#a855f7", "#a855f7", "#a855f7"], "wk_lbl": ["Lun 14", "Mar 15", "Mié 16", "Jue 17", "Vie 18", "Sáb 19", "Dom 20"], "wk_mia": [0, 0, 0, 0, 0, 0, 0], "wk_ig": [0, 0, 0, 0, 0, 0, 0]};
+let charts = [];
+function destroy(){charts.forEach(c=>c.destroy());charts=[];}
+const gridc = {color:'#1e293b'}, tickc = {color:'#94a3b8',font:{size:11}};
+function show(t){
+  document.getElementById('tab-w').classList.toggle('hide', t!=='w');
+  document.getElementById('tab-y').classList.toggle('hide', t!=='y');
+  document.querySelectorAll('.tab').forEach((e,i)=>e.classList.toggle('active', (i===0)===(t==='w')));
+  destroy(); render(t);
+}
+function render(t){
+  if(t==='w'){
+    charts.push(new Chart(document.getElementById('c_wk'),{type:'bar',data:{labels:CH.wk_lbl,datasets:[
+      {label:'MIA',data:CH.wk_mia,backgroundColor:'#a855f7',maxBarThickness:50},
+      {label:'IG',data:CH.wk_ig,backgroundColor:'#3b82f6',maxBarThickness:50}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#cbd5e1'}}},
+      scales:{x:{stacked:true,grid:gridc,ticks:tickc},y:{stacked:true,grid:gridc,ticks:tickc,beginAtZero:true}}}}));
+    return;
   }
-
-  function buildWeekCharts() {
-    destroyAll(chartsWeek);
-    const c1 = document.getElementById('chartDaily').getContext('2d');
-    chartsWeek.push(new Chart(c1, {
-      type: 'bar',
-      data: { labels: dailyLabels, datasets: [{ label: 'Bruto',
-        data: dailyValues, backgroundColor: '#a855f7', maxBarThickness: 50 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-        scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } } }
-    }));
-    if (collWValues.some(v => v > 0)) {
-      const c2 = document.getElementById('chartCollW').getContext('2d');
-      chartsWeek.push(new Chart(c2, {
-        type: 'doughnut',
-        data: { labels: collWLabels, datasets: [{ data: collWValues, backgroundColor: collWColors }] },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'right' } } }
-      }));
-    }
-  }
-
-  function buildYTDCharts() {
-    destroyAll(chartsYTD);
-    const c1 = document.getElementById('chartMonthRev').getContext('2d');
-    chartsYTD.push(new Chart(c1, {
-      type: 'bar',
-      data: { labels: monthLabels, datasets: [{ label: 'Bruto', data: monthRev,
-        backgroundColor: '#ec4899', maxBarThickness: 50 }] },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-        scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } } }
-    }));
-    const c2 = document.getElementById('chartCollY').getContext('2d');
-    chartsYTD.push(new Chart(c2, {
-      type: 'doughnut',
-      data: { labels: collYLabels, datasets: [{ data: collYValues, backgroundColor: collYColors }] },
-      options: { responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { position: 'right' } } }
-    }));
-  }
-
-  function showTab(id, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
-    if (id === 'week') buildWeekCharts();
-    else buildYTDCharts();
-  }
-
-  buildWeekCharts();
-</script>
-</body>
-</html>
+  charts.push(new Chart(document.getElementById('c_mes'),{type:'bar',data:{labels:CH.mes_lbl,datasets:[
+    {label:'MIA',data:CH.mes_mia,backgroundColor:'#a855f7',maxBarThickness:50},
+    {label:'IG',data:CH.mes_ig,backgroundColor:'#3b82f6',maxBarThickness:50}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#cbd5e1'}}},
+    scales:{x:{grid:gridc,ticks:tickc},y:{grid:gridc,ticks:tickc,beginAtZero:true}}}}));
+  charts.push(new Chart(document.getElementById('c_col'),{type:'doughnut',data:{labels:CH.col_lbl,
+    datasets:[{data:CH.col_val,backgroundColor:CH.col_col,borderColor:'#0a0f1e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#cbd5e1',font:{size:11},boxWidth:12}},title:{display:true,text:'Colecciones MIA',color:'#e2e8f0'}}}}));
+  charts.push(new Chart(document.getElementById('c_pie'),{type:'doughnut',data:{labels:CH.pie_lbl,
+    datasets:[{data:CH.pie_val,backgroundColor:CH.pie_col,borderColor:'#0a0f1e',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:'#cbd5e1',font:{size:11},boxWidth:12}},title:{display:true,text:'Tipos de pieza',color:'#e2e8f0'}}}}));
+  charts.push(new Chart(document.getElementById('c_top'),{type:'bar',data:{labels:CH.top_lbl,
+    datasets:[{label:'Ingreso',data:CH.top_val,backgroundColor:'#a855f7',maxBarThickness:28}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:gridc,ticks:tickc},y:{grid:gridc,ticks:{color:'#94a3b8',font:{size:10}}}}}}));
+  charts.push(new Chart(document.getElementById('c_dow'),{type:'bar',data:{labels:CH.dow_lbl,
+    datasets:[{data:CH.dow_val,backgroundColor:CH.dow_col,maxBarThickness:28}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Ventas por día de la semana',color:'#e2e8f0'}},
+    scales:{x:{grid:gridc,ticks:tickc},y:{grid:gridc,ticks:tickc}}}}));
+  charts.push(new Chart(document.getElementById('c_hr'),{type:'bar',data:{labels:CH.hr_lbl,
+    datasets:[{data:CH.hr_val,backgroundColor:CH.hr_col,maxBarThickness:50}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},title:{display:true,text:'Ventas por hora del día',color:'#e2e8f0'}},
+    scales:{x:{grid:gridc,ticks:{color:'#94a3b8',font:{size:10}}},y:{grid:gridc,ticks:tickc,beginAtZero:true}}}}));
+}
+render('w');
+</script></body></html>
