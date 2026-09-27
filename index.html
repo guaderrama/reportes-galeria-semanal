@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reporte Semanal de Ventas · 14–20 Sep 2026 · IG Alvaro Obregon</title>
+<title>Reporte Semanal de Ventas · 21–27 Sep 2026 · IG Alvaro Obregon</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -39,6 +39,7 @@ tr:last-child td{border-bottom:none}
 .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600}
 .badge-zero{background:#7f1d1d;color:#fecaca}
 .badge-ok{background:#14532d;color:#bbf7d0}
+code{background:#450a0a;padding:1px 6px;border-radius:4px;font-size:13px}
 footer{text-align:center;color:#64748b;font-size:12.5px;margin-top:32px;padding-top:20px;border-top:1px solid #1e293b}
 </style>
 </head>
@@ -46,16 +47,17 @@ footer{text-align:center;color:#64748b;font-size:12.5px;margin-top:32px;padding-
 <div class="wrap">
   <header>
     <h1>Reporte Semanal de Ventas</h1>
-    <div class="sub">IG Alvaro Obregon · Lunes 14 al Domingo 20 de septiembre de 2026 · USD</div>
+    <div class="sub">IG Alvaro Obregon · Lunes 21 al Domingo 27 de septiembre de 2026 · USD</div>
   </header>
 
   <div class="alert">
-    <h2>⚠️ Sin registros de venta en el POS — semana 11 consecutiva</h2>
-    <p>La consulta a la API de Lightspeed/Vend no devolvió <strong>ninguna transacción</strong> para el outlet IG Alvaro Obregon en el periodo del 14 al 20 de septiembre de 2026.</p>
-    <p>La última venta registrada en todo el sistema es del <strong>2 de julio de 2026 a las 21:01 (hora Mazatlán)</strong>. Desde entonces han transcurrido <strong>11 semanas completas sin una sola transacción capturada</strong>.</p>
+    <h2>⚠️ Sin registros de venta en el POS — semana 12 consecutiva</h2>
+    <p>La consulta a la API de Lightspeed/Vend no devolvió <strong>ninguna transacción</strong> para el outlet IG Alvaro Obregon en el periodo del 21 al 27 de septiembre de 2026.</p>
+    <p>La última venta registrada en todo el sistema es del <strong>2 de julio de 2026 a las 21:01 (hora Mazatlán)</strong>. Desde entonces han transcurrido <strong>12 semanas completas sin una sola transacción capturada</strong>. Verificado con tres consultas independientes: <code>/api/2.0/search</code>, <code>/api/2.0/sales</code> (por versión) y <code>/api/register_sales</code> (0.9).</p>
     <ul>
       <li><strong>Esto no significa necesariamente que no hubo ventas.</strong> Significa que no están llegando al POS.</li>
       <li>Causas probables a verificar: terminal desconectada o sin sincronizar, cambio de sistema de cobro, cuenta/suscripción de Lightspeed vencida, o token de API sin permisos actualizados.</li>
+      <li><strong>Dato nuevo:</strong> la caja <strong>ALVARO OBREGON</strong> figura como <strong>abierta desde el 6 de julio de 2026, 19:23 (hora Mazatlán)</strong> y nunca se ha cerrado. Es consistente con que el POS dejó de usarse (o se usa otro sistema de cobro) justo después del último turno con ventas.</li>
       <li>El outlet <strong>BODEGA CREATIVA ya no aparece</strong> en el listado de outlets de la API — solo existe IG Alvaro Obregon. Vale la pena confirmar si fue eliminado a propósito.</li>
       <li>Mientras esto no se resuelva, el reporte semanal seguirá saliendo en ceros y el acumulado del año queda congelado al 2 de julio.</li>
     </ul>
@@ -74,43 +76,43 @@ footer{text-align:center;color:#64748b;font-size:12.5px;margin-top:32px;padding-
     <div class="days">
       <div class="day-card">
         <div class="day-name">Lunes</div>
-        <div class="day-date">14 sep</div>
+        <div class="day-date">21 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Martes</div>
-        <div class="day-date">15 sep</div>
+        <div class="day-date">22 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Miércoles</div>
-        <div class="day-date">16 sep</div>
+        <div class="day-date">23 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Jueves</div>
-        <div class="day-date">17 sep</div>
+        <div class="day-date">24 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Viernes</div>
-        <div class="day-date">18 sep</div>
+        <div class="day-date">25 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Sábado</div>
-        <div class="day-date">19 sep</div>
+        <div class="day-date">26 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
       <div class="day-card">
         <div class="day-name">Domingo</div>
-        <div class="day-date">20 sep</div>
+        <div class="day-date">27 sep</div>
         <div class="day-amount">$0.00</div>
         <div class="day-count">0 ventas</div>
       </div>
@@ -127,12 +129,12 @@ footer{text-align:center;color:#64748b;font-size:12.5px;margin-top:32px;padding-
     <h2>Estado de captura por semana</h2>
     <table>
       <thead><tr><th>Semana (lun–dom)</th><th>Ingresos</th><th>Transacciones</th><th>Estado</th></tr></thead>
-      <tbody><tr><td>15-Jun 2026</td><td>$1,002.00</td><td>12</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>22-Jun 2026</td><td>$600.00</td><td>10</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>29-Jun 2026</td><td>$1,393.40</td><td>13</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>06-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>13-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>20-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>27-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>03-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>10-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>17-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>24-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>31-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>07-Sep 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>14-Sep 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr></tbody>
+      <tbody><tr><td>15-Jun 2026</td><td>$1,002.00</td><td>12</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>22-Jun 2026</td><td>$600.00</td><td>10</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>29-Jun 2026</td><td>$1,393.40</td><td>13</td><td><span class="badge badge-ok">Con captura</span></td></tr><tr><td>06-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>13-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>20-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>27-Jul 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>03-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>10-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>17-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>24-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>31-Aug 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>07-Sep 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>14-Sep 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr><tr><td>21-Sep 2026</td><td>$0.00</td><td>0</td><td><span class="badge badge-zero">Sin captura</span></td></tr></tbody>
     </table>
   </div>
 
   <div class="section">
-    <h2>Ingresos por día · semana 14–20 sep</h2>
+    <h2>Ingresos por día · semana 21–27 sep</h2>
     <div class="chart-box"><canvas id="chDias"></canvas></div>
   </div>
 
@@ -153,11 +155,11 @@ footer{text-align:center;color:#64748b;font-size:12.5px;margin-top:32px;padding-
 
   <div class="section">
     <h2>Detalle de transacciones</h2>
-    <div class="empty"><div class="big">🧾</div><div>0 transacciones entre el 14 y el 20 de septiembre de 2026.<br><span style="font-size:13px">Tampoco se encontraron ventas VOIDED, SAVED ni CANCELLED en el periodo.</span></div></div>
+    <div class="empty"><div class="big">🧾</div><div>0 transacciones entre el 21 y el 27 de septiembre de 2026.<br><span style="font-size:13px">Tampoco se encontraron ventas VOIDED, SAVED ni CANCELLED en el periodo.</span></div></div>
   </div>
 
   <footer>
-    Generado el 22 de septiembre de 2026, 13:30 (Hora Mazatlán, UTC-7)<br>
+    Generado el domingo 27 de septiembre de 2026, 08:20 (Hora Mazatlán, UTC-7) · La galería cierra en domingo, por lo que la semana se considera cerrada<br>
     Fuente: Lightspeed/Vend API · Outlet IG Alvaro Obregon · Moneda USD · Hora Mazatlán (UTC-7)
   </footer>
 </div>
@@ -167,8 +169,8 @@ const gris='#475569', rojo='#ef4444', azul='#38bdf8', indigo='#818cf8';
 Chart.defaults.color='#94a3b8';
 Chart.defaults.borderColor='#334155';
 
-const histLabels=["13-Apr", "20-Apr", "27-Apr", "04-May", "11-May", "18-May", "25-May", "01-Jun", "08-Jun", "15-Jun", "22-Jun", "29-Jun", "06-Jul", "13-Jul", "20-Jul", "27-Jul", "03-Aug", "10-Aug", "17-Aug", "24-Aug", "31-Aug", "07-Sep", "14-Sep"];
-const histVals=[2557.5, 13371.0, 3068.0, 2863.11, 771.0, 2403.0, 2389.0, 1313.5, 1521.0, 1002.0, 600.0, 1393.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+const histLabels=["13-Apr", "20-Apr", "27-Apr", "04-May", "11-May", "18-May", "25-May", "01-Jun", "08-Jun", "15-Jun", "22-Jun", "29-Jun", "06-Jul", "13-Jul", "20-Jul", "27-Jul", "03-Aug", "10-Aug", "17-Aug", "24-Aug", "31-Aug", "07-Sep", "14-Sep", "21-Sep"];
+const histVals=[2557.5, 13371.0, 3068.0, 2863.11, 771.0, 2403.0, 2389.0, 1313.5, 1521.0, 1002.0, 600.0, 1393.4, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 new Chart(document.getElementById('chHist'),{
   type:'bar',
   data:{labels:histLabels,datasets:[{label:'Ingresos USD',data:histVals,
